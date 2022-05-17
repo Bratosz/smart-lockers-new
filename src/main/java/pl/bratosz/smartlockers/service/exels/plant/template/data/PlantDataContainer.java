@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class PlantDataContainer {
     private Set<TemplatePosition> positions;
     private Set<TemplateArticle> articles;
-    private Set<TemplateEmployee> employees;
+    private Map<String, TemplateEmployee> employees;
     private Set<TemplateLockers> lockers;
     private Set<String> locations;
     private Set<String> departments;
@@ -49,11 +49,11 @@ public class PlantDataContainer {
         this.articles = articles;
     }
 
-    public Set<TemplateEmployee> getEmployees() {
+    public Map<String, TemplateEmployee> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(Set<TemplateEmployee> employees) {
+    public void setEmployees(Map<String, TemplateEmployee> employees) {
         this.employees = employees;
     }
 
@@ -87,5 +87,9 @@ public class PlantDataContainer {
 
     public void setEmployeesWithArticlesAndSizes(Map<String, Map<TemplateArticle, ClothSize>> employeesWithArticlesAndSizes) {
         this.employeesWithArticlesAndSizes = employeesWithArticlesAndSizes;
+    }
+
+    public Set<TemplateEmployee> getEmployeesSet() {
+        return employees.values().stream().collect(Collectors.toSet());
     }
 }

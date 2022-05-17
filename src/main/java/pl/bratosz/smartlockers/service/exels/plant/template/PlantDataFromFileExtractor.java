@@ -61,8 +61,9 @@ public class PlantDataFromFileExtractor {
                         sheets.get(DEPARTMENTS),
                         this::extractStringData));
         dataContainer.setPositions(
-                extractPositionsWithArticles(sheets));
-                //CREATE POSITIONS WITH ARTICLES AND QUANTITIES
+                extractPositionsWithArticles(
+                        sheets,
+                        dataContainer.getArticles()));
         checkAndUpdatePositions(
                 extract(
                         sheets.get(POSITIONS_AND_DEPARTMENTS),
@@ -82,27 +83,25 @@ public class PlantDataFromFileExtractor {
         switch (templateType) {
             case TEMPLATE_WITH_LOCATIONS:
                 checkEmployees(
-                        dataContainer.getEmployees(),
+                        dataContainer.getEmployeesSet(),
                         dataContainer.getLocations());
                 checkLockersCapacity(
                         dataContainer.getLockers(),
-                        dataContainer.getEmployees());
+                        dataContainer.getEmployeesSet());
                 break;
             case TEMPLATE_WITH_LOCATIONS_AND_SIZES:
                 checkEmployees(
-                        dataContainer.getEmployees(),
+                        dataContainer.getEmployeesSet(),
                         dataContainer.getLocations());
-//                extractSizes(
-//                        dataContainer.getEmployees(),
-//                        dataContainer.getpo
-//                )
+                updateEmployeesWithSizes(
+                        dataContainer.getEmployees());
                 checkLockersCapacity(
                         dataContainer.getLockers(),
-                        dataContainer.getEmployees());
+                        dataContainer.getEmployeesSet());
                 break;
             case TEMPLATE_WITH_BOXES:
                 checkThatEmployeesFitInLockers(
-                        dataContainer.getEmployees(),
+                        dataContainer.getEmployeesSet(),
                         dataContainer.getLockers()
                 );
                 break;
@@ -142,9 +141,9 @@ public class PlantDataFromFileExtractor {
         return elements;
     }
 
-    private Set<TemplatePosition> extractFromRow(MySheet mySheet, int rowIndex) {
+    private List<TemplatePosition> extractFromRow(MySheet mySheet, int rowIndex) {
         XSSFSheet sheet = mySheet.getSheet();
-        Set<TemplatePosition> positions = new HashSet<>();
+        List<TemplatePosition> positions = new ArrayList<>();
         XSSFRow row = sheet.getRow(rowIndex);
         for (int cellNo = 1; cellNo <= mySheet.getLastColIndex(); cellNo++) {
             String name = getCellValue(row.getCell(cellNo));
@@ -153,18 +152,34 @@ public class PlantDataFromFileExtractor {
         return positions;
     }
 
-    private Set<TemplateEmployee> extractEmployees(MySheet mySheet, Set<TemplatePosition> positions) throws MyException {
+    private Map<String, TemplateEmployee> extractEmployees(MySheet mySheet, Set<TemplatePosition> positions) throws MyException {
         XSSFSheet sheet = mySheet.getSheet();
-        Set<TemplateEmployee> employees = new LinkedHashSet<>();
+        Map<String, TemplateEmployee> employees = new TreeMap<>();
         for (int rowNo = 1; rowNo <= mySheet.getLastRowIndex(); rowNo++) {
-            employees.add(
-                    extractEmployeeAndCheckPositions(sheet.getRow(rowNo), positions)
-            );
+            TemplateEmployee employee = extractEmployeeAndCheckPositions(sheet.getRow(rowNo), positions);
+            employees.put(employee.getPersonalNumber(), employee);
         }
         return employees;
     }
 
-    private TemplateEmployee extractEmployeeAndCheckPositions(XSSFRow row, Set<TemplatePosition> positions) throws MyException {
+    private void updateEmployeesWithSizes(Map<String, TemplateEmployee> employees) {
+        MySheet mySheet = sheets.get(EMPLOYEES_AND_SIZES);
+        XSSFSheet sheet = mySheet.getSheet();
+        XSSFRow row;
+        TemplateEmployee employee;
+        for (int rowIndex = 1; rowIndex <= mySheet.getLastRowIndex(); rowIndex++) {
+            row = sheet.getRow(rowIndex);
+            employee = getEmployee(row);
+            employee.addArticleWithSize(
+                    getSize(row),
+                    getArticle(row));
+        }
+    }
+
+    private TemplateEmployee extractEmployeeAndCheckPositions(
+            XSSFRow row,
+            Set<TemplatePosition> positions)
+            throws MyException {
         String personalNumber = resolvePersonalNumber(getCellValue(row.getCell(0)));
         String firstName = getCellValue(row.getCell(1));
         String lastName = getCellValue(row.getCell(2));
@@ -218,11 +233,30 @@ public class PlantDataFromFileExtractor {
         return new TemplatePositionWithDepartment(positionName, departmentName);
     }
 
-    private Set<TemplatePosition> extractPositionsWithArticles(Map<SheetTypeForPlantLoad, MySheet> sheets) {
-        Set<TemplatePosition> templatePositions = extractFromRow(
-                sheets.get(POSITIONS_AND_ARTICLES),
+    private Set<TemplatePosition> extractPositionsWithArticles(Map<SheetTypeForPlantLoad, MySheet> sheets, Set<TemplateArticle> articles) throws MyException {
+        MySheet positionsAndArticles = sheets.get(POSITIONS_AND_ARTICLES);
+        List<TemplatePosition> positions = extractFromRow(
+                positionsAndArticles,
                 0);
+        for (int rowIndex = 1; rowIndex <= positionsAndArticles.getLastRowIndex(); rowIndex++) {
+            XSSFRow row = positionsAndArticles.getSheet().getRow(rowIndex);
+            String articleName = getCellValue(row.getCell(0));
+            TemplateArticle article = articles.stream()
+                    .filter(e -> e.getArticleName().equals(articleName))
+                    .findFirst().get();
+            for (int colIndex = 1; colIndex <= positions.size(); colIndex++) {
+                try {
+                    int quantity = Float.valueOf(getCellValue(row.getCell(colIndex))).intValue();
+                    if (quantity <= 0) continue;
+                    positions.get(colIndex - 1).addArticleWithQuantity(article, quantity);
+                } catch (NumberFormatException e) {
+                    throw new MyException("W arkuszu " + POSITIONS_AND_ARTICLES.getName() +
+                            " w wierszu nr " + (rowIndex + 1) + " jest błąd.");
+                }
 
+            }
+        }
+        return positions.stream().collect(Collectors.toSet());
     }
 
     private TemplateLockers extractLocker(XSSFRow row) {
