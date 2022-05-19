@@ -93,6 +93,7 @@ public class ClothStatusService {
             LifeCycleStatus lifeCycleStatus) {
         switch (reason) {
             case CLOTH_ASSIGNMENT:
+            case CLOTH_RELEASE:
                 if (lifeCycleStatus.equals(BEFORE_RELEASE))
                     return ASSIGNED;
                 else if (lifeCycleStatus.equals(IN_ROTATION))

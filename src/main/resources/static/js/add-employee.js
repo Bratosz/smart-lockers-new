@@ -1,3 +1,4 @@
+
 loadDepartments(userId, $('#select-department'), "", loadPositionsForSelectedDepartment);
 loadLocations(userId, $('#select-location'));
 

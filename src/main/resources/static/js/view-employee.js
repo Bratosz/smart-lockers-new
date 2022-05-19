@@ -1,7 +1,7 @@
 reloadEmployee();
 
-$("#refresh-button").click(function () {
-    updateEmployee();
+$("#refresh-employee-button").click(function () {
+        updateEmployee();
 });
 
 $("#button-perform-action-on-main-orders").click(function () {
@@ -124,19 +124,19 @@ $(document).ready(function () {
 });
 
 function updateEmployee() {
-    $.ajax({
-        url: getUpdatedEmployee(employeeId),
-        method: 'get',
-        success: function (response) {
-            console.log(response);
-            if (response.succeed) {
-                window.alert(response.message)
-                reloadEmployee();
-            } else {
-                window.alert(response.message);
+        $.ajax({
+            url: getUpdatedEmployee(employeeId),
+            method: 'get',
+            success: function (response) {
+                console.log(response);
+                if (response.succeed) {
+                    window.alert(response.message);
+                    displayEmployeeForEmployeeView(response.entity);
+                } else {
+                    window.alert(response.message);
+                }
             }
-        }
-    })
+        });
 }
 
 function refreshOrders() {

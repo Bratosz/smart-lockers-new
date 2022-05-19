@@ -107,7 +107,7 @@ public class PlantDataFromFileExtractor {
                 break;
             case TEMPLATE_WITH_BOXES_AND_SIZES:
                 checkThatEmployeesFitInLockers(
-                        dataContainer.getEmployees(),
+                        dataContainer.getEmployeesSet(),
                         dataContainer.getLockers()
                 );
                 break;
@@ -163,17 +163,16 @@ public class PlantDataFromFileExtractor {
     }
 
     private void updateEmployeesWithSizes(Map<String, TemplateEmployee> employees) {
-        MySheet mySheet = sheets.get(EMPLOYEES_AND_SIZES);
-        XSSFSheet sheet = mySheet.getSheet();
-        XSSFRow row;
-        TemplateEmployee employee;
-        for (int rowIndex = 1; rowIndex <= mySheet.getLastRowIndex(); rowIndex++) {
-            row = sheet.getRow(rowIndex);
-            employee = getEmployee(row);
-            employee.addArticleWithSize(
-                    getSize(row),
-                    getArticle(row));
-        }
+//        MySheet mySheet = sheets.get(EMPLOYEES_AND_SIZES);
+//        EmployeeSizesExtractor sizesExtractor = new EmployeeSizesExtractor();
+//        sizesExtractor.extract(mySheet, employees);
+//        for (int rowIndex = 1; rowIndex <= mySheet.getLastRowIndex(); rowIndex++) {
+//            row = sheet.getRow(rowIndex);
+//            employee = getEmployee(row);
+//            employee.addArticleWithSize(
+//                    getSize(row),
+//                    getArticle(row));
+//        }
     }
 
     private TemplateEmployee extractEmployeeAndCheckPositions(

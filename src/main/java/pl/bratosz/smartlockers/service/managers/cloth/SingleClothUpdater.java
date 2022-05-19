@@ -6,8 +6,7 @@ import pl.bratosz.smartlockers.service.ClothService;
 
 import java.time.LocalDate;
 
-import static pl.bratosz.smartlockers.service.managers.cloth.ClothUpdateReason.CLOTH_ASSIGNMENT;
-import static pl.bratosz.smartlockers.service.managers.cloth.ClothUpdateReason.CLOTH_WITHDRAWAL;
+import static pl.bratosz.smartlockers.service.managers.cloth.ClothUpdateReason.*;
 
 public class SingleClothUpdater {
     private static final LocalDate INITIAL_DATE = LocalDate.of(1970, 1, 1);
@@ -21,10 +20,19 @@ public class SingleClothUpdater {
     public void updateAssignedCloth(Cloth newCloth, Cloth recentlyAssigned) {
         ClothUpdateReason reason = CLOTH_ASSIGNMENT;
         newCloth.setBarcode(recentlyAssigned.getBarcode());
-        updateDates(newCloth, recentlyAssigned);
-        updateStatus(newCloth, reason);
-        updateOrder(newCloth);
-        clothService.getClothesRepository().save(newCloth);
+        updateCloth(newCloth, recentlyAssigned, reason);
+    }
+
+    public void updateReleasedCloth(Cloth cloth, Cloth recentlyReleased) {
+        ClothUpdateReason reason = CLOTH_RELEASE;
+        updateCloth(cloth, recentlyReleased, reason);
+    }
+
+    public void updateCloth(Cloth toUpdate, Cloth actual, ClothUpdateReason reason) {
+        updateDates(toUpdate, actual);
+        updateStatus(toUpdate, reason);
+        updateOrder(toUpdate);
+        clothService.getClothesRepository().save(toUpdate);
     }
 
     public void updateWithdrawnCloth(Cloth cloth) {
@@ -42,6 +50,7 @@ public class SingleClothUpdater {
     private void updateStatus(Cloth cloth, ClothUpdateReason reason) {
         switch(reason) {
             case CLOTH_ASSIGNMENT:
+            case CLOTH_RELEASE:
                 LocalDate releaseDate = cloth.getReleaseDate();
                 cloth.setLifeCycleStatus(updateLifeCycleStatus(releaseDate));
                 break;

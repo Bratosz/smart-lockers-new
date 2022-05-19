@@ -376,7 +376,8 @@ public class ClothService {
             User user) throws ClothException {
         loadUser(user);
         List<Cloth> newClothes = new LinkedList<>();
-        List<Cloth> priorClothes = employee.getClothes().stream().filter(c -> c.isActive()).collect(Collectors.toList());
+        List<Cloth> priorClothes = employee.getClothes().stream()
+                .filter(c -> c.isActive()).collect(Collectors.toList());
         if (priorClothes.isEmpty()) {
             for (Cloth cloth : actualClothes) {
                 cloth.setEmployee(employee);

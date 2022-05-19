@@ -489,7 +489,7 @@ public class EmployeeService {
         }
         if (status == 1) {
             try {
-                SimpleEmployee simpleEmployee = scrapingService.getSimpleEmployee();
+//                SimpleEmployee simpleEmployee = scrapingService.getSimpleEmployee();
 //                update(employee, simpleEmployee);
                 scrapingService.loadBox();
                 List<Cloth> actualClothes = scrapingService.getClothes(employee);
@@ -499,8 +499,9 @@ public class EmployeeService {
                 } catch (ClothException e) {
                     e.printStackTrace();
                 }
+                employee = employeesRepository.getEmployeeById(employee.getId());
                 return StandardResponse.createForSucceed(
-                        "Zaktualizowano ubrania");
+                        "Zaktualizowano ubrania", employee);
             } catch (EmptyElementException e) {
                 return StandardResponse.createForFailure(
                         "Pracownik nie ma ubrań");
