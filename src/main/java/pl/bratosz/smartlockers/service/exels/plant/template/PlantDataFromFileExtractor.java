@@ -10,6 +10,7 @@ import pl.bratosz.smartlockers.model.ClientArticle;
 import pl.bratosz.smartlockers.model.files.TemplateTypeForPlantLoad;
 import pl.bratosz.smartlockers.service.exels.plant.template.data.*;
 import pl.bratosz.smartlockers.strings.MyString;
+import pl.bratosz.smartlockers.utils.MyXLSX;
 import pl.bratosz.smartlockers.utils.Utils;
 
 import java.util.*;
@@ -20,10 +21,12 @@ import static org.apache.poi.ss.usermodel.CellType.*;
 import static pl.bratosz.smartlockers.model.files.TemplateTypeForPlantLoad.TEMPLATE_WITH_BOXES;
 import static pl.bratosz.smartlockers.model.files.TemplateTypeForPlantLoad.TEMPLATE_WITH_BOXES_AND_SIZES;
 import static pl.bratosz.smartlockers.service.exels.plant.template.data.SheetTypeForPlantLoad.*;
+import static pl.bratosz.smartlockers.utils.MyXLSX.getCellValue;
 
 public class PlantDataFromFileExtractor {
     private Map<SheetTypeForPlantLoad, MySheet> sheets = new HashMap<>();
     private final TemplateTypeForPlantLoad templateType;
+    private PlantDataContainer dataContainer;
 
     private PlantDataFromFileExtractor(TemplateTypeForPlantLoad templateType) {
         this.templateType = templateType;
@@ -49,9 +52,8 @@ public class PlantDataFromFileExtractor {
         }
     }
 
-    @SuppressWarnings("DuplicateBranchesInSwitch")
     private PlantDataContainer validateAndExtractData(List<ClientArticle> clientArticles) throws MyException {
-        PlantDataContainer dataContainer = new PlantDataContainer(clientArticles);
+        dataContainer = new PlantDataContainer(clientArticles);
         dataContainer.setLocations(
                 extract(
                         sheets.get(LOCATIONS),
@@ -162,17 +164,10 @@ public class PlantDataFromFileExtractor {
         return employees;
     }
 
-    private void updateEmployeesWithSizes(Map<String, TemplateEmployee> employees) {
-//        MySheet mySheet = sheets.get(EMPLOYEES_AND_SIZES);
-//        EmployeeSizesExtractor sizesExtractor = new EmployeeSizesExtractor();
-//        sizesExtractor.extract(mySheet, employees);
-//        for (int rowIndex = 1; rowIndex <= mySheet.getLastRowIndex(); rowIndex++) {
-//            row = sheet.getRow(rowIndex);
-//            employee = getEmployee(row);
-//            employee.addArticleWithSize(
-//                    getSize(row),
-//                    getArticle(row));
-//        }
+    private void updateEmployeesWithSizes() throws MyException {
+        MySheet mySheet = sheets.get(EMPLOYEES_AND_SIZES);
+        EmployeeSizesUpdater sizesUpdater = new EmployeeSizesUpdater(dataContainer);
+        sizesUpdater.update(mySheet);
     }
 
     private TemplateEmployee extractEmployeeAndCheckPositions(
@@ -264,16 +259,6 @@ public class PlantDataFromFileExtractor {
         String capacity = getCellValue(row.getCell(2));
         String location = getCellValue(row.getCell(3));
         return new TemplateLockers(firstLockerNumber, lastLockerNumber, capacity, location);
-    }
-
-    private String getCellValue(XSSFCell cell) {
-        CellType cellType = cell.getCellTypeEnum();
-        if (cellType.equals(NUMERIC))
-            return MyString.create(
-                    String.valueOf(cell.getNumericCellValue())).get();
-        else
-            return MyString.create(
-                    cell.getStringCellValue()).get();
     }
 
 

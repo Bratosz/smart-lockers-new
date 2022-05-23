@@ -72,6 +72,14 @@ public enum ClothSize implements Comparable<ClothSize>, ConvertableEnum {
         }
     }
 
+    public static ClothSize getExactSizeByName(String name) {
+        if(sizesByNames.containsKey(name)) {
+            return sizesByNames.get(name);
+        } else {
+            return ClothSize.SIZE_UNKNOWN;
+        }
+    }
+
     @JsonValue
     @Override
     public String getName() {

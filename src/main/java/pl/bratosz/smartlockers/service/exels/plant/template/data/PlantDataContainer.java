@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class PlantDataContainer {
     private Set<TemplatePosition> positions;
-    private Set<TemplateArticle> articles;
+    private Map<Integer, TemplateArticle> articles;
     private Map<String, TemplateEmployee> employees;
     private Set<TemplateLockers> lockers;
     private Set<String> locations;
@@ -20,7 +20,10 @@ public class PlantDataContainer {
     private Map<String, Map<TemplateArticle, ClothSize>> employeesWithArticlesAndSizes;
 
  public PlantDataContainer(List<ClientArticle> clientArticles) {
-     this.articles = convert(clientArticles);
+     Set<TemplateArticle> articles = convert(clientArticles);
+     Map<Integer, TemplateArticle> articlesMap = articles.stream()
+             .collect(Collectors.toMap(a -> a.getArticleNumber(), a -> a));
+     this.articles = articlesMap;
      employeesWithArticlesAndSizes = new HashMap<>();
     }
 
@@ -41,11 +44,11 @@ public class PlantDataContainer {
         this.positions = positions;
     }
 
-    public Set<TemplateArticle> getArticles() {
+    public Map<Integer, TemplateArticle> getArticles() {
         return articles;
     }
 
-    public void setArticles(Set<TemplateArticle> articles) {
+    public void setArticles(Map<Integer, TemplateArticle> articles) {
         this.articles = articles;
     }
 
