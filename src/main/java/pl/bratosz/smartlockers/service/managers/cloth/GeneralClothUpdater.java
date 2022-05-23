@@ -13,9 +13,9 @@ import java.util.List;
 public class GeneralClothUpdater {
     private List<Cloth> priorClothes;
     private List<Cloth> actualClothes;
-    private List<Cloth> assignedClothes;
+    private List<Cloth> notAssignedClothes;
     private List<Cloth> beforeReleaseClothes;
-    private List<Cloth> withdrawnedClothes;
+    private List<Cloth> withdrewClothes;
     private List<Cloth> recentlyAddedClothes;
     private SingleClothUpdater singleClothUpdater;
     private Employee employee;
@@ -28,45 +28,51 @@ public class GeneralClothUpdater {
             List<Cloth> actualClothes,
             Employee employee,
             ClothService clothService) {
+        this.singleClothUpdater = new SingleClothUpdater(clothService);
         this.employee = employee;
         this.isRotational = employeeIsRotational(employee);
         this.clothService = clothService;
         this.priorClothes = priorClothes;
         this.actualClothes = actualClothes;
-        this.assignedClothes = popAssignedClothesFromPriorToAssigned();
-        this.beforeReleaseClothes = popBeforeReleaseClothesFromPriorClothes();
-        this.withdrawnedClothes = popWithdrawnedClothesFromPriorClothes();
-        this.recentlyAddedClothes = popRecentlyAddedClothesFromActualClothes();
-        this.singleClothUpdater = new SingleClothUpdater(clothService);
+        //by barcode == 0
+        this.notAssignedClothes = popNotAssignedClothesFrom(priorClothes);
+        //by compare barcode
+        this.withdrewClothes = popWithdrewClothesFrom(priorClothes);
+        this.recentlyAddedClothes = popRecentlyAddedClothesFrom(actualClothes);
     }
 
     public void update() {
-        updateWashedClothes();
-        updateAssignedClothes();
+        updateAssigned();
+        updateNotAssigned();
         updateRecentlyAddedClothes();
-        updateBeforeReleaseClothse();
         updateWithdrawnClothes();
     }
 
-    private void updateWashedClothes() {
-        priorClothes.forEach(pc -> pc.setLastWashing(actualClothes.stream()
-                .filter(ac -> ac.equals(pc))
+    private void updateAssigned() {
+        beforeReleaseClothes = popBeforeReleaseClothesFrom(priorClothes);
+        updateBeforeRelease();
+        updateWashed();
+    }
+
+    private void updateWashed() {
+        priorClothes.forEach(c -> c.setLastWashing(actualClothes.stream()
+                .filter(ac -> ac.equals(c))
                 .findFirst().get().getLastWashing()));
         clothService.getClothesRepository().saveAll(priorClothes);
     }
 
-    private void updateBeforeReleaseClothse() {
-        beforeReleaseClothes.forEach(bc -> {
-            if(clothIsRecentlyReleased(bc)) {
-                Cloth recentlyReleasedCloth = popByEquals(bc, actualClothes);
-                singleClothUpdater.updateReleasedCloth(bc, recentlyReleasedCloth);
+    private void updateBeforeRelease() {
+        beforeReleaseClothes.forEach(c -> {
+            if(clothIsRecentlyReleased(c)) {
+                Cloth recentlyReleasedCloth = popByEquals(c, actualClothes);
+                singleClothUpdater.updateReleasedCloth(c, recentlyReleasedCloth);
             }
         });
     }
     
-    private void updateAssignedClothes() {
+    private void updateNotAssigned() {
         List<Cloth> clothesToRemove = new LinkedList<>();
-        assignedClothes.forEach(c -> {
+        notAssignedClothes.forEach(c -> {
             if (clothIsRecentlyAdded(c)) {
                 Cloth recentlyAddedCloth = popByCompare(c, recentlyAddedClothes);
                 singleClothUpdater.updateAssignedCloth(c, recentlyAddedCloth);
@@ -74,11 +80,12 @@ public class GeneralClothUpdater {
                 clothesToRemove.add(c);
             }
         });
-        assignedClothes.removeAll(clothesToRemove);
+        notAssignedClothes.removeAll(clothesToRemove);
     }
 
     private void updateRecentlyAddedClothes() {
         recentlyAddedClothes.forEach(c -> {
+            //UPDATE NOT ASSIGNED HERE OR UPPER
             c.setEmployee(employee);
             c.setRotational(isRotational);
         });
@@ -86,7 +93,7 @@ public class GeneralClothUpdater {
     }
 
     private void updateWithdrawnClothes() {
-        withdrawnedClothes.forEach(c -> {
+        withdrewClothes.forEach(c -> {
             singleClothUpdater.updateWithdrawnCloth(c);
         });
     }
@@ -122,7 +129,7 @@ public class GeneralClothUpdater {
 
     }
 
-    private List<Cloth> popBeforeReleaseClothesFromPriorClothes() {
+    private List<Cloth> popBeforeReleaseClothesFrom(List<Cloth> priorClothes) {
         List<Cloth> beforeReleaseClothes = new LinkedList<>();
         List<Cloth> clothesToRemove = new LinkedList<>();
         priorClothes.forEach(c -> {
@@ -132,47 +139,35 @@ public class GeneralClothUpdater {
             }
         });
         priorClothes.removeAll(clothesToRemove);
-        clothesToRemove.clear();
         return beforeReleaseClothes;
     }
 
-    private List<Cloth> popAssignedClothesFromPriorToAssigned() {
-        List<Cloth> assignedClothes = new LinkedList<>();
+    private List<Cloth> popNotAssignedClothesFrom(List<Cloth> priorClothes) {
+        List<Cloth> notAssignedClothes = new LinkedList<>();
         List<Cloth> clothesToRemove = new LinkedList<>();
         priorClothes.forEach(c -> {
             if (c.getBarcode() == 0) {
                 clothesToRemove.add(c);
-                assignedClothes.add(c);
+                notAssignedClothes.add(c);
             }
         });
         priorClothes.removeAll(clothesToRemove);
-        return assignedClothes;
+        return notAssignedClothes;
     }
 
-    private List<Cloth> popWithdrawnedClothesFromPriorClothes() {
-        List<Cloth> deletedClothes = new LinkedList<>();
-        List<Cloth> clothesToRemove = new LinkedList<>();
-        priorClothes.forEach(c -> {
-            if (!actualClothes.contains(c)) {
-                clothesToRemove.add(c);
-                deletedClothes.add(c);
-            }
-        });
-        priorClothes.removeAll(clothesToRemove);
-        return deletedClothes;
+    private List<Cloth> difference(List<Cloth> list1st, List<Cloth> list2nd) {
+        List<Cloth> difference = new LinkedList<>(list1st);
+        difference.removeAll(list2nd);
+        list1st.removeAll(difference);
+        return difference;
     }
 
-    private List<Cloth> popRecentlyAddedClothesFromActualClothes() {
-        List<Cloth> newClothes = new LinkedList<>();
-        List<Cloth> clothesToRemove = new LinkedList<>();
-        actualClothes.forEach(c -> {
-            if (!priorClothes.contains(c)) {
-                clothesToRemove.add(c);
-                newClothes.add(c);
-            }
-        });
-        actualClothes.removeAll(clothesToRemove);
-        return newClothes;
+    private List<Cloth> popWithdrewClothesFrom(List<Cloth> priorClothes) {
+        return difference(this.priorClothes, actualClothes);
+    }
+
+    private List<Cloth> popRecentlyAddedClothesFrom(List<Cloth> actualClothes) {
+        return difference(this.actualClothes, priorClothes);
     }
 
     private boolean employeeIsRotational(Employee employee) {

@@ -392,52 +392,6 @@ public class ClothService {
                     employee,
                     this);
             gcu.update();
-//            for (Cloth priorCloth : priorClothes) {
-//                if(!actualClothes.contains(priorCloth)) {
-//                    updateWithdrawnCloth(priorCloth);
-//                } else {
-//                    for (Cloth actualCloth : actualClothes) {
-//                        if (!priorClothes.contains(actualCloth)) {
-//                            ClothStatus clothStatus;
-//                            try {
-//                                Cloth newCloth = getOrderedClothByActualCloth(priorClothes, actualCloth);
-//                                newCloth.setBarcode(actualCloth.getBarcode());
-//                                newCloth.setAssignment(actualCloth.getAssignment());
-//                                newCloth.setLastWashing(actualCloth.getLastWashing());
-//                                newCloth.setReleaseDate(actualCloth.getReleaseDate());
-//                                if (newCloth.getReleaseDate().compareTo(LocalDateConverter.convert(new Date(0))) == 0) {
-//                                    newCloth.setLifeCycleStatus(BEFORE_RELEASE);
-//                                    clothStatus = clothStatusService
-//                                            .createForChangeSize(ClothDestination.FOR_RELEASE, newCloth, user);
-//                                    orderService.update(newCloth, user);
-//                                } else {
-//                                    newCloth.setLifeCycleStatus(IN_ROTATION);
-//                                    clothStatus = clothStatusService
-//                                            .createForChangeSize(ClothDestination.FOR_WASH, newCloth, user);
-//                                    orderService.update(newCloth, user);
-//                                }
-//                                newCloth.setStatus(clothStatus);
-//                                newCloth.setActive(true);
-//                            } catch (ClothNotExistException e) {
-//                                actualCloth.setEmployee(employee);
-//                                newClothes.add(actualCloth);
-//                            }
-//                        } else if (actualCloth.equals(priorCloth)) {
-//                            System.out.println(employee.toString());
-//                            if (priorCloth.getReleaseDate().compareTo(LocalDateConverter.convert(new Date(0))) == 0) {
-//                                priorCloth.setReleaseDate(actualCloth.getReleaseDate());
-//                                priorCloth.setLifeCycleStatus(IN_ROTATION);
-//                                ClothStatus clothStatus = clothStatusService
-//                                        .createForChangeSize(ClothDestination.FOR_WASH, priorCloth, user);
-//                                priorCloth.setStatus(clothStatus);
-//                                orderService.updateForReleasedCloth(priorCloth, user);
-//                            }
-//                            priorCloth.setLastWashing(actualCloth.getLastWashing());
-//                        }
-//                    }
-//                }
-//                clothesRepository.flush();
-//            }
         }
     }
 
