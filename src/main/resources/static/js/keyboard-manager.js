@@ -18,6 +18,18 @@ function pressedCtrlBackSlashGoToSearchWindow() {
         '#nav-input-last-name');
 }
 
+function loadFirstBoxByCtrlEnter() {
+    ifKeyClickedWtihCtrlThenDo(
+        enter,
+        $(document),
+        function () {
+            console.log("kliknięto");
+            $("#table-of-boxes > tr-nth:first > .button-view-employee.btn.btn-outline-danger").trigger('click');
+            // console.log(button.value());
+            // button.trigger('click');
+        })
+}
+
 function enterKeyBehaviour() {
     ifKeyClickedAtThenDo(enter, $('#nav-input-last-name'), function () {
         $('#nav-button-search-by-last-name').trigger('click');
@@ -27,7 +39,7 @@ function enterKeyBehaviour() {
 function ifKeyClickedWithCtrlAtThenGoTo(keyCode, $clickedArea, elementToFocus) {
     $clickedArea.keydown(function (e) {
         if(e.keyCode == keyCode && ctrlPressed) {
-            $(elementToFocus).focus();
+            $(elementToFocus).select();
         }
     });
 }
@@ -39,6 +51,15 @@ function ifKeyClickedAtThenDo(keyCode, $where, desiredAction) {
             desiredAction();
         }
     });
+}
+
+function ifKeyClickedWtihCtrlThenDo(keyCode, $where, action) {
+    $where.keydown(function(e) {
+        if(e.keyCode == keyCode && ctrlIsPressed) {
+            e.preventDefault();
+            action();
+        }
+    })
 }
 
 function ctrlIsPressed() {

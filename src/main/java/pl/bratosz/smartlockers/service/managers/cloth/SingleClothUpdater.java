@@ -28,7 +28,13 @@ public class SingleClothUpdater {
         updateCloth(cloth, recentlyReleased, reason);
     }
 
-    public void updateCloth(Cloth toUpdate, Cloth actual, ClothUpdateReason reason) {
+    public void updateAddedCloth(Cloth cloth) {
+        ClothUpdateReason reason = CLOTH_ADDED;
+        updateStatus(cloth, reason);
+        clothService.getClothesRepository().save(cloth);
+    }
+
+    private void updateCloth(Cloth toUpdate, Cloth actual, ClothUpdateReason reason) {
         updateDates(toUpdate, actual);
         updateStatus(toUpdate, reason);
         updateOrder(toUpdate);
@@ -51,6 +57,7 @@ public class SingleClothUpdater {
         switch(reason) {
             case CLOTH_ASSIGNMENT:
             case CLOTH_RELEASE:
+            case CLOTH_ADDED:
                 LocalDate releaseDate = cloth.getReleaseDate();
                 cloth.setLifeCycleStatus(updateLifeCycleStatus(releaseDate));
                 break;
@@ -78,4 +85,6 @@ public class SingleClothUpdater {
         assigned.setLastWashing(recentlyAdded.getLastWashing());
         assigned.setReleaseDate(recentlyAdded.getReleaseDate());
     }
+
+
 }

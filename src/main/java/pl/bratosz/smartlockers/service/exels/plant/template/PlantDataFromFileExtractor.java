@@ -65,7 +65,7 @@ public class PlantDataFromFileExtractor {
         dataContainer.setPositions(
                 extractPositionsWithArticles(
                         sheets,
-                        dataContainer.getArticles()));
+                        dataContainer.getArticlesSet()));
         checkAndUpdatePositions(
                 extract(
                         sheets.get(POSITIONS_AND_DEPARTMENTS),
@@ -96,7 +96,7 @@ public class PlantDataFromFileExtractor {
                         dataContainer.getEmployeesSet(),
                         dataContainer.getLocations());
                 updateEmployeesWithSizes(
-                        dataContainer.getEmployees());
+                        dataContainer.getEmployeesSet());
                 checkLockersCapacity(
                         dataContainer.getLockers(),
                         dataContainer.getEmployeesSet());
@@ -164,7 +164,7 @@ public class PlantDataFromFileExtractor {
         return employees;
     }
 
-    private void updateEmployeesWithSizes() throws MyException {
+    private void updateEmployeesWithSizes(Set<TemplateEmployee> employeesSet) throws MyException {
         MySheet mySheet = sheets.get(EMPLOYEES_AND_SIZES);
         EmployeeSizesUpdater sizesUpdater = new EmployeeSizesUpdater(dataContainer);
         sizesUpdater.update(mySheet);

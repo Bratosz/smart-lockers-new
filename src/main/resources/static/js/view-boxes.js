@@ -6,6 +6,8 @@ loadLocations(userId, $('#select-location'));
 
 loadBoxes();
 
+loadFirstBoxByCtrlEnter();
+
 $("#button-filter").click(function () {
     console.log("klik");
     let plantId = $("#select-plant").val();

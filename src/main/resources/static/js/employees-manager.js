@@ -64,6 +64,4 @@ function displayEmployeeForEmployeeView(employee) {
     displayWithdrawnClothes(withdrawn);
     displayOrders(activeOrders);
     displayRotationalClothes(activeRotationalClothes);
-
-
 }

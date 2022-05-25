@@ -48,6 +48,10 @@ public class PlantDataContainer {
         return articles;
     }
 
+    public Set<TemplateArticle> getArticlesSet() {
+     return articles.values().stream().collect(Collectors.toSet());
+    }
+
     public void setArticles(Map<Integer, TemplateArticle> articles) {
         this.articles = articles;
     }

@@ -43,13 +43,12 @@ public class GeneralClothUpdater {
 
     public void update() {
         updateAssigned();
-        updateNotAssigned();
         updateRecentlyAddedClothes();
         updateWithdrawnClothes();
     }
 
     private void updateAssigned() {
-        beforeReleaseClothes = popBeforeReleaseClothesFrom(priorClothes);
+        beforeReleaseClothes = popBeforeReleaseClothes();
         updateBeforeRelease();
         updateWashed();
     }
@@ -69,28 +68,26 @@ public class GeneralClothUpdater {
             }
         });
     }
-    
+
+    private void updateRecentlyAddedClothes() {
+        updateNotAssigned();
+        recentlyAddedClothes.forEach(c -> {
+            c.setEmployee(employee);
+            c.setRotational(isRotational);
+            clothService.getClothesRepository().save(c);
+            singleClothUpdater.updateAddedCloth(c);
+        });
+    }
+
     private void updateNotAssigned() {
-        List<Cloth> clothesToRemove = new LinkedList<>();
         notAssignedClothes.forEach(c -> {
             if (clothIsRecentlyAdded(c)) {
                 Cloth recentlyAddedCloth = popByCompare(c, recentlyAddedClothes);
                 singleClothUpdater.updateAssignedCloth(c, recentlyAddedCloth);
-            } else {
-                clothesToRemove.add(c);
             }
         });
-        notAssignedClothes.removeAll(clothesToRemove);
     }
 
-    private void updateRecentlyAddedClothes() {
-        recentlyAddedClothes.forEach(c -> {
-            //UPDATE NOT ASSIGNED HERE OR UPPER
-            c.setEmployee(employee);
-            c.setRotational(isRotational);
-        });
-        clothService.getClothesRepository().saveAll(recentlyAddedClothes);
-    }
 
     private void updateWithdrawnClothes() {
         withdrewClothes.forEach(c -> {
@@ -129,7 +126,7 @@ public class GeneralClothUpdater {
 
     }
 
-    private List<Cloth> popBeforeReleaseClothesFrom(List<Cloth> priorClothes) {
+    private List<Cloth> popBeforeReleaseClothes() {
         List<Cloth> beforeReleaseClothes = new LinkedList<>();
         List<Cloth> clothesToRemove = new LinkedList<>();
         priorClothes.forEach(c -> {
