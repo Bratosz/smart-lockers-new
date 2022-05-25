@@ -6,7 +6,7 @@ loadLocations(userId, $('#select-location'));
 
 loadBoxes();
 
-loadFirstBoxByCtrlEnter();
+loadBoxByCtrlPlusNumber();
 
 $("#button-filter").click(function () {
     console.log("klik");
