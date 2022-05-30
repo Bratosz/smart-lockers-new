@@ -38,7 +38,7 @@ function writeArticleToSelectionRow(articleToOrder, $row) {
             createOption(a.id,
                 a.article.number + " " + a.article.name));
     }
-    $row.find('.input-quantity').val(articleToOrder.quantity)
+    $row.find('.input-quantity').val(articleToOrder.quantity);
     return $row;
 }
 

@@ -231,8 +231,8 @@ function reloadEmployee() {
         method: 'get',
         success: function (employee) {
             console.log(employee);
-            displayEmployeeForEmployeeView(employee);
             loadedEmployee = employee;
+            displayEmployeeForEmployeeView(employee);
         }
     }).done(function () {
         loadForEmployeePositionAndDepartment();

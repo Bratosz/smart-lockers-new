@@ -23,16 +23,26 @@ function getActualOrderStatus(order) {
 
 function writeOrderToRow(order, $row) {
     let actualOrderStatus = getActualOrderStatus(order);
-    $row.removeAttr("id");
-    $row.css("display", "table-row");
-    $row.find(".cell-main-order-id").text(order.id);
-    $row.find(".cell-main-order-type").text(order.orderType);
-    $row.find(".cell-main-order-status").text(actualOrderStatus.orderStage);
+    $row.removeAttr('id');
+    $row.css('display', 'table-row');
+    $row.find('.cell-main-order-id').text(order.id);
+    $row.find('.cell-main-order-type').text(order.orderType);
+    $row.find('.cell-main-order-status').text(actualOrderStatus.orderStage);
     $row.find('.cell-clothes-amount').text(order.clothOrders.length);
-    $row.find(".cell-status-changed-date").text(formatDateDMY(
+    $row.find('.cell-status-changed-date').text(formatDateDMY(
         actualOrderStatus.dateOfUpdate));
-    $row.find(".cell-desired-article").text(
-        toStringArticle(order.desiredClientArticle));
+    if(!order.reported && order.orderType == "Nowy artykuł") {
+        let clientArticle = order.desiredClientArticle;
+        let $select = $row.find('.select-article-in-orders-table');
+        $select.css('display', 'table-row');
+        $select.append(createOption(
+            clientArticle.id,
+            clientArticle.article.name));
+        appendArticles($select, clientArticle);
+    } else {
+        $row.find('.cell-desired-article').text(
+            toStringArticle(order.desiredClientArticle));
+    }
     $row.find('.input-size').val(order.desiredSize);
     if(order.lengthModification != "NONE") {
         $row.find('.input-length-modification').val(order.lengthModification);
@@ -41,7 +51,9 @@ function writeOrderToRow(order, $row) {
 
 }
 
-function iterateOrdersAndWriteInTable(orders, $table) {
+function writeOrdersToTable($table, orders) {
+    $table = removeTableRows($table);
+    orders = sortOrdersByCreationDate(orders);
     const $rowTemplate = getRowTemplate($table);
     for(let order of orders) {
         let $row = $rowTemplate.clone();
@@ -49,11 +61,4 @@ function iterateOrdersAndWriteInTable(orders, $table) {
         $table.append($row);
     }
     return $table;
-}
-
-function writeOrdersToTable($table, orders) {
-    $table = removeTableRows($table);
-    orders =
-        sortOrdersByCreationDate(orders);
-    return iterateOrdersAndWriteInTable(orders, $table);
 }

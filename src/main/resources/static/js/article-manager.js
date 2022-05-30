@@ -21,6 +21,31 @@ function loadArticlesToSelect(userId, $select, clothType) {
 }
 
 function displayAvailableArticlesByPosition($select) {
+    let clientArticles = getClientArticles();
+    removeOptionsFromSelect($select);
+    for (let a of clientArticles) {
+        console.log(a);
+        $select.append(createOption(
+            a.id,
+            a.article.number + " " + a.article.name));
+    }
+}
+
+function appendArticles($select, clientArticle) {
+    let clientArticles = getClientArticles(),
+        actualArticle = clientArticle.article,
+        clothType = actualArticle.clothType;
+    for(let a of clientArticles) {
+        if(a.article.number != actualArticle.number
+            && a.article.clothType == clothType) {
+            $select.append(createOption(
+                a.id,
+                a.article.number + " " + a.article.name));
+        }
+    }
+}
+
+function getClientArticles() {
     let articlesWithQuantities = loadedEmployee.position.articlesWithQuantities;
     let availableArticles = [];
     let clientArticles = [];
@@ -31,14 +56,10 @@ function displayAvailableArticlesByPosition($select) {
         }
     }
     clientArticles = sort(clientArticles, 'article.number');
-    removeOptionsFromSelect($select);
-    for (let a of clientArticles) {
-        console.log(a);
-        $select.append(createOption(
-            a.id,
-            a.article.number + " " + a.article.name));
-    }
+    return clientArticles;
 }
+
+
 
 
 function getArticlesByClothType(clientArticles, clothType) {
