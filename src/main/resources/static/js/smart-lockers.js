@@ -129,7 +129,7 @@ function loadNav() {
 
 function goBack() {
     actualPage = previousPages.pop();
-    $('#div-content').load(actualPage);
+    $('#div-content-1').load(actualPage);
 }
 
 function loadContent($element, source, saveSource) {
