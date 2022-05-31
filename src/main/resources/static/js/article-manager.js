@@ -21,7 +21,7 @@ function loadArticlesToSelect(userId, $select, clothType) {
 }
 
 function displayAvailableArticlesByPosition($select) {
-    let clientArticles = getClientArticles();
+    let clientArticles = getClientArticlesFromEmployeePosition();
     removeOptionsFromSelect($select);
     for (let a of clientArticles) {
         console.log(a);
@@ -32,7 +32,7 @@ function displayAvailableArticlesByPosition($select) {
 }
 
 function appendArticles($select, clientArticle) {
-    let clientArticles = getClientArticles(),
+    let clientArticles = getClientArticlesFromEmployeePosition(),
         actualArticle = clientArticle.article,
         clothType = actualArticle.clothType;
     for(let a of clientArticles) {
@@ -45,7 +45,7 @@ function appendArticles($select, clientArticle) {
     }
 }
 
-function getClientArticles() {
+function getClientArticlesFromEmployeePosition() {
     let articlesWithQuantities = loadedEmployee.position.articlesWithQuantities;
     let availableArticles = [];
     let clientArticles = [];

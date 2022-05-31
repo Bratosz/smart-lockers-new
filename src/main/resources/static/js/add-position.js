@@ -14,6 +14,7 @@ $('#button-position-delete').click(function () {
 
 $('#button-create-position').click(function () {
     let positionName = $('#input-position-name').val();
+    console.log("click");
     createPosition(positionName);
 });
 
