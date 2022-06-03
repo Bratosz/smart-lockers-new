@@ -1,12 +1,12 @@
 <main>
     <div class="row">
         <div class="col-sm-8">
-            <!--EMPLOYEE PANEL-->
+<!--EMPLOYEE PANEL-->
             <div class="gap-vertical-20"></div>
             <div class="row">
                 <div id="employee" class="col-sm-6" style="font-size: 30px;"></div>
                 <div class="col-lg-6">
-                    <!--POSITION AND DEPARTMENT SELECTION-->
+<!--POSITION AND DEPARTMENT SELECTION-->
                     <form class="form-inline">
                         <div class="form-group">
                             <select class="form-control" id="select-department"></select>
@@ -21,7 +21,7 @@
             </div>
             <div class="gap-vertical-20"></div>
 
-            <!--ORDERS TABLE-->
+<!--ORDERS TABLE-->
             <div class="container-table col-sm-12" id="div-orders" style="display: none">
                 <span>Zamówienia</span>
                 <table id="table-of-main-orders" class="table-striped">
@@ -57,7 +57,7 @@
                     </tr>
                     </tbody>
                 </table>
-                <!--ORDERS MANAGING-->
+<!--ORDERS MANAGING-->
                 <div>
                     <div class="side-menu">
                         <input type="radio" id="manage-order-1" name="manage-order" value="EDIT">
@@ -70,7 +70,7 @@
                 </div>
             </div>
 
-            <!--EMPLOYEE ACTIVE CLOTHES-->
+<!--EMPLOYEE ACTIVE CLOTHES-->
             <div class="container-table" id="div-clothes-active" style="display:none">
                 <div class="row col-sm-12">
                     <div class="gap-vertical-5"></div>
@@ -112,7 +112,7 @@
             </div>
 
 
-            <!--EMPLOYEE TO RELEASE CLOTHES-->
+<!--EMPLOYEE TO RELEASE CLOTHES-->
             <div class="container-table col-sm-12" id="div-clothes-to-release" style="display: none">
                 <div class="gap-vertical-20"></div>
                     <span>Ubrania do wydania</span>
@@ -142,7 +142,7 @@
             </div>
 
 
-            <!--ACCEPTED CLOTHES TABLE-->
+<!--ACCEPTED CLOTHES TABLE-->
             <div class="container-table col-sm-12" id="div-accepted-clothes">
                 <div class="gap-vertical-20"></div>
                 <span>Ubrania przyjęte na wymianę</span>
@@ -176,7 +176,7 @@
             </div>
 
 
-            <!--ROTATIONAL CLOTHES TABLE-->
+<!--ROTATIONAL CLOTHES TABLE-->
             <div class="container-table col-sm-12" id="div-rotational-clothes" style="display:none">
                 <div class="gap-vertical-20"></div>
                 <span>Wydana rotacja</span>
@@ -210,7 +210,7 @@
                 <button type="button" class="btn btn-outline-danger" id="button-return-rotational-clothes">Zwróć</button>
             </div>
             <br>
-            <!--WITHDRAWN CLOTHES TABLE-->
+<!--WITHDRAWN CLOTHES TABLE-->
             <div class="container-table col-sm-12" id="div-withdrawn-clothes">
                 <span>Wycofana odzież</span>
                 <div class="gap-vertical-5"></div>
@@ -244,8 +244,9 @@
             </div>
         </div>
 
+<!--EXCHANGE CLOTHES-->
         <div class="col-sm-4">
-            <div class="row">
+            <div class="row" id="div-exchange-clothes-panel" style="display: none">
                 <p>Wybierz artykuł do wymiany</p>
                 <form class="form-inline">
                     <div class="form-group col-sm-12">
@@ -271,16 +272,34 @@
                     </div>
                 </form>
             </div>
-            <!--            <div class="row">-->
-            <!--                <form class="form-inline">-->
-            <!--                    <div class="form-group">-->
-            <!--                        <input type="text" class="form-control col-sm-3" id="input-size" placeholder="Rozmiar">-->
-            <!--                        <input type="text" class="form-control col-sm-3" id="input-length-modification" placeholder="N100/R100">-->
-            <!--                        <button type="button" class="btn btn-secondary col-sm-6" id="button-order-for-change-size">Zamów-->
-            <!--                        </button>-->
-            <!--                    </div>-->
-            <!--                </form>-->
-            <!--            </div>-->
+            <div class="row" id="order-new-clothes-panel" style="display: none">
+                <p>Dodaj nowy artykuł</p>
+                <form class="form-inline">
+                    <div class="form-group col-sm-12">
+                        <select id="select-article-to-add" class="form-control col-sm-12"></select>
+                        <input type="text" class="form-control col-sm-4 center" id="input-size-for-add-article"
+                               placeholder="Rozmiar">
+                        <input type="text" class="form-control col-sm-4 center" id="input-length-modification-for-add-article"
+                               placeholder="N100/R100">
+                        <input type="number" class="form-control col-sm-4 center" id="input-quantity-for-add-article">
+                        <button type="button" id="button-add-new-article" class="btn btn-outline-danger col-sm-12">
+                            Dodaj
+                        </button>
+                    </div>
+<!--                    <div class="form-group col-sm-12" id="div-order-clothes" style="display: none">-->
+<!--                        <select class="form-control col-sm-12" id="select-desired-article-for-order-clothes"-->
+<!--                                style="display: none"></select>-->
+<!--                        <input type="text" class="form-control col-sm-3 center" id="input-size-for-order-clothes"-->
+<!--                               placeholder="Rozmiar">-->
+<!--                        <input type="text" class="form-control col-sm-3 center"-->
+<!--                               id="input-length-modification-for-order-clothes"-->
+<!--                               placeholder="N100/R100">-->
+<!--                        <button type="button" class="btn btn-secondary col-sm-6"-->
+<!--                                id="button-add-order-for-order-clothes">Zamów-->
+<!--                        </button>-->
+<!--                    </div>-->
+                </form>
+            </div>
         </div>
     </div>
 
@@ -291,7 +310,7 @@
 
 
 
-    <!--Clothing acceptance-->
+<!--Clothing acceptance-->
     <div>
         <div>
             Przypisanie odzieży:

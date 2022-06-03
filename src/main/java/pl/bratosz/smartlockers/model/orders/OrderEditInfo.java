@@ -7,6 +7,7 @@ public class OrderEditInfo {
     private long orderId;
     private ClothSize clothSize;
     private LengthModification lengthModification;
+    private long clientArticleId;
     private MainOrder mainOrder;
 
     public OrderEditInfo() {
@@ -44,4 +45,11 @@ public class OrderEditInfo {
         this.mainOrder = mainOrder;
     }
 
+    public long getClientArticleId() {
+        return clientArticleId;
+    }
+
+    public void setClientArticleId(long clientArticleId) {
+        this.clientArticleId = clientArticleId;
+    }
 }

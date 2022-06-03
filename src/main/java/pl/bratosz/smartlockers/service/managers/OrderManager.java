@@ -206,6 +206,7 @@ public class OrderManager {
         MainOrder mainOrder = oei.getMainOrder();
         editSize(mainOrder, oei.getClothSize());
         editLengthModification(mainOrder, oei.getLengthModification());
+        editClientArticle(mainOrder, oei.getClientArticleId());
         update(mainOrder, actionType, user);
         return mainOrdersRepository.save(mainOrder);
     }
@@ -302,6 +303,20 @@ public class OrderManager {
                     .forEach(clothOrder -> clothOrder.getClothToRelease().setSize(clothSize));
         }
     }
+
+    private void editClientArticle(MainOrder mainOrder, long desiredClientArticleId) {
+        long previousDesiredArticleId = mainOrder.getDesiredClientArticle().getId();
+        if(desiredClientArticleId > 0 && desiredClientArticleId != previousDesiredArticleId) {
+            ClientArticle desiredClientArticle = clientArticlesRepository.getBy(desiredClientArticleId);
+            if(!mainOrder.isReported()) {
+                mainOrder.setDesiredClientArticle(desiredClientArticle);
+                mainOrder.getClothOrders().stream()
+                        .filter(clothOrder -> clothOrder.isActive())
+                        .forEach(clothOrder -> clothOrder.getClothToRelease().setClientArticle(desiredClientArticle));
+            }
+        }
+    }
+
 
     public Set<MainOrder> update(
             OrderStage orderStage,

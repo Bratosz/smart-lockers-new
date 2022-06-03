@@ -199,13 +199,17 @@ function performActionOnOrders() {
     $('#table-of-main-orders-body').find('input[type="checkbox"]:checked').each(function () {
         let orderId = parseInt($(this).closest('tr').find('.cell-main-order-id').text());
         let desiredSize = $(this).closest('tr').find('.input-size').val();
+        let desiredClientArticleId = $(this).closest('tr').find('.select-article-in-orders-table').val();
+        console.log(desiredClientArticleId);
         let lengthModification = $(this).closest('tr').find('.input-length-modification').val();
         if (desiredSize == "") desiredSize = "Taki sam";
         if (lengthModification == "") lengthModification = "NONE";
+        if (desiredClientArticleId == undefined) desiredClientArticleId = 0;
         let orderEditInfo = {
             orderId: orderId,
             clothSize: desiredSize,
-            lengthModification: lengthModification
+            lengthModification: lengthModification,
+            clientArticleId: desiredClientArticleId
         };
         orderEditInfoArray.push(orderEditInfo);
     });
@@ -250,16 +254,19 @@ function addToManagedEmployees() {
     })
 }
 
-function displayArticlesInChangeSelection(clientArticles) {
-    let $select = $('#select-article-to-change-for-order-clothes');
-    removeOptionsFromSelect($select);
-    for (let clientArticle of clientArticles) {
-        $select.append(createOption(
-            clientArticle.id,
-            clientArticle.article.number + " " + clientArticle.article.name));
+function displayArticlesForChangeInExchangePanel(clientArticles) {
+    if(clientArticles.length > 0) {
+        showFlex($('#div-exchange-clothes-panel'));
+        let $select = $('#select-article-to-change-for-order-clothes');
+        removeOptionsFromSelect($select);
+        for (let clientArticle of clientArticles) {
+            $select.append(createOption(
+                clientArticle.id,
+                clientArticle.article.number + " " + clientArticle.article.name));
+        }
+        hide($('#div-change-article'));
+        hide($('#div-change-size'));
     }
-    hide($('#div-change-article'));
-    hide($('#div-change-size'));
 }
 
 function displayActiveClothes(clothes) {

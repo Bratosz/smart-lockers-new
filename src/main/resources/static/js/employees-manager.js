@@ -57,7 +57,7 @@ function displayEmployeeForEmployeeView(employee) {
     let activeOrders = extractActiveOrders(mainOrders);
     let clientArticles = extractClientArticles(inRotation);
 
-    displayArticlesInChangeSelection(clientArticles);
+    displayArticlesForChangeInExchangePanel(clientArticles);
     displayActiveClothes(inRotation);
     displayClothesBeforeRelease(beforeRelease);
     displayAcceptedClothes(accepted);

@@ -592,7 +592,10 @@ public class EmployeeService {
     }
 
     public Set<SimpleEmployee> getSimpleEmployeesWithActiveOrdersBy(Plant plant) {
-        return employeesRepository.getSimpleEmployeesWithActiveOrdersBy(plant);
+        TreeSet<SimpleEmployee> simpleEmployees = new TreeSet<>();
+        Set<SimpleEmployee> employeesWithActiveOrdersBy = employeesRepository.getSimpleEmployeesWithActiveOrdersBy(plant);
+        simpleEmployees.addAll(employeesWithActiveOrdersBy);
+        return simpleEmployees;
     }
 
     public void updateEmployees(Set<Employee> employeesToUpdate, User user) {
