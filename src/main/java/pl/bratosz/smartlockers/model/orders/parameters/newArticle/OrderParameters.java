@@ -8,10 +8,10 @@ public class OrderParameters {
     private long articlesWithQuantityId;
     private long clientArticleId;
     private ClothSize size;
-    private LengthModification lengthModification;
+    private String lengthModification;
     private int quantity;
     private long employeeId;
-    private OrderType orderType;
+    private String orderType;
     private long [] barcodes;
 
     public OrderParameters() {
@@ -35,11 +35,7 @@ public class OrderParameters {
     }
 
     public LengthModification getLengthModification() {
-        return lengthModification;
-    }
-
-    public void setLengthModification(LengthModification lengthModification) {
-        this.lengthModification = lengthModification;
+        return LengthModification.valueOf(lengthModification);
     }
 
     public int getQuantity() {
@@ -59,11 +55,7 @@ public class OrderParameters {
     }
 
     public OrderType getOrderType() {
-        return orderType;
-    }
-
-    public void setOrderType(OrderType orderType) {
-        this.orderType = orderType;
+        return OrderType.valueOf(orderType);
     }
 
     public long getEmployeeId() {
@@ -75,6 +67,9 @@ public class OrderParameters {
     }
 
     public long[] getBarcodes() {
+        if(barcodes == null) {
+            return new long[0];
+        }
         return barcodes;
     }
 

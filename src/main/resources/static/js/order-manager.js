@@ -26,6 +26,7 @@ function writeOrderToRow(order, $row) {
     $row.removeAttr('id');
     $row.css('display', 'table-row');
     $row.find('.cell-main-order-id').text(order.id);
+    console.log(order.id);
     $row.find('.cell-main-order-type').text(order.orderType);
     $row.find('.cell-main-order-status').text(actualOrderStatus.orderStage);
     $row.find('.cell-clothes-amount').text(order.clothOrders.length);

@@ -180,8 +180,12 @@ public class OrderService {
             long userId) {
         User user = userService.getUserById(userId);
         Client client = clientRepository.getById(user.getActualClientId());
-        List<Cloth> clothes = clothesService.getByBarcodes(p.getBarcodes());
-        List<Cloth> clothesWithActiveOrders = getClothesWithActiveOrders(clothes);
+        List<Cloth> clothes = new LinkedList<>();
+        List<Cloth> clothesWithActiveOrders = new LinkedList<>();
+        if(p.getBarcodes().length > 0) {
+            clothes = clothesService.getByBarcodes(p.getBarcodes());
+            clothesWithActiveOrders = getClothesWithActiveOrders(clothes);
+        }
         if (clothesWithActiveOrders.isEmpty()) {
             switch (p.getOrderType()) {
                 case EXCHANGE_FOR_NEW_ONE:
@@ -309,7 +313,7 @@ public class OrderService {
                 .filter(o -> o.getDesiredSize().equals(size) && o.getDesiredClientArticle().equals(article))
                 .collect(Collectors.toList());
         if(matchingMainOrders.size() == 1) {
-            return mainOrders.get(0);
+            return matchingMainOrders.get(0);
         } else if (matchingMainOrders.isEmpty()) {
             return orderManager.createEmpty();
         } else {

@@ -148,11 +148,12 @@ function getSizeFromTextInputForAddClothes(size) {
 
 
 
-function getLengthModificationFromInput(lengthModification) {
-    if(lengthModification == "" || lengthModification == 0) {
+function getLengthModificationFromInput($input) {
+    let l = $input.val();
+    if(l == "" || l == 0) {
         return "NONE";
     } else {
-        return lengthModification;
+        return l;
     }
 }
 

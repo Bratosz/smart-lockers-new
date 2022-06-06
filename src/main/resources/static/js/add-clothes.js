@@ -109,10 +109,9 @@ function getArticlesParameters() {
                 articlesWithQuantityId: $(row).attr('id'),
                 clientArticleId: $(row).find('.select-article').val(),
                 size: getSizeFromTextInputForAddClothes($(row).find('.input-size').val().toUpperCase()),
-                lengthModification: getLengthModificationFromInput($(row).find('.input-length-modification').val().toUpperCase()),
+                lengthModification: getLengthModificationFromInput($(row).find('.input-length-modification')),
                 quantity: $(row).find('.input-quantity').val(),
-                employeeId: loadedEmployee.id,
-                orderType: actualOrderType
+                employeeId: loadedEmployee.id
             };
             console.log(parameters);
             articlesParameters.push(parameters);
