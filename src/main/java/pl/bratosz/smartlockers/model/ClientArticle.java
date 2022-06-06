@@ -6,6 +6,7 @@ import pl.bratosz.smartlockers.model.clothes.Cloth;
 
 import javax.persistence.*;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -129,5 +130,18 @@ public class ClientArticle implements Comparable<ClientArticle> {
     @Override
     public String toString() {
         return article.getNumber() + " " + article.getName();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ClientArticle that = (ClientArticle) o;
+        return getId() == that.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

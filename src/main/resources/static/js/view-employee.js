@@ -10,7 +10,7 @@ $("#button-perform-action-on-main-orders").click(function () {
 
 $('#button-add-order-for-order-clothes').click(function () {
     if (confirm("Czy na pewno?")) {
-        addOrder();
+        addExchangeOrder();
     }
 });
 
@@ -30,8 +30,10 @@ $('#button-change-size').click(function () {
 });
 
 $('#button-exchange-clothes-for-new-ones').click(function () {
-    actualOrderType = "EXCHANGE_FOR_NEW_ONE";
-    addOrder();
+    if (confirm("Czy na pewno?")) {
+        actualOrderType = "EXCHANGE_FOR_NEW_ONE";
+        addExchangeOrder();
+    }
 });
 
 $('#button-change-article').click(function () {
@@ -45,6 +47,13 @@ $('#button-change-article').click(function () {
         showFlex($('#select-desired-article-for-order-clothes'));
         selectClothesByClientArticleId(clientArticleId);
         displayAvailableArticlesByPosition($('#select-desired-article-for-order-clothes'));
+    }
+});
+
+$('#button-add-new-article').click(function () {
+    if (confirm("Czy na pewno?")) {
+        actualOrderType = "NEW_ARTICLE";
+        addNewArticle();
     }
 });
 
@@ -151,20 +160,46 @@ function refreshOrders() {
     })
 }
 
-function addOrder() {
-    let barcodes,
-        clientArticleId,
-        size,
-        lengthModification;
-    barcodes = getCheckedBarcodes($('#table-of-clothes-body'));
-    clientArticleId = getDesiredClientArticleId();
-    size = getSize();
-    lengthModification = getLengthModification();
+function addNewArticle() {
+    let parameters = {
+        clientArticleId: getDesiredClientArticleId($('#select-article-to-add')),
+        size: getSize($('#input-size-for-add-article')),
+        lengthModification: getLengthModificationFromInput($('#input-length-modification-for-add-article')),
+        quantity: getQuantity($('#input-quantity-for-add-article')),
+        employeeId: loadedEmployee.id,
+        orderType: actualOrderType
+    };
+    if(parameters.quantity <= 0) alert("Ilość musi być większa niż 0");
+    else {
+        $.ajax({
+            url: postNewOrdersBy(userId),
+            method: 'post',
+            contentType: "application/json",
+            data: JSON.stringify(parameters),
+            success: function (response) {
+                alert(response.message);
+                reloadEmployee();
+            }
+        }).done(function () {
+            actualOrderType = "EMPTY";
+        })
+    }
+}
+
+function addExchangeOrder() {
+    let parameters = {
+        barcodes: getCheckedBarcodes($('#table-of-clothes-body')),
+        clientArticleId: getDesiredClientArticleId($('#select-desired-article-for-order-clothes')),
+        size: getSize($('#input-size-for-order-clothes')),
+        orderType: actualOrderType,
+        lengthModification: getLengthModificationFromInput($('#input-length-modification-for-order-clothes'))
+    };
+    console.log(parameters);
     $.ajax({
-        url: postNewOrdersBy(clientArticleId, size, lengthModification, actualOrderType, userId),
+        url: postNewOrdersBy(userId),
         method: 'post',
         contentType: "application/json",
-        data: JSON.stringify(barcodes),
+        data: JSON.stringify(parameters),
         success: function (response) {
             window.alert(response.message);
             reloadEmployee();
@@ -254,9 +289,21 @@ function addToManagedEmployees() {
     })
 }
 
+function displayArticlesToAddInAddPanel(position) {
+    let $panel = $('#order-new-clothes-panel');
+    let $select = $('#select-article-to-add');
+    if(position != null) {
+        showFlex($panel);
+        displayAvailableArticlesByPosition($select);
+    } else {
+        hide($panel);
+    }
+}
+
 function displayArticlesForChangeInExchangePanel(clientArticles) {
+    let $panel = $('#div-exchange-clothes-panel');
     if(clientArticles.length > 0) {
-        showFlex($('#div-exchange-clothes-panel'));
+        showFlex($panel);
         let $select = $('#select-article-to-change-for-order-clothes');
         removeOptionsFromSelect($select);
         for (let clientArticle of clientArticles) {
@@ -266,6 +313,8 @@ function displayArticlesForChangeInExchangePanel(clientArticles) {
         }
         hide($('#div-change-article'));
         hide($('#div-change-size'));
+    } else {
+        hide($panel);
     }
 }
 

@@ -51,9 +51,6 @@ function loadEmployee(employeeId) {
     });
 }
 
-
-
-
 function displayEmployeeForAddClothesView(employee) {
     let box = employee.box;
     $('#employee-info').text(
@@ -109,11 +106,13 @@ function getArticlesParameters() {
     $('#table-of-clothes-selection > tbody > tr').each(function (index, row) {
         if ($(row).attr('id') != "row-template") {
             let parameters = {
-                id: $(row).attr('id'),
+                articlesWithQuantityId: $(row).attr('id'),
                 clientArticleId: $(row).find('.select-article').val(),
-                size: getSizeFromTextInput($(row).find('.input-size').val().toUpperCase()),
+                size: getSizeFromTextInputForAddClothes($(row).find('.input-size').val().toUpperCase()),
                 lengthModification: getLengthModificationFromInput($(row).find('.input-length-modification').val().toUpperCase()),
-                quantity: $(row).find('.input-quantity').val()
+                quantity: $(row).find('.input-quantity').val(),
+                employeeId: loadedEmployee.id,
+                orderType: actualOrderType
             };
             console.log(parameters);
             articlesParameters.push(parameters);

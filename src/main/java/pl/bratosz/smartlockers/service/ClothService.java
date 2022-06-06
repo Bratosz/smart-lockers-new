@@ -22,7 +22,6 @@ import pl.bratosz.smartlockers.service.managers.cloth.ClothesCreator;
 import pl.bratosz.smartlockers.service.managers.OrderManager;
 import pl.bratosz.smartlockers.service.managers.cloth.ClothesManager;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -107,17 +106,14 @@ public class ClothService {
         loadUser(user);
         Set<Cloth> clothes = new LinkedHashSet<>();
         Cloth cloth;
-        int highestOrdinalNumber = clothesManager
-                .getHighestOrdinalNumber(
-                        o.getEmployee(),
-                        o.getDesiredClientArticle());
-        int ordinalNumber = highestOrdinalNumber + 1;
-        while (clothQuantity > 0) {
+        OrdinalNumberResolver onr = OrdinalNumberResolver.createForNewArticle(
+                o.getDesiredSize(),
+                o.getDesiredClientArticle(),
+                o.getEmployee());
+        for (int i = 0; i < clothQuantity; i++) {
             cloth = clothesCreator
-                    .createNew(ordinalNumber, o, user);
+                    .createNew(onr.getNextNumber(), o, user);
             clothes.add(cloth);
-            ordinalNumber++;
-            clothQuantity--;
         }
         return clothes;
     }
@@ -286,7 +282,7 @@ public class ClothService {
                     size,
                     lengthModification,
                     mainOrder,
-                    onr.get(),
+                    onr.getNextNumber(),
                     user);
             return ResponseClothAcceptance.createNewOrderAddedAndClothAcceptedResponse(clothOrder);
         } else if (actualOrderType.equals(CHANGE_ARTICLE)) {
@@ -327,7 +323,7 @@ public class ClothService {
                     size,
                     lengthModification,
                     mainOrder,
-                    onr.get(),
+                    onr.getNextNumber(),
                     user);
             return ResponseClothAcceptance.createNewOrderAddedAndClothAcceptedResponse(clothOrder);
         } else if (actualOrderType.equals(CHANGE_SIZE)) {

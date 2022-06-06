@@ -3,10 +3,8 @@ package pl.bratosz.smartlockers.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.web.bind.annotation.*;
 import pl.bratosz.smartlockers.model.*;
-import pl.bratosz.smartlockers.model.clothes.ClothSize;
-import pl.bratosz.smartlockers.model.clothes.LengthModification;
 import pl.bratosz.smartlockers.model.orders.*;
-import pl.bratosz.smartlockers.model.orders.parameters.newArticle.OrderParametersForNewArticle;
+import pl.bratosz.smartlockers.model.orders.parameters.newArticle.OrderParameters;
 import pl.bratosz.smartlockers.response.ResponseOrdersCreated;
 import pl.bratosz.smartlockers.response.StandardResponse;
 import pl.bratosz.smartlockers.response.UpdateResponse;
@@ -34,7 +32,7 @@ public class OrderController {
     public ResponseOrdersCreated placeForNewClothes(
             @PathVariable long employeeId,
             @PathVariable long userId,
-            @RequestBody Set<OrderParametersForNewArticle> parametersForNewArticles) {
+            @RequestBody Set<OrderParameters> parametersForNewArticles) {
         return orderService.placeForNewEmployee(
                 parametersForNewArticles,
                 employeeId,
@@ -42,21 +40,9 @@ public class OrderController {
     }
 
     @JsonView(Views.OrderBasicInfo.class)
-    @PostMapping("/place-many/{clientArticleId}/{size}" +
-            "/{lengthModification}/{orderType}/{userId}")
-    public StandardResponse placeMany(@PathVariable OrderType orderType,
-                                       @PathVariable long clientArticleId,
-                                       @PathVariable ClothSize size,
-                                       @PathVariable LengthModification lengthModification,
-                                       @PathVariable long userId,
-                                       @RequestBody long[] barCodes) {
-        return orderService.placeMany(
-                orderType,
-                clientArticleId,
-                size,
-                lengthModification,
-                barCodes,
-                userId);
+    @PostMapping("/place-many/{userId}")
+    public StandardResponse placeMany(@PathVariable long userId, @RequestBody OrderParameters parameters) {
+        return orderService.placeMany(parameters, userId);
     }
 
     @JsonView(Views.OrderBasicInfo.class)

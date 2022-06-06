@@ -27,10 +27,10 @@ function writeLockerToRowWithViewButton(locker, $row) {
     return $row;
 }
 
-function writeArticleToSelectionRow(articleToOrder, $row) {
-    let articles = articleToOrder.availableArticles;
+function writeArticleToSelectionRow(articlesWithQuantity, $row) {
+    let articles = articlesWithQuantity.availableArticles;
     $row.removeAttr("id");
-    $row.attr('id', articleToOrder.id);
+    $row.attr('id', articlesWithQuantity.id);
     $row.css("display", "table-row");
     sort(articles, "article.number");
     for (let a of articles) {
@@ -38,7 +38,7 @@ function writeArticleToSelectionRow(articleToOrder, $row) {
             createOption(a.id,
                 a.article.number + " " + a.article.name));
     }
-    $row.find('.input-quantity').val(articleToOrder.quantity);
+    $row.find('.input-quantity').val(articlesWithQuantity.quantity);
     return $row;
 }
 

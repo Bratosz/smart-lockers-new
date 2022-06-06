@@ -38,7 +38,7 @@
                     </thead>
                     <tbody id="table-of-main-orders-body">
                     <tr id="row-template-main-order" style="display: none">
-                        <td class="cell-main-order-id"></td>
+                        <td class="cell-main-order-id="" "></td>
                         <td class="cell-main-order-type"></td>
                         <td class="cell-main-order-status"></td>
                         <td class="cell-clothes-amount"></td>
@@ -244,8 +244,9 @@
             </div>
         </div>
 
-<!--EXCHANGE CLOTHES-->
+
         <div class="col-sm-4">
+<!--EXCHANGE CLOTHES-->
             <div class="row" id="div-exchange-clothes-panel" style="display: none">
                 <p>Wybierz artykuł do wymiany</p>
                 <form class="form-inline">
@@ -271,17 +272,20 @@
                         </button>
                     </div>
                 </form>
+                <br>
             </div>
+<!--ADD ARTICLES-->
             <div class="row" id="order-new-clothes-panel" style="display: none">
                 <p>Dodaj nowy artykuł</p>
                 <form class="form-inline">
                     <div class="form-group col-sm-12">
                         <select id="select-article-to-add" class="form-control col-sm-12"></select>
-                        <input type="text" class="form-control col-sm-4 center" id="input-size-for-add-article"
-                               placeholder="Rozmiar">
-                        <input type="text" class="form-control col-sm-4 center" id="input-length-modification-for-add-article"
-                               placeholder="N100/R100">
-                        <input type="number" class="form-control col-sm-4 center" id="input-quantity-for-add-article">
+                        <input type="text" class="form-control col-sm-4 center"
+                               id="input-size-for-add-article" placeholder="Rozmiar">
+                        <input type="text" class="form-control col-sm-4 center"
+                               id="input-length-modification-for-add-article" placeholder="N100/R100">
+                        <input type="number" class="form-control col-sm-4 center"
+                               id="input-quantity-for-add-article">
                         <button type="button" id="button-add-new-article" class="btn btn-outline-danger col-sm-12">
                             Dodaj
                         </button>
@@ -320,7 +324,7 @@
             <div class="radio-list">
                 <input type="radio" id="assginment-2" name="assignment"
                        value="ASSIGN_WITHDRAWN_CLOTH">
-                <label for="assginment-2">Zapisanie wycofanej(nadmiarowej) odzieży</label>
+                <label for="assignment">Zapisanie wycofanej(nadmiarowej) odzieży</label>
             </div>
             <div class="gap-vertical-5"></div>
             <div>

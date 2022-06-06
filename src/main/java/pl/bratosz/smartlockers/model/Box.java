@@ -100,7 +100,7 @@ public class Box implements Comparable<Box>{
     }
 
 //    public void setEmployee(Employee employee) {
-//        if(employee.isEmpty()) {
+//        if(employee.isOrderEmpty()) {
 //            this.employee = employee;
 //            setBoxStatus(BoxStatus.FREE);
 //        } else {

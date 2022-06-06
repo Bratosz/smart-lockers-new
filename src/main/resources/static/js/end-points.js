@@ -294,10 +294,9 @@ function getBoxesFilteredByPlantDepartmentLocationAndBoxStatus(plantId, departme
         `/${boxStatus}`;
 }
 
-function postNewOrdersBy(articleNumber, size, lengthModification, orderType, userId) {
+function postNewOrdersBy(userId) {
     return getActualLocation() +
-        `/order/place-many/` +
-        `/${articleNumber}/${size}/${lengthModification}/${orderType}/${userId}`
+        `/order/place-many/${userId}`
 }
 
 function getEmployeeWithCompleteInfo(employeeId) {

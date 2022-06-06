@@ -55,9 +55,10 @@ function displayEmployeeForEmployeeView(employee) {
     let accepted = extractClothes("ACCEPTED", clothes);
     let withdrawn = extractClothes("WITHDRAWN", clothes);
     let activeOrders = extractActiveOrders(mainOrders);
-    let clientArticles = extractClientArticles(inRotation);
+    let clientArticlesInRotation = extractClientArticles(inRotation);
 
-    displayArticlesForChangeInExchangePanel(clientArticles);
+    displayArticlesForChangeInExchangePanel(clientArticlesInRotation);
+    displayArticlesToAddInAddPanel(loadedEmployee.position);
     displayActiveClothes(inRotation);
     displayClothesBeforeRelease(beforeRelease);
     displayAcceptedClothes(accepted);

@@ -39,7 +39,7 @@
 //            for (int j = 1; j <= 10; j++) {
 //                Employee employee = employeesRepository.save(new Employee("Jan", "Nowak" + j, Department.METAL));
 //                Employee dismissedEmp = employeesRepository.save(new Employee("", "", Department.METAL));
-//                Box box = new Box(j, Box.BoxStatus.OCCUPY, dismissedEmp.getId());
+//                Box box = new Box(j, Box.BoxStatus.OCCUPY, dismissedEmp.getArticlesWithQuantityId());
 //
 //                List<Employee> dismissedEmployees = new LinkedList<>();
 //                dismissedEmployees.addArticle(dismissedEmp);

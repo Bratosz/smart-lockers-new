@@ -2,15 +2,19 @@ package pl.bratosz.smartlockers.model.orders.parameters.newArticle;
 
 import pl.bratosz.smartlockers.model.clothes.ClothSize;
 import pl.bratosz.smartlockers.model.clothes.LengthModification;
+import pl.bratosz.smartlockers.model.orders.OrderType;
 
-public class OrderParametersForNewArticle {
-    private long id;
+public class OrderParameters {
+    private long articlesWithQuantityId;
     private long clientArticleId;
     private ClothSize size;
     private LengthModification lengthModification;
     private int quantity;
+    private long employeeId;
+    private OrderType orderType;
+    private long [] barcodes;
 
-    public OrderParametersForNewArticle() {
+    public OrderParameters() {
     }
 
     public long getClientArticleId() {
@@ -46,11 +50,35 @@ public class OrderParametersForNewArticle {
         this.quantity = quantity;
     }
 
-    public long getId() {
-        return id;
+    public long getArticlesWithQuantityId() {
+        return articlesWithQuantityId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setArticlesWithQuantityId(long articlesWithQuantityId) {
+        this.articlesWithQuantityId = articlesWithQuantityId;
+    }
+
+    public OrderType getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(OrderType orderType) {
+        this.orderType = orderType;
+    }
+
+    public long getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(long employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public long[] getBarcodes() {
+        return barcodes;
+    }
+
+    public void setBarcodes(long[] barcodes) {
+        this.barcodes = barcodes;
     }
 }

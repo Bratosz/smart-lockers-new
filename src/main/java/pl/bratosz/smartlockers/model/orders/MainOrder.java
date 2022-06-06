@@ -72,6 +72,8 @@ public class MainOrder implements Comparable<MainOrder>, MyEntity {
     @JsonView(Views.Public.class)
     private LengthModification lengthModification;
 
+    private boolean orderEmpty;
+
     public MainOrder() {
     }
 
@@ -80,6 +82,12 @@ public class MainOrder implements Comparable<MainOrder>, MyEntity {
         mainOrder.setActive(true);
         mainOrder.setCreated(new Date());
         return mainOrder;
+    }
+
+    public static MainOrder createEmpty() {
+        MainOrder m = new MainOrder();
+        m.setOrderEmpty(true);
+        return m;
     }
 
     public long getId() {
@@ -234,6 +242,14 @@ public class MainOrder implements Comparable<MainOrder>, MyEntity {
 
     public void setReported(boolean reported) {
         this.reported = reported;
+    }
+
+    public boolean isOrderEmpty() {
+        return orderEmpty;
+    }
+
+    public void setOrderEmpty(boolean orderEmpty) {
+        this.orderEmpty = orderEmpty;
     }
 
     @Override

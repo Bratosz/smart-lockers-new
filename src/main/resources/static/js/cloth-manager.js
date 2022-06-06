@@ -112,12 +112,21 @@ function toStringArticle(clientArticle) {
         clientArticle.article.number;
 }
 
-function getSize(orderType) {
+function getQuantity($input) {
+    let v = $input.val();
+    if(v == "") {
+        return 0;
+    } else {
+        return v;
+    }
+}
+
+function getSize($input, orderType) {
     if(orderType == 'EXCHANGE_FOR_A_NEW_ONE') {
         return 'SIZE_SAME';
     } else {
         return getSizeFromTextInput(
-            $('#input-size-for-order-clothes').val());
+            $input.val());
     }
 }
 
@@ -129,12 +138,15 @@ function getSizeFromTextInput(size) {
     }
 }
 
-
-function getLengthModification() {
-    return getLengthModificationFromInput(
-        $('#input-length-modification-for-order-clothes').val()
-    );
+function getSizeFromTextInputForAddClothes(size) {
+    if (size == null || size == "" || size == undefined) {
+        return "EMPTY";
+    } else {
+        return size.trim().toUpperCase();
+    }
 }
+
+
 
 function getLengthModificationFromInput(lengthModification) {
     if(lengthModification == "" || lengthModification == 0) {
@@ -144,10 +156,10 @@ function getLengthModificationFromInput(lengthModification) {
     }
 }
 
-function getDesiredClientArticleId() {
+function getDesiredClientArticleId($input) {
     let clientArticleId = 0;
     if(actualOrderType == "CHANGE_ARTICLE" || actualOrderType == 'NEW_ARTICLE') {
-        clientArticleId = $('#select-desired-article-for-order-clothes').val();
+        clientArticleId = $input.val();
     }
     return clientArticleId;
 }

@@ -40,6 +40,7 @@ let scanner;
 const config = {qrbox: 350};
 
 $(document).ready(function () {
+    console.log("start");
     loadClient();
     loadGeneralKeyBehaviour();
     loadNav();

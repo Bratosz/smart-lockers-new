@@ -2,13 +2,14 @@ package pl.bratosz.smartlockers.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.bratosz.smartlockers.exception.MyException;
 import pl.bratosz.smartlockers.model.ArticleWithQuantity;
 import pl.bratosz.smartlockers.model.Client;
 import pl.bratosz.smartlockers.model.ClientArticle;
 import pl.bratosz.smartlockers.model.Employee;
 import pl.bratosz.smartlockers.model.clothes.*;
 import pl.bratosz.smartlockers.model.orders.*;
-import pl.bratosz.smartlockers.model.orders.parameters.newArticle.OrderParametersForNewArticle;
+import pl.bratosz.smartlockers.model.orders.parameters.newArticle.OrderParameters;
 import pl.bratosz.smartlockers.model.orders.parameters.complete.CompleteForExchangeAndRelease;
 import pl.bratosz.smartlockers.model.orders.parameters.complete.CompleteOrderParameters;
 import pl.bratosz.smartlockers.model.users.User;
@@ -21,8 +22,11 @@ import pl.bratosz.smartlockers.service.managers.OrderManager;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
+import static pl.bratosz.smartlockers.model.orders.ExchangeStrategy.*;
 import static pl.bratosz.smartlockers.model.orders.OrderStatus.*;
+import static pl.bratosz.smartlockers.model.orders.OrderType.NEW_ARTICLE;
 
 @Service
 public class OrderService {
@@ -58,40 +62,28 @@ public class OrderService {
     }
 
     public ResponseOrdersCreated placeForNewEmployee(
-            Set<OrderParametersForNewArticle> parameters,
+            Set<OrderParameters> parameters,
             long employeeId,
             long userId) {
         long clientId = usersRepository.getActualClientId(userId);
-        OrderType orderType = OrderType.NEW_ARTICLE;
-        ExchangeStrategy exchangeStrategy = ExchangeStrategy.NONE;
+        OrderType orderType = NEW_ARTICLE;
+        ExchangeStrategy exchangeStrategy = NONE;
         Employee employee = employeesRepository.getEmployeeById(employeeId);
-//        int mainOrdersCounter = (int) employee.getMainOrders().stream().filter(o -> o.isActive()).count();
         Map<Long, MainOrder> mainOrdersByArticleIdMap =
-                mapMainOrderWithClientArticle(employee.getMainOrders());
-        Map<Long, MainOrder> articleToReleaseToMainOrder = mapArticleToReleaseToMainOrder(
+                mapActiveMainOrderWithClientArticle(employee.getMainOrders());
+        Map<Long, MainOrder> articleToReleaseToMainOrder = mapArticleWithQuantityToMainOrder(
                 employee.getPosition().getArticlesWithQuantities(),
                 mainOrdersByArticleIdMap);
         User user = userService.getUserById(userId);
         Set<ClothOrder> orders = new HashSet<>();
         parameters.stream()
                 .forEach(params -> {
-                    if (params.getQuantity() > 0 && !params.getSize().equals(ClothSize.SIZE_SAME)) {
-                        if (articleToReleaseToMainOrder.containsKey(params.getId())) {
-                            MainOrder mainOrder = articleToReleaseToMainOrder.get(params.getId());
+                    if (paramsAreNotEmpty(params)) {
+                        if (mainOrderExist(articleToReleaseToMainOrder, params)) {
+                            MainOrder mainOrder = articleToReleaseToMainOrder.get(params.getArticlesWithQuantityId());
                             orderManager.edit(mainOrder, params, user);
                         } else {
-                            ClientArticle article = clientArticleService
-                                    .getById(params.getClientArticleId());
-                            OrderStatus orderStatus = orderStatusService
-                                    .create(orderType, user);
-                            MainOrder mainOrder = createOrder(
-                                    params.getSize(),
-                                    params.getLengthModification(),
-                                    article,
-                                    employee,
-                                    orderType,
-                                    exchangeStrategy,
-                                    orderStatus);
+                            MainOrder mainOrder = getMainOrder(orderType, exchangeStrategy, employee, user, params);
                             orders.addAll(createClothOrdersForNewClothes(
                                     params.getQuantity(),
                                     mainOrder,
@@ -105,7 +97,31 @@ public class OrderService {
         return ResponseOrdersCreated.createForOrdersCreated(orderType, orders.size());
     }
 
-    private Map<Long, MainOrder> mapArticleToReleaseToMainOrder(
+    private MainOrder getMainOrder(
+            OrderType orderType, ExchangeStrategy exchangeStrategy, Employee employee, User user, OrderParameters params) {
+        ClientArticle article = clientArticleService
+                .getById(params.getClientArticleId());
+        OrderStatus orderStatus = orderStatusService
+                .create(orderType, user);
+        return createOrder(
+                params.getSize(),
+                params.getLengthModification(),
+                article,
+                employee,
+                orderType,
+                exchangeStrategy,
+                orderStatus);
+    }
+
+    private boolean paramsAreNotEmpty(OrderParameters params) {
+        return params.getQuantity() > 0 && !params.getSize().equals(ClothSize.SIZE_EMPTY);
+    }
+
+    private boolean mainOrderExist(Map<Long, MainOrder> articleToReleaseToMainOrder, OrderParameters params) {
+        return articleToReleaseToMainOrder.containsKey(params.getArticlesWithQuantityId());
+    }
+
+    private Map<Long, MainOrder> mapArticleWithQuantityToMainOrder(
             Set<ArticleWithQuantity> articlesToRelease,
             Map<Long, MainOrder> mainOrdersMap) {
         Map<Long, MainOrder> map = new HashMap<>();
@@ -123,7 +139,7 @@ public class OrderService {
         return map;
     }
 
-    private Map<Long, MainOrder> mapMainOrderWithClientArticle(List<MainOrder> mainOrders) {
+    private Map<Long, MainOrder> mapActiveMainOrderWithClientArticle(List<MainOrder> mainOrders) {
         Map<Long, MainOrder> map = new HashMap<>();
         for (MainOrder o : mainOrders) {
             if (o.isActive()) map.put(o.getDesiredClientArticle().getId(), o);
@@ -159,29 +175,27 @@ public class OrderService {
         return clothOrdersRepository.save(order);
     }
 
-
     public StandardResponse placeMany(
-            OrderType orderType,
-            long clientArticleId,
-            ClothSize size,
-            LengthModification lengthModification,
-            long[] barcodes,
+            OrderParameters p,
             long userId) {
         User user = userService.getUserById(userId);
         Client client = clientRepository.getById(user.getActualClientId());
-        List<Cloth> clothes = clothesService.getByBarcodes(barcodes);
+        List<Cloth> clothes = clothesService.getByBarcodes(p.getBarcodes());
         List<Cloth> clothesWithActiveOrders = getClothesWithActiveOrders(clothes);
         if (clothesWithActiveOrders.isEmpty()) {
-            switch (orderType) {
+            switch (p.getOrderType()) {
                 case EXCHANGE_FOR_NEW_ONE:
-                    return exchangeForNewOnes(lengthModification, clothes, orderType, user, client);
+                    return exchangeForNewOnes(p.getLengthModification(), clothes, p.getOrderType(), user, client);
                 case CHANGE_SIZE:
-                    return exchangeForAnotherSize(size, lengthModification, clothes, orderType, user, client);
+                    return exchangeForAnotherSize(
+                            p.getSize(), p.getLengthModification(), clothes, p.getOrderType(), user, client);
                 case CHANGE_ARTICLE:
                     return exchangeForAnotherArticle(
-                            clientArticleId, size, lengthModification, clothes, orderType, client, user);
+                            p.getClientArticleId(), p.getSize(), p.getLengthModification(), clothes, p.getOrderType(), client, user);
+                case NEW_ARTICLE:
+                    return addNewClothes(p, user);
                 default:
-                    throw new IllegalStateException("Unexpected value: " + orderType);
+                    return StandardResponse.createForFailure("Typ zamówienia nieobsługiwany: " + p.getOrderType().getName());
             }
         } else {
             return StandardResponse.createForFailure(
@@ -270,6 +284,39 @@ public class OrderService {
         return false;
     }
 
+    private StandardResponse addNewClothes(
+            OrderParameters params,
+            User user) {
+        OrderType orderType = NEW_ARTICLE;
+        ExchangeStrategy exchangeStrategy = NONE;
+        ClientArticle article = clientArticleService.getById(params.getClientArticleId());
+        Employee employee = employeesRepository.getEmployeeById(params.getEmployeeId());
+        try {
+            MainOrder mainOrder = getExistingOrder(employee.getMainOrders(), params.getSize(), article);
+            if(mainOrder.isOrderEmpty()) {
+                 mainOrder = getMainOrder(orderType, exchangeStrategy, employee, user, params);
+            }
+            createClothOrdersForNewClothes(params.getQuantity(), mainOrder, user);
+            return StandardResponse.createForSucceed("Utworzono zamówienie typu: " + orderType.getName());
+        } catch (MyException e) {
+            return StandardResponse.createForFailure("Nie udało się utworzyć zamówienia z powodu: " + e.getMessage());
+        }
+    }
+
+    private MainOrder getExistingOrder(List<MainOrder> mainOrders, ClothSize size, ClientArticle article) throws MyException {
+        List<MainOrder> matchingMainOrders = mainOrders.stream()
+                .filter(o -> o.isActive() && !o.isReported())
+                .filter(o -> o.getDesiredSize().equals(size) && o.getDesiredClientArticle().equals(article))
+                .collect(Collectors.toList());
+        if(matchingMainOrders.size() == 1) {
+            return mainOrders.get(0);
+        } else if (matchingMainOrders.isEmpty()) {
+            return orderManager.createEmpty();
+        } else {
+            throw new MyException("More than one matching orders exception");
+        }
+    }
+
     private StandardResponse exchangeForAnotherArticle(
             long clientArticleId,
             ClothSize desiredSize,
@@ -308,7 +355,7 @@ public class OrderService {
                     desiredSize,
                     lengthModification,
                     mainOrder,
-                    onr.get(),
+                    onr.getNextNumber(),
                     user);
         }
         return StandardResponse.createForSucceed("Utworzono zamówienie typu: " + orderType);
@@ -384,7 +431,7 @@ public class OrderService {
                     desiredSize,
                     lengthModification,
                     mainOrder,
-                    onr.get(),
+                    onr.getNextNumber(),
                     user);
         }
         return StandardResponse.createForSucceed("Utworzono zamówienie typu: " + orderType);

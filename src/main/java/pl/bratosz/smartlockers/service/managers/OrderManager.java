@@ -11,7 +11,7 @@ import pl.bratosz.smartlockers.model.orders.OrderStatus.OrderStage;
 import pl.bratosz.smartlockers.model.orders.parameters.complete.CompleteOrderParameters;
 import pl.bratosz.smartlockers.model.orders.parameters.complete.CompleteForExchangeAndRelease;
 import pl.bratosz.smartlockers.model.orders.parameters.complete.CompleteForRelease;
-import pl.bratosz.smartlockers.model.orders.parameters.newArticle.OrderParametersForNewArticle;
+import pl.bratosz.smartlockers.model.orders.parameters.newArticle.OrderParameters;
 import pl.bratosz.smartlockers.model.users.User;
 import pl.bratosz.smartlockers.repository.ClientArticlesRepository;
 import pl.bratosz.smartlockers.repository.ClothOrdersRepository;
@@ -20,6 +20,7 @@ import pl.bratosz.smartlockers.response.UpdateResponse;
 import pl.bratosz.smartlockers.service.ClothService;
 import pl.bratosz.smartlockers.service.OrderStatusService;
 import pl.bratosz.smartlockers.service.managers.creators.OrderCreator;
+import sun.applet.Main;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -53,6 +54,11 @@ public class OrderManager {
     public ClothOrder createOne(CompleteForRelease parameters, User user) {
         return OrderCreator.create(parameters, user);
     }
+
+    public MainOrder createEmpty() {
+        return MainOrder.createEmpty();
+    }
+
 
     public ClothOrder createOne(CompleteForExchangeAndRelease parameters, User user) {
         return OrderCreator.createWithExchange(parameters, user);
@@ -192,7 +198,7 @@ public class OrderManager {
         return mainOrders;
     }
 
-    public void edit(MainOrder order, OrderParametersForNewArticle params, User user) {
+    public void edit(MainOrder order, OrderParameters params, User user) {
         ActionType actionType = ActionType.EDIT;
         changeArticle(order, params.getClientArticleId());
         editSize(order, params.getSize());
@@ -331,4 +337,5 @@ public class OrderManager {
         });
         return updatedOrders;
     }
+
 }
