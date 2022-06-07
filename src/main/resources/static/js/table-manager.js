@@ -35,6 +35,14 @@ function addStdRowToTable(element, $table, writingMethod) {
     $tbody.append($row);
 }
 
+function addEmptyRowToTable($table) {
+    let $tbody = $table.find('tbody');
+    let $row = getRowTemplate($tbody).clone();
+    $row.removeAttr('id');
+    $row.css('display', 'table-row');
+    $tbody.append($row);
+}
+
 function addLabeledRowToTable(label, content, $table, writingMethod) {
     let $row = getRowTemplate($table).clone();
     $row.removeAttr('id');

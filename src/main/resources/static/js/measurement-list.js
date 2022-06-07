@@ -13,6 +13,10 @@ $('#button-go-to-add-employee').click(function () {
     loadContent($('#div-content-1'),'add-employee.html');
 });
 
+$('#button-go-to-employees-pasting').click(function () {
+    loadContent($('#div-content-1'), 'employees-paste.html');
+});
+
 $('#button-download-measurement-list').click(function () {
     $.ajax({
         url: getActualLocation() +
