@@ -3,12 +3,13 @@ package pl.bratosz.smartlockers.model;
 import pl.bratosz.smartlockers.service.update.SimpleCloth;
 
 import javax.persistence.Embeddable;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Embeddable
-public class SimpleEmployee {
+public class SimpleEmployee implements Comparable<SimpleEmployee>{
     private String firstName;
     private String lastName;
     private int lockerNumber;
@@ -154,5 +155,13 @@ public class SimpleEmployee {
     @Override
     public String toString() {
         return lockerNumber + "/" + boxNumber + " " + lastName + " " + firstName;
+    }
+
+    @Override
+    public int compareTo(SimpleEmployee o) {
+        return Comparator.comparing(SimpleEmployee::getLockerNumber)
+                .thenComparing(SimpleEmployee::getBoxNumber)
+                .thenComparing(SimpleEmployee::getLastName)
+                .compare(this, o);
     }
 }

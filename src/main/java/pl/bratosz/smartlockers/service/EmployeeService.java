@@ -18,6 +18,7 @@ import pl.bratosz.smartlockers.service.managers.EmployeeManager;
 import pl.bratosz.smartlockers.service.exels.plant.template.data.TemplateEmployee;
 import pl.bratosz.smartlockers.service.update.ScrapingService;
 import pl.bratosz.smartlockers.utils.Utils;
+import sun.awt.image.ImageWatched;
 
 import java.util.*;
 
@@ -592,7 +593,7 @@ public class EmployeeService {
     }
 
     public Set<SimpleEmployee> getSimpleEmployeesWithActiveOrdersBy(Plant plant) {
-        TreeSet<SimpleEmployee> simpleEmployees = new TreeSet<>();
+        HashSet<SimpleEmployee> simpleEmployees = new HashSet<>();
         Set<SimpleEmployee> employeesWithActiveOrdersBy = employeesRepository.getSimpleEmployeesWithActiveOrdersBy(plant);
         simpleEmployees.addAll(employeesWithActiveOrdersBy);
         return simpleEmployees;
@@ -603,7 +604,11 @@ public class EmployeeService {
     }
 
     public void updateEmployees(Set<SimpleEmployee> employeesToUpdate, Plant plant, User user) {
-        for (SimpleEmployee e : employeesToUpdate) {
+        ArrayList<SimpleEmployee> simpleEmployeesToUpdate = new ArrayList<>(employeesToUpdate);
+        Collections.sort(simpleEmployeesToUpdate);
+        int counter = 0;
+        for (SimpleEmployee e : simpleEmployeesToUpdate) {
+            System.out.println(counter++);
             try {
                 update(e, plant, user);
             } catch (MultipleBoxException e1) {

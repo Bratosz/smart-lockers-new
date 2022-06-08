@@ -160,7 +160,7 @@ public class PlantLoadingService {
             ClothesAndEmployeesToUpdate clothesAndEmployees =
                     scrapingService.getClothesAndEmployeesToUpdate(plant);
             System.out.println("clothes to update: " + clothesAndEmployees.getUpdatedClothes().size());
-//            clothService.updateLastWashingDate(clothesAndEmployees.getUpdatedClothes());
+            clothService.updateLastWashingDate(clothesAndEmployees.getUpdatedClothes());
             Set<SimpleEmployee> employeesToUpdate =
                     getEmployeesToUpdate(plant, clothesAndEmployees.getEmployeesToUpdate());
             System.out.println("employees to update: " + clothesAndEmployees.getEmployeesToUpdate().size());
