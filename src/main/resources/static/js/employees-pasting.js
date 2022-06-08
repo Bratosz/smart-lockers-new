@@ -8,9 +8,19 @@ $('#button-add-10-rows').click(function () {
    extendTableByNumberOfRows($('#table-for-employees-paste-edpl'), 10);
 });
 
+
 $('#button-add-employees-edpl').click(function () {
    let employees = getEmployeesFromTableEDPL();
    console.log(employees);
+   $.ajax({
+       url: postAddPastedEmployeesEDPL(),
+       method: 'post',
+       contentType: 'application/json',
+       data: JSON.stringify(employees),
+       success: function () {
+           alert("Dodano pracowników");
+       }
+   })
 });
 
 function getEmployeesFromTableEDPL() {
@@ -32,7 +42,7 @@ function getEmployeesFromTableEDPL() {
         let $this = $(this), employee;
         if(rowIsFilled($this)) {
             employee = {
-                name: name,
+                employeeName: name,
                 department: department,
                 position: position,
                 location: location

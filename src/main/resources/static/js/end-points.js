@@ -6,6 +6,14 @@ function getEmployee(employeeId) {
         `/${employeeId}`;
 }
 
+function postAddPastedEmployeesEDPL() {
+    return getActualLocation() +
+        `/paste/add-employees-edpl` +
+        `/${userId}`;
+}
+
+
+
 function postOrdersForNewClothes(employeeId) {
     return getActualLocation() +
         `/order/place-for-new-clothes` +
