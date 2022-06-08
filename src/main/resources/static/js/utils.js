@@ -205,3 +205,11 @@ function setButtonAsClicked($clickedButton, $releasedButton, buttonType) {
     $releasedButton.removeClass('btn-' + buttonType);
     $releasedButton.addClass('btn-outline-' + buttonType);
 }
+
+function empty(v) {
+    if(v == null || v == "" || v == undefined) {
+        return true;
+    } else {
+        return false;
+    }
+}

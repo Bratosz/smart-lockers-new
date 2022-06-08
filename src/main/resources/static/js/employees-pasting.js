@@ -1,10 +1,52 @@
-let rowsInTable = 0;
-loadTable();
+loadTableForEmployeesPasting();
 
 $(document).ready(function () {
+    assignPastingBehaviourToInputs();
+});
+
+$('#button-add-10-rows').click(function () {
+   extendTableByNumberOfRows($('#table-for-employees-paste-edpl'), 10);
+});
+
+$('#button-add-employees-edpl').click(function () {
+   let employees = getEmployeesFromTableEDPL();
+   console.log(employees);
+});
+
+function getEmployeesFromTableEDPL() {
+    let name, department, position, location, employees = [];
+
+    function rowIsFilled(row) {
+        name = row.find('.input-name').val();
+        department = row.find('.input-department').val();
+        position = row.find('.input-position').val();
+        location = row.find('.input-location').val();
+        if(!empty(name) || !empty(department) || !empty(position) || !empty(location)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    $('.edpl').each(function () {
+        let $this = $(this), employee;
+        if(rowIsFilled($this)) {
+            employee = {
+                name: name,
+                department: department,
+                position: position,
+                location: location
+            };
+            employees.push(employee);
+        }
+    });
+    return employees;
+}
+
+
+function assignPastingBehaviourToInputs() {
     $('input').on('paste', function (e) {
         let $this = $(this);
-        console.log(e);
         $.each(e.originalEvent.clipboardData.items, function (index, value) {
             if (value.type === 'text/plain') {
                 value.getAsString(function (text) {
@@ -14,44 +56,52 @@ $(document).ready(function () {
                     console.log(text.split('\n'));
                     $.each(text.split('\n'), function (i2, v2) {
                         $.each(v2.split('\t'), function (i3, v3) {
-                            let cellNameValue = v3.trim().toUpperCase();
+                            // let cellNameValue = v3.trim().toUpperCase();
                             // if (isItHeaderRow(cellNameValue)) {
                             //     y -= 1;
                             //     return false;
                             // }
-                            let row = y + i2;
-                            if(rowsAreFilled(row)) {
-                                extendTable($('#table-for-employees-paste'));
+                            let rowIndex = y + i2;
+                            let $table = $('#table-for-employees-paste-edpl');
+                            if(tableIsFilled($table, rowIndex)) {
+                                extendTable($table);
                             }
                             let col = x + i3;
-                            $this.closest('table').find('tr:eq(' + row + ') td:eq(' + col + ') input').val(v3);
+                            $this.closest('table').find('tr:eq(' + rowIndex + ') td:eq(' + col + ') input').val(v3);
                         });
-
                     });
+                    assignPastingBehaviourToInputs();
                 });
             }
         });
-        return false;
     });
-});
+}
 
-function rowsAreFilled(actualRowNumber) {
-    if(rowsInTable == (actualRowNumber - 1)) {
+function tableIsFilled($table, rowIndex) {
+    let rowsInTable = $table.find('tbody > tr').length;
+    if(rowsInTable == (rowIndex)) {
         return true;
     } else {
         return false;
     }
 }
 
-function loadTable() {
-    let $table = ($('#table-for-employees-paste'));
+function loadTableForEmployeesPasting() {
+    let $table = ($('#table-for-employees-paste-edpl'));
     removeTableRows($table);
     for(let i = 0; i < 10; i++) {
         extendTable($table);
     }
 }
 
+function extendTableByNumberOfRows($table, amount) {
+    for(let i = 0; i < amount; i++) {
+        extendTable($table);
+    }
+    assignPastingBehaviourToInputs();
+}
+
 function extendTable($table) {
     addEmptyRowToTable($table);
-    rowsInTable++;
 }
+
