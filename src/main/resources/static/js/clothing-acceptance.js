@@ -11,7 +11,7 @@ $(document).ready(function () {
                     clearInput($(this));
                 } else {
                     let exchangeType = getExchangeType(),
-                        size = getSize(),
+                        size = getSize($('input[name="size"]:checked')),
                         articleNumber = getDesiredClientArticleId();
                     sendExchangeRequest(exchangeType, barcode, size, articleNumber);
                     clearInput($(this));
