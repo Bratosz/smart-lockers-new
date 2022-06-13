@@ -11,6 +11,9 @@ public class MyString {
     }
 
     private String normalize(String s) {
+        if(s == null) {
+            s = "";
+        }
         return s.trim().toUpperCase();
     }
 
