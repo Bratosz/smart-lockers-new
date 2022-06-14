@@ -1,7 +1,7 @@
 package pl.bratosz.smartlockers.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import pl.bratosz.smartlockers.strings.MyString;
+import pl.bratosz.smartlockers.utils.string.MyString;
 
 import javax.persistence.*;
 import java.util.Objects;

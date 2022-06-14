@@ -5,7 +5,7 @@ import pl.bratosz.smartlockers.model.*;
 import pl.bratosz.smartlockers.repository.*;
 import pl.bratosz.smartlockers.response.StandardResponse;
 import pl.bratosz.smartlockers.service.exels.plant.template.data.TemplatePosition;
-import pl.bratosz.smartlockers.strings.MyString;
+import pl.bratosz.smartlockers.utils.string.MyString;
 
 import java.util.ArrayList;
 import java.util.List;

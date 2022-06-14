@@ -1,7 +1,7 @@
 package pl.bratosz.smartlockers.service.exels.plant.template.data;
 
 import pl.bratosz.smartlockers.model.clothes.ClothSize;
-import pl.bratosz.smartlockers.strings.MyString;
+import pl.bratosz.smartlockers.utils.string.MyString;
 
 import java.util.Objects;
 

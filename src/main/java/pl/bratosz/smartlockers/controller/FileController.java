@@ -30,7 +30,7 @@ import pl.bratosz.smartlockers.payload.UploadFileResponse;
 import pl.bratosz.smartlockers.service.*;
 import pl.bratosz.smartlockers.service.exels.plant.template.data.PlantDataContainer;
 import pl.bratosz.smartlockers.service.exels.plant.template.PlantDataFromFileExtractor;
-import pl.bratosz.smartlockers.strings.MyString;
+import pl.bratosz.smartlockers.utils.string.MyString;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;

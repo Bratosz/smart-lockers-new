@@ -13,7 +13,7 @@ import pl.bratosz.smartlockers.response.StandardResponse;
 import pl.bratosz.smartlockers.service.creators.ClientCreator;
 import pl.bratosz.smartlockers.service.exels.DataBaseLoader;
 import pl.bratosz.smartlockers.service.exels.LoadType;
-import pl.bratosz.smartlockers.strings.MyString;
+import pl.bratosz.smartlockers.utils.string.MyString;
 import pl.bratosz.smartlockers.service.exels.plant.template.data.PlantDataContainer;
 
 import java.util.List;

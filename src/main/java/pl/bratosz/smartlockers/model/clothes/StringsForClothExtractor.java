@@ -1,7 +1,6 @@
 package pl.bratosz.smartlockers.model.clothes;
 
-import pl.bratosz.smartlockers.exception.WrongLengthModificationException;
-import pl.bratosz.smartlockers.strings.MyString;
+import pl.bratosz.smartlockers.utils.string.MyString;
 
 import static pl.bratosz.smartlockers.model.clothes.ClothSize.*;
 

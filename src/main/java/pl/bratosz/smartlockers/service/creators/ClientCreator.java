@@ -7,7 +7,7 @@ import pl.bratosz.smartlockers.model.Plant;
 import pl.bratosz.smartlockers.model.orders.ExchangeStrategy;
 import pl.bratosz.smartlockers.model.orders.OrderType;
 import pl.bratosz.smartlockers.service.ClientService;
-import pl.bratosz.smartlockers.strings.MyString;
+import pl.bratosz.smartlockers.utils.string.MyString;
 
 import java.util.HashMap;
 

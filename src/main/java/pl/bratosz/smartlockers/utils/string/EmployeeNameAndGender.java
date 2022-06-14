@@ -1,29 +1,29 @@
-package pl.bratosz.smartlockers.utils;
+package pl.bratosz.smartlockers.utils.string;
 
 import pl.bratosz.smartlockers.service.jgenderize.model.Gender;
 import pl.bratosz.smartlockers.service.jgenderize.model.NameGender;
 
 import java.util.List;
 
-public class EmployeeName {
+public class EmployeeNameAndGender {
     private final String firstName;
     private final String lastName;
     private final Gender gender;
 
-    private EmployeeName( String lastName, String firstName, Gender gender) {
+    private EmployeeNameAndGender(String lastName, String firstName, Gender gender) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
     }
 
-    public static EmployeeName createForGenderUnknown(List<NameGender> genders) {
+    public static EmployeeNameAndGender createForGenderUnknown(List<NameGender> genders) {
         String lastName = genders.get(0).getName();
         String firstName = genders.get(1).getName();
-        return new EmployeeName(lastName, firstName, Gender.NULL);
+        return new EmployeeNameAndGender(lastName, firstName, Gender.NULL);
     }
 
-    public static EmployeeName create(String lastName, String firstName, Gender gender) {
-        return new EmployeeName(lastName, firstName, gender);
+    public static EmployeeNameAndGender create(String lastName, String firstName, Gender gender) {
+        return new EmployeeNameAndGender(lastName, firstName, gender);
     }
 
     public String getFirstName() {

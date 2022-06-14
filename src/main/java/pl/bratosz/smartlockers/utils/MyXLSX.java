@@ -1,9 +1,8 @@
 package pl.bratosz.smartlockers.utils;
 
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
-import pl.bratosz.smartlockers.strings.MyString;
+import pl.bratosz.smartlockers.utils.string.MyString;
 
 import static org.apache.poi.ss.usermodel.CellType.NUMERIC;
 

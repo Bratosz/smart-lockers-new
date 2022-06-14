@@ -1,58 +1,83 @@
 package pl.bratosz.smartlockers.service.pasting.employee;
 
-import pl.bratosz.smartlockers.strings.MyString;
+import pl.bratosz.smartlockers.utils.string.EmployeeNameAndGender;
+import pl.bratosz.smartlockers.utils.string.MyString;
+import pl.bratosz.smartlockers.utils.string.NameExtractor;
 
 public class PastedEmployeeEDPL extends PastedEmployee {
     private String personalNumber;
     private String employeeName;
+    private String firstName;
+    private String lastName;
     private String department;
     private String position;
     private String location;
 
     public PastedEmployeeEDPL() {
+//        resolveEmployeeNames();
     }
 
+    public String getEmployeeName() {
+        return lastName + " " + firstName;
+    }
 
     @Override
-    String getPersonalNumber() {
+    public String getPersonalNumber() {
         String s = MyString.create(personalNumber).get();
         return s;
     }
 
     @Override
-    String getFirstName() {
+    public String getFirstName() {
+        if(MyString.isEmpty(firstName)) {
+            resolveEmployeeNames();
+            return firstName;
+        } else {
+            return firstName;
+        }
+
+    }
+
+    private void resolveEmployeeNames() {
         String s = MyString.create(employeeName).get();
         if(s.isEmpty()) throw new IllegalArgumentException("Name can not be empty");
-        return null;
+        EmployeeNameAndGender e = NameExtractor.getInstance().get(s);
+        firstName = e.getFirstName();
+        lastName = e.getLastName();
     }
 
     @Override
-    String getLastName() {
-        return null;
+    public String getLastName() {
+        if(MyString.isEmpty(lastName)) {
+            resolveEmployeeNames();
+            return lastName;
+        } else {
+            return lastName;
+        }
     }
 
     @Override
-    int getLockerNumber() {
+    public int getLockerNumber() {
         return 0;
     }
 
     @Override
-    int getBoxNumber() {
+    public int getBoxNumber() {
         return 0;
     }
 
     @Override
-    String getDepartment() {
+    public String getDepartment() {
         return null;
     }
 
     @Override
-    String getPosition() {
+    public String getPosition() {
         return null;
     }
 
     @Override
-    String getLocation() {
+    public String getLocation() {
         return null;
     }
 }

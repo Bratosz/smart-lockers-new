@@ -6,7 +6,7 @@ import pl.bratosz.smartlockers.exception.WrongIdException;
 import pl.bratosz.smartlockers.model.*;
 import pl.bratosz.smartlockers.response.StandardResponse;
 import pl.bratosz.smartlockers.service.EmployeeService;
-import pl.bratosz.smartlockers.strings.MyString;
+import pl.bratosz.smartlockers.utils.string.MyString;
 
 import java.util.List;
 

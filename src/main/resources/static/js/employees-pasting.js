@@ -24,14 +24,15 @@ $('#button-add-employees-edpl').click(function () {
 });
 
 function getEmployeesFromTableEDPL() {
-    let name, department, position, location, employees = [];
+    let employeeName, department, position, location, employees = [];
 
     function rowIsFilled(row) {
-        name = row.find('.input-name').val();
+        employeeName = row.find('.input-employee-name').val();
+        console.log(employeeName);
         department = row.find('.input-department').val();
         position = row.find('.input-position').val();
         location = row.find('.input-location').val();
-        if(!empty(name) || !empty(department) || !empty(position) || !empty(location)) {
+        if(!empty(employeeName) || !empty(department) || !empty(position) || !empty(location)) {
             return true;
         } else {
             return false;
@@ -42,7 +43,7 @@ function getEmployeesFromTableEDPL() {
         let $this = $(this), employee;
         if(rowIsFilled($this)) {
             employee = {
-                employeeName: name,
+                employeename: employeeName,
                 department: department,
                 position: position,
                 location: location

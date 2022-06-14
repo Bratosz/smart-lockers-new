@@ -2,7 +2,6 @@ package pl.bratosz.smartlockers.service;
 
 import org.springframework.stereotype.Service;
 import pl.bratosz.smartlockers.model.Client;
-import pl.bratosz.smartlockers.model.Employee;
 import pl.bratosz.smartlockers.model.Location;
 import pl.bratosz.smartlockers.model.Plant;
 import pl.bratosz.smartlockers.repository.ClientRepository;
@@ -10,7 +9,7 @@ import pl.bratosz.smartlockers.repository.LocationRepository;
 import pl.bratosz.smartlockers.repository.PlantsRepository;
 import pl.bratosz.smartlockers.repository.UsersRepository;
 import pl.bratosz.smartlockers.response.CreateResponse;
-import pl.bratosz.smartlockers.strings.MyString;
+import pl.bratosz.smartlockers.utils.string.MyString;
 
 import java.util.LinkedList;
 import java.util.List;

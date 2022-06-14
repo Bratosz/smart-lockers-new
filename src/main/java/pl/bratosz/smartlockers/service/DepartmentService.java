@@ -8,7 +8,7 @@ import pl.bratosz.smartlockers.repository.PlantsRepository;
 import pl.bratosz.smartlockers.repository.UsersRepository;
 import pl.bratosz.smartlockers.response.CreateResponse;
 import pl.bratosz.smartlockers.service.managers.DepartmentManager;
-import pl.bratosz.smartlockers.strings.MyString;
+import pl.bratosz.smartlockers.utils.string.MyString;
 
 import java.util.*;
 

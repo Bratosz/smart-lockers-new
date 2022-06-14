@@ -4,7 +4,7 @@ import pl.bratosz.smartlockers.exception.MyException;
 import pl.bratosz.smartlockers.model.clothes.Article;
 import pl.bratosz.smartlockers.model.clothes.ClothType;
 import pl.bratosz.smartlockers.service.ArticleService;
-import pl.bratosz.smartlockers.strings.MyString;
+import pl.bratosz.smartlockers.utils.string.MyString;
 
 public class ArticleCreator {
     private ArticleService articleService;

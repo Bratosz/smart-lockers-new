@@ -1,6 +1,5 @@
 package pl.bratosz.smartlockers.service.exels.plant.template;
 
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -9,15 +8,12 @@ import pl.bratosz.smartlockers.exception.MyException;
 import pl.bratosz.smartlockers.model.ClientArticle;
 import pl.bratosz.smartlockers.model.files.TemplateTypeForPlantLoad;
 import pl.bratosz.smartlockers.service.exels.plant.template.data.*;
-import pl.bratosz.smartlockers.strings.MyString;
-import pl.bratosz.smartlockers.utils.MyXLSX;
 import pl.bratosz.smartlockers.utils.Utils;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.apache.poi.ss.usermodel.CellType.*;
 import static pl.bratosz.smartlockers.model.files.TemplateTypeForPlantLoad.TEMPLATE_WITH_BOXES;
 import static pl.bratosz.smartlockers.model.files.TemplateTypeForPlantLoad.TEMPLATE_WITH_BOXES_AND_SIZES;
 import static pl.bratosz.smartlockers.service.exels.plant.template.data.SheetTypeForPlantLoad.*;

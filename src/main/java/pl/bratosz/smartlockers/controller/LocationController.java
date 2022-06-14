@@ -6,7 +6,7 @@ import pl.bratosz.smartlockers.model.Location;
 import pl.bratosz.smartlockers.model.Views;
 import pl.bratosz.smartlockers.response.CreateResponse;
 import pl.bratosz.smartlockers.service.LocationService;
-import pl.bratosz.smartlockers.strings.MyString;
+import pl.bratosz.smartlockers.utils.string.MyString;
 
 import java.util.List;
 

@@ -9,7 +9,7 @@ import java.util.List;
 public class PastingEmployeeService {
 
     public void add(long userId, List<PastedEmployeeEDPL> employees) {
-        System.out.println("foo");
-
+        System.out.println("start");
+        employees.get(0).getFirstName();
     }
 }

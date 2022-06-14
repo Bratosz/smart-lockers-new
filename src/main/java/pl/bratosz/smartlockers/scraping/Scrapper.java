@@ -11,7 +11,7 @@ import pl.bratosz.smartlockers.model.clothes.*;
 import pl.bratosz.smartlockers.service.ClientArticleService;
 import pl.bratosz.smartlockers.service.update.EmployeesAndClothes;
 import pl.bratosz.smartlockers.service.update.SimpleCloth;
-import pl.bratosz.smartlockers.strings.MyString;
+import pl.bratosz.smartlockers.utils.string.MyString;
 import pl.bratosz.smartlockers.utils.Utils;
 
 import java.io.IOException;
