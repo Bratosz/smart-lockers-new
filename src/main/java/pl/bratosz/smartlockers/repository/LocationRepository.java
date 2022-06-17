@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import pl.bratosz.smartlockers.model.Client;
 import pl.bratosz.smartlockers.model.Location;
-import pl.bratosz.smartlockers.model.Plant;
 
 import java.util.List;
 
@@ -23,6 +22,11 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
     Location getBySurrogateAndClient(boolean surrogate, Client client);
 
+    Location getBySurrogateAndClientId(boolean surrogate, long clientId);
+
     @Query("select l from Location l where l.id = :id")
     Location getById(long id);
+
+    @Query("select l from Location l where l.name = :name and l.client.id  = :clientId")
+    Location getByNameAndClient(@Param("name") String name, @Param("clientId") long clientId);
 }

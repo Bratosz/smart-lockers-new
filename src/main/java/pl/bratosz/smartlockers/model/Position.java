@@ -31,12 +31,21 @@ public class Position {
     @JsonView(Views.Public.class)
     private Set<ArticleWithQuantity> articlesWithQuantities;
 
+    @JsonView(Views.Public.class)
+    private boolean surrogate;
+
     public Position() {
     }
 
     public Position(String name, Client client) {
         setName(name);
         setClient(client);
+    }
+
+    public Position(String n, Client c, boolean b) {
+        setName(n);
+        setClient(c);
+        setSurrogate(b);
     }
 
     public long getId() {
@@ -106,5 +115,13 @@ public class Position {
     @Override
     public String toString() {
         return getName();
+    }
+
+    public boolean isSurrogate() {
+        return surrogate;
+    }
+
+    public void setSurrogate(boolean surrogate) {
+        this.surrogate = surrogate;
     }
 }

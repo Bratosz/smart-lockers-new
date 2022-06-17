@@ -34,6 +34,16 @@ public class LocationService {
         return locationRepository.getByNameAndPlantNumber(name, plantNumber);
     }
 
+    public Location getByNameAndClientId(String name, long clientId) {
+        name = MyString.create(name).get();
+        Location l = locationRepository.getByNameAndClient(name, clientId);
+        if(l == null) {
+            return getSurrogateBy(clientId);
+        } else {
+            return l;
+        }
+    }
+
     public Location create(long clientId, String locationName) {
         return create(clientId, locationName, false);
     }
@@ -70,6 +80,20 @@ public class LocationService {
 
     public Location getSurrogateBy(Client client) {
         return locationRepository.getBySurrogateAndClient(true, client);
+    }
+
+    public Location getSurrogateBy(long clientId) {
+        Location l = locationRepository.getBySurrogateAndClientId(true, clientId);
+        if(l == null) {
+            return createSurrogate(clientId);
+        } else {
+            return l;
+        }
+    }
+
+    private Location createSurrogate(long clientId) {
+        String s = MyString.create("ZASTĘPCZY").get();
+        return create(clientId, s, true);
     }
 
     public CreateResponse create(String locationName, long plantId) {

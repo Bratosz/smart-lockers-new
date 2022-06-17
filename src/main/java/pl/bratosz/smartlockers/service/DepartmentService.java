@@ -135,9 +135,20 @@ public class DepartmentService {
     }
 
 
+    private Department createSurrogate(long clientId) {
+        Client c = clientRepository.getById(clientId);
+        return create("ZASTĘPCZY", clientId, c.getPlants().stream().findFirst().get().getPlantNumber(), true);
+
+    }
+
 
     public Department getSurrogateBy(long clientId) {
-        return departmentsRepository.getBySurrogateAndClientId(true, clientId);
+        Department d = departmentsRepository.getBySurrogateAndClientId(true, clientId);
+        if(d == null) {
+            return createSurrogate(clientId);
+        } else {
+            return d;
+        }
     }
 
     public Location getLocation(Department department, long locationId) {

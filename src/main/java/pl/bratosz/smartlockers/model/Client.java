@@ -3,6 +3,7 @@ package pl.bratosz.smartlockers.model;
 import com.fasterxml.jackson.annotation.JsonView;
 import pl.bratosz.smartlockers.model.orders.ExchangeStrategy;
 import pl.bratosz.smartlockers.model.orders.OrderType;
+import pl.bratosz.smartlockers.service.pasting.employee.EmployeeToAssign;
 
 import javax.persistence.*;
 import java.util.*;
@@ -32,6 +33,10 @@ public class Client {
     @JsonView(Views.Public.class)
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private Set<ClientArticle> articles;
+
+    @JsonView(Views.Public.class)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    private List<EmployeeToAssign> employeesToAssign;
 
     @ElementCollection
     @CollectionTable(name = "exchange_strategies",
@@ -106,6 +111,7 @@ public class Client {
         return departmentOpt.orElseThrow(NoSuchElementException::new);
     }
 
+
     public Location getLocationByName(String locationName) {
         Optional<Location> locationOpt = locations.stream().filter(l -> l.getName().equals(locationName))
                 .findFirst();
@@ -159,5 +165,16 @@ public class Client {
     public void addMeasurementList(MeasurementList measurementList) {
         measurementList.setClient(this);
         this.setMeasurementList(measurementList);
+    }
+
+    public List<EmployeeToAssign> getEmployeesToAssign() {
+        if(employeesToAssign == null) {
+            employeesToAssign = new LinkedList<>();
+        }
+        return employeesToAssign;
+    }
+
+    public void setEmployeesToAssign(List<EmployeeToAssign> employeesToAssign) {
+        this.employeesToAssign = employeesToAssign;
     }
 }

@@ -43,7 +43,7 @@ function getEmployeesFromTableEDPL() {
         let $this = $(this), employee;
         if(rowIsFilled($this)) {
             employee = {
-                employeename: employeeName,
+                employeeName: employeeName,
                 department: department,
                 position: position,
                 location: location

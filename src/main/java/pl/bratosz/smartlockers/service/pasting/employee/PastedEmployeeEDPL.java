@@ -14,11 +14,10 @@ public class PastedEmployeeEDPL extends PastedEmployee {
     private String location;
 
     public PastedEmployeeEDPL() {
-//        resolveEmployeeNames();
     }
 
     public String getEmployeeName() {
-        return lastName + " " + firstName;
+        return getLastName() + " " + getFirstName();
     }
 
     @Override
@@ -29,18 +28,13 @@ public class PastedEmployeeEDPL extends PastedEmployee {
 
     @Override
     public String getFirstName() {
-        if(MyString.isEmpty(firstName)) {
-            resolveEmployeeNames();
-            return firstName;
-        } else {
-            return firstName;
-        }
-
+        if (MyString.isEmpty(firstName)) resolveEmployeeNames();
+        return firstName;
     }
 
     private void resolveEmployeeNames() {
         String s = MyString.create(employeeName).get();
-        if(s.isEmpty()) throw new IllegalArgumentException("Name can not be empty");
+        if (s.isEmpty()) throw new IllegalArgumentException("Name can not be empty");
         EmployeeNameAndGender e = NameExtractor.getInstance().get(s);
         firstName = e.getFirstName();
         lastName = e.getLastName();
@@ -48,36 +42,32 @@ public class PastedEmployeeEDPL extends PastedEmployee {
 
     @Override
     public String getLastName() {
-        if(MyString.isEmpty(lastName)) {
-            resolveEmployeeNames();
-            return lastName;
-        } else {
-            return lastName;
-        }
+        if (MyString.isEmpty(lastName)) resolveEmployeeNames();
+        return lastName;
     }
 
     @Override
     public int getLockerNumber() {
-        return 0;
+        return -1;
     }
 
     @Override
     public int getBoxNumber() {
-        return 0;
+        return -1;
     }
 
     @Override
     public String getDepartment() {
-        return null;
+        return MyString.create(department).get();
     }
 
     @Override
     public String getPosition() {
-        return null;
+        return MyString.create(position).get();
     }
 
     @Override
     public String getLocation() {
-        return null;
+        return MyString.create(location).get();
     }
 }

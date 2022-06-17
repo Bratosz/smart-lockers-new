@@ -43,9 +43,15 @@ public class PositionService {
         long clientId = usersRepository.getActualClientId(userId);
         Client client = clientRepository.getById(clientId);
         Position position = create(name, client);
-        return  StandardResponse.createForSucceed(
+        return StandardResponse.createForSucceed(
                 "Dodano stanowisko",
                 position);
+    }
+
+    private Position createSurrogate(Client c) {
+        String n = MyString.create("ZASTĘPCZA").get();
+        Position p = new Position(n, c, true);
+        return positionsRepository.save(p);
     }
 
     public Position create(
@@ -93,6 +99,24 @@ public class PositionService {
     public Set<Position> get(long userId) {
         long clientId = usersRepository.getById(userId).getActualClientId();
         return positionsRepository.getByClientId(clientId);
+    }
+
+    public Position get(String positionName, Client c) {
+        Position p = positionsRepository.getByClientIdAndName(c, positionName);
+        if (p == null) {
+            return getSurrogate(c);
+        } else {
+            return p;
+        }
+    }
+
+    private Position getSurrogate(Client c) {
+        Position p = positionsRepository.getByClientAndSurrogate(c, true);
+        if (p == null) {
+            return createSurrogate(c);
+        } else {
+            return p;
+        }
     }
 
     public Set<Position> getAllByDepartment(long departmentId) {
@@ -154,17 +178,17 @@ public class PositionService {
 
     public Position getRotational(Plant plant) {
         String rotationalPositionName = "ROTACJA";
-        return positionsRepository.getByPlantAndName(plant.getClient(), rotationalPositionName);
+        return positionsRepository.getByClientIdAndName(plant.getClient(), rotationalPositionName);
     }
 
     private void delete(Set<ArticleWithQuantity> clothTypesWithQuantities) {
-       for(ArticleWithQuantity ctq : clothTypesWithQuantities) {
-           clothTypesWithQuantitiesRepository.deleteById(ctq.getId());
-       }
+        for (ArticleWithQuantity ctq : clothTypesWithQuantities) {
+            clothTypesWithQuantitiesRepository.deleteById(ctq.getId());
+        }
     }
 
     private void removeAssignedPositionFromEmployees(Set<Employee> employees) {
-        for(Employee emp : employees) {
+        for (Employee emp : employees) {
             emp.setPosition(null);
             employeesRepository.save(emp);
         }
