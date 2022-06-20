@@ -26,6 +26,12 @@ function postCreateEmployees() {
         `/create-employees`;
 }
 
+function deleteEmployeesToCreate() {
+    return getActualLocation() +
+        `/create-employees/delete` +
+        `/${userId}`;
+}
+
 function postOrdersForNewClothes(employeeId) {
     return getActualLocation() +
         `/order/place-for-new-clothes` +

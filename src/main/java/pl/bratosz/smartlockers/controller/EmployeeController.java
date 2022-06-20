@@ -50,7 +50,7 @@ public class EmployeeController {
     }
 
     @JsonView(Views.InternalForEmployees.class)
-    @PostMapping("/createWithDepartmentPositionAndLocation-employee-and-add-to-box/{boxId}/{lastName}/{firstName}" +
+    @PostMapping("/create-employee-and-add-to-box/{boxId}/{lastName}/{firstName}" +
             "/{departmentId}/{positionId}")
     public StandardResponse createEmployee(
             @PathVariable long boxId,
@@ -65,7 +65,7 @@ public class EmployeeController {
     }
 
     @JsonView(Views.InternalForEmployees.class)
-    @PostMapping("/createWithDepartmentPositionAndLocation-employee-and-add-to-next-free-box/{lastName}/{firstName}/{departmentId}" +
+    @PostMapping("/create-employee-and-add-to-next-free-box/{lastName}/{firstName}/{departmentId}" +
             "/{locationId}/{positionId}")
     public StandardResponse createEmployee(
             @PathVariable String lastName,

@@ -12,4 +12,6 @@ public interface EmployeesToCreateRepository extends JpaRepository<EmployeeToCre
 
     @Query("select e from EmployeeToCreate e where e.client.id = :clientId order by e.client.id")
     List<EmployeeToCreate> getAllByClient(long clientId);
+
+    EmployeeToCreate getById(long id);
 }

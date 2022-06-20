@@ -3,6 +3,8 @@ package pl.bratosz.smartlockers.controller;
 import org.springframework.web.bind.annotation.*;
 import pl.bratosz.smartlockers.response.StandardResponse;
 import pl.bratosz.smartlockers.service.pasting.CreatingEmployeeService;
+import pl.bratosz.smartlockers.service.pasting.employee.EmployeeToCreate;
+import pl.bratosz.smartlockers.service.pasting.employee.EmployeeToCreateData;
 import pl.bratosz.smartlockers.service.pasting.employee.PastedEmployeeEDPL;
 
 import java.util.List;
@@ -16,6 +18,11 @@ public class CreatingEmployeeController {
 
     public CreatingEmployeeController(CreatingEmployeeService creatingEmployeeService) {
         this.creatingEmployeeService = creatingEmployeeService;
+    }
+
+    @PostMapping
+    public StandardResponse createEmployees(@RequestBody List<EmployeeToCreateData> employeesData) {
+        return creatingEmployeeService.createTheEmployees(employeesData);
     }
 
     @PostMapping("/add-employees-edpl/{userId}")
@@ -32,5 +39,10 @@ public class CreatingEmployeeController {
             @RequestBody Set<Long> employeesIds) {
         return creatingEmployeeService.setDepartmentPositionAndLocation(
                 departmentId, positionId, locationId, employeesIds);
+    }
+
+    @DeleteMapping("/delete/{userId}")
+    public StandardResponse deleteEmployees(@PathVariable long userId, @RequestBody List<Long> employeesIds) {
+        return creatingEmployeeService.deleteEmployeesToCreate(employeesIds, userId);
     }
 }

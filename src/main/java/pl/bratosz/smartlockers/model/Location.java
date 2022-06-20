@@ -37,6 +37,9 @@ public class Location implements SameClient {
     @JsonView(Views.Public.class)
     private boolean surrogate;
 
+    @JsonView(Views.Public.class)
+    private boolean full;
+
     public Location() {
     }
 
@@ -119,5 +122,13 @@ public class Location implements SameClient {
     @Override
     public String toString() {
         return getName();
+    }
+
+    public boolean isFull() {
+        return full;
+    }
+
+    public void setFull(boolean full) {
+        this.full = full;
     }
 }

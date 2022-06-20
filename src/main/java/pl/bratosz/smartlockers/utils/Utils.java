@@ -138,8 +138,17 @@ public class Utils {
         List<SameClient> a1 = new LinkedList<>(col);
         List<SameClient> a2 = Arrays.asList(args);
         a1.addAll(a2);
+        return haveSameClient(a1);
+    }
+
+    public static boolean haveSameClient(SameClient... args) {
+        List<SameClient> l = Arrays.asList(args);
+        return haveSameClient(l);
+    }
+
+    private static boolean haveSameClient(List<SameClient> l) {
         long clientId = 0;
-        for(SameClient e : a1) {
+        for(SameClient e : l) {
             if(clientId == 0) clientId = e.getClient().getId();
             else {
                 if(clientId != e.getClient().getId()) return false;

@@ -16,10 +16,12 @@ import pl.bratosz.smartlockers.repository.UsersRepository;
 import pl.bratosz.smartlockers.response.StandardResponse;
 import pl.bratosz.smartlockers.service.managers.EmployeeManager;
 import pl.bratosz.smartlockers.service.exels.plant.template.data.TemplateEmployee;
+import pl.bratosz.smartlockers.service.pasting.employee.EmployeeToCreate;
 import pl.bratosz.smartlockers.service.update.ScrapingService;
 import pl.bratosz.smartlockers.utils.Utils;
 import sun.awt.image.ImageWatched;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import static pl.bratosz.smartlockers.model.Box.BoxStatus.OCCUPY;
@@ -171,6 +173,8 @@ public class EmployeeService {
         return employee;
     }
 
+
+
     public StandardResponse createEmployee(
             String lastName,
             String firstName,
@@ -180,12 +184,25 @@ public class EmployeeService {
         Department department = departmentService.getById(departmentId);
         Location location = locationService.getById(locationId);
         Position position = departmentService.getPosition(department, positionId);
-        Box box;
         try {
-            box = boxService.findNextFreeBox(location);
+            return createEmployee(lastName, firstName, department, position, location);
         } catch (BoxNotAvailableException e) {
             return StandardResponse.createForFailure("Brak wolnych szafek, podaj inny oddział lub lokalizację");
         }
+    }
+
+    public StandardResponse createEmployee(EmployeeToCreate e) throws BoxNotAvailableException {
+        return createEmployee(
+                e.getLastName(), e.getFirstName(), e.getDepartment(), e.getPosition(), e.getLocation());
+    }
+
+    private StandardResponse createEmployee(
+            String lastName,
+            String firstName,
+            Department department,
+            Position position,
+            Location location) throws BoxNotAvailableException {
+        Box box = boxService.findNextFreeBox(location);
         Employee employee = create(firstName, lastName, position, box, department);
         return StandardResponse.createForSucceed("Dodano pracownika do szafki " +
                         box.getLocker().getPlant().getPlantNumber() +

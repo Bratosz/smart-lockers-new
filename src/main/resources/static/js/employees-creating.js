@@ -25,17 +25,26 @@ $('#button-post-employees-to-create').click(function () {
         method: 'post',
         contentType: 'application/json',
         data: JSON.stringify(employeesToCreate),
-        success: function (response) {
-            alert(response.message);
+        success: function () {
         }
     }).done(function () {
-        loadEmployeesToCreate();
-    });
+        $.ajax({
+            url: getEmployeesToCreate(),
+            method: 'get',
+            success: function (response) {
+                if (response.entity.length > 0) {
+                    loadEmployeesToCreate(response.entity);
+                } else {
+                    loadContent($('#div-content-1'), 'measurement-list.html');
+                }
+            }
+        })
+    })
 });
 
 $('#button-select-all-rows').click(function () {
-    $('#table-of-employees-to-create').find('input[type="checkbox"]').each(function () {
-        $(this).prop('checked', true);
+    $('#table-of-employees-to-create').find('tr:not(tr:nth-child(1))').each(function () {
+        $(this).find('input[type="checkbox"]').prop('checked', true);
     });
 });
 
@@ -51,10 +60,7 @@ $('#button-set-dep-pos-loc').click(function () {
         locationId = $('#select-location').val(),
         employeesIds = [];
     getCheckedRows($('#table-of-employees-to-create')).forEach(
-        r => {
-            let employeeId = r.attr('id');
-            employeesIds.push(employeeId);
-        });
+        r => employeesIds.push(getEmployeeIdFromRow(r)));
     $.ajax({
         url: postSetDepartmentPositionLocationForEmployeesToCreate(
             departmentId, positionId, locationId),
@@ -67,20 +73,42 @@ $('#button-set-dep-pos-loc').click(function () {
     }).done(function () {
         loadEmployeesToCreate();
     })
-
 });
 
 
-function loadEmployeesToCreate() {
+$('#button-delete-employees-to-create').click(function () {
+    let employeesIds = [];
+    getCheckedRows($('#table-of-employees-to-create')).forEach(
+        r => employeesIds.push(getEmployeeIdFromRow(r)));
     $.ajax({
-        url: getEmployeesToCreate(),
-        method: 'get',
+        url: deleteEmployeesToCreate(),
+        method: 'delete',
+        contentType: 'application/json',
+        data: JSON.stringify(employeesIds),
         success: function (response) {
-            if (response.succeed) {
-                displayEmployeesToCreate(response.entity);
+            if (response.entity.length > 0) {
+                loadEmployeesToCreate(response.entity);
+            } else {
+                loadContent($('#div-content-1'), 'measurement-list.html');
             }
         }
     })
+});
+
+function loadEmployeesToCreate(employees) {
+    if (employees == undefined) {
+        $.ajax({
+            url: getEmployeesToCreate(),
+            method: 'get',
+            success: function (response) {
+                if (response.succeed) {
+                    displayEmployeesToCreate(response.entity);
+                }
+            }
+        })
+    } else {
+        displayEmployeesToCreate(employees);
+    }
 }
 
 function displayEmployeesToCreate(employeesToCreate) {
@@ -101,9 +129,5 @@ function loadSelectInRowForEmployeeToCreate($select, options, actual, placeholde
             $select,
             actual);
     }
-    $select.find('option').each(function () {
-        $(this).attr('disabled', 'disabled');
-    })
-
 }
 

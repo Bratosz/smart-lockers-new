@@ -14,6 +14,10 @@ function dismissEmployee(employeeId) {
     });
 }
 
+function getEmployeeIdFromRow($row) {
+    return $row.attr('id');
+}
+
 function writeEmployeeInfoToElement(employee, $element) {
     let location,
         plantNumber,

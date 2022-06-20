@@ -17,6 +17,20 @@ $('#button-go-to-employees-pasting').click(function () {
     loadContent($('#div-content-1'), 'employees-paste.html');
 });
 
+$('#button-go-to-employees-pasted').click(function () {
+    $.ajax({
+        url: getEmployeesToCreate(),
+        method: 'get',
+        success: function (response) {
+            if(response.entity.length > 0) {
+                loadContent($('#div-content-1'), 'employees-creating.html');
+            } else {
+                loadContent($('#div-content-1'), 'employees-paste.html');
+            }
+        }
+    })
+});
+
 $('#button-download-measurement-list').click(function () {
     $.ajax({
         url: getActualLocation() +
