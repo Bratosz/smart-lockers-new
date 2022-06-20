@@ -89,6 +89,9 @@ function writeEmployeeToCreateToRow(employee, $row) {
     loadSelectInRowForEmployeeToCreate(
         $selectLocation, loadedClient.locations, employee.location, "Wybierz lokalizację");
     rowClickedThenSelectCheckBox($row);
+    $row.find('.button-swap-names').click(function () {
+       swapNames(employee.id);
+    });
     return $row;
 }
 

@@ -41,6 +41,13 @@ public class CreatingEmployeeController {
                 departmentId, positionId, locationId, employeesIds);
     }
 
+    @PostMapping("/swap-names/{employeeId}")
+    public void swapNames(@PathVariable long employeeId) {
+        creatingEmployeeService.swapNames(employeeId);
+    }
+
+
+
     @DeleteMapping("/delete/{userId}")
     public StandardResponse deleteEmployees(@PathVariable long userId, @RequestBody List<Long> employeesIds) {
         return creatingEmployeeService.deleteEmployeesToCreate(employeesIds, userId);

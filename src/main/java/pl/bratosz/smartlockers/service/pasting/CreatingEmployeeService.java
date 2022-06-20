@@ -131,7 +131,13 @@ public class CreatingEmployeeService {
         return employees;
     }
 
-
-
+    public void swapNames(long employeeId) {
+        EmployeeToCreate e = employeesToCreateRepository.getById(employeeId);
+        String firstName = e.getFirstName();
+        String lastName = e.getLastName();
+        e.setFirstName(lastName);
+        e.setLastName(firstName);
+        employeesToCreateRepository.save(e);
+    }
 }
 

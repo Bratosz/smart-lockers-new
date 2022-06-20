@@ -52,6 +52,10 @@ public class NameExtractor {
     private NameGender getGenderName(List<NameGender> genders) {
         long count = genders.stream().filter(g -> g.getProbability() > 0.9f).count();
         if(count == 1) return genders.stream().filter(g -> g.getProbability() > 0.9f).findFirst().get();
+        else if(count == 2) {
+            count = genders.stream().filter(g -> g.getProbability() >= 0.95f).count();
+            if(count == 1) return genders.stream().filter(g -> g.getProbability() >= 0.95f).findFirst().get();
+        }
         Collections.sort(genders);
         return genders.get(0);
     }

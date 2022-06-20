@@ -18,6 +18,16 @@ function getEmployeeIdFromRow($row) {
     return $row.attr('id');
 }
 
+function swapNames(employeeId) {
+    $.ajax({
+        url: postSwapEmployeeNames(employeeId),
+        method: 'post',
+        success: function () {
+            alert("Zamieiono imiona");
+        }
+    })
+}
+
 function writeEmployeeInfoToElement(employee, $element) {
     let location,
         plantNumber,

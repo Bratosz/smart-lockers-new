@@ -56,6 +56,13 @@ function getManagementList() {
         `/${userId}`;
 }
 
+function postSwapEmployeeNames(employeeId) {
+    return getActualLocation() +
+        `/create-employees/swap-names` +
+        `/${employeeId}`;
+}
+
+
 function postNewEmployee(boxId, lastName, firstName, departmentId, positionId) {
     return getActualLocation() +
         `/employee/create-employee-and-add-to-box` +
