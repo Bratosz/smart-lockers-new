@@ -29,7 +29,7 @@ public class ClientArticleController {
         return clientArticleService.add(articleId, badgeNumber, userId);
     }
 
-    @PostMapping("/create-article-and-add-client-article" +
+    @PostMapping("/createWithDepartmentPositionAndLocation-article-and-add-client-article" +
             "/{articleNumber}/{articleName}/{badgeNumber}/{userId}")
     public StandardResponse createArticleAndAddClientArticle(
             @PathVariable int articleNumber,

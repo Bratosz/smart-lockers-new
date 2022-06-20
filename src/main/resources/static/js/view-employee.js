@@ -15,9 +15,7 @@ $('#button-add-order-for-order-clothes').click(function () {
 });
 
 $('#select-department').change(function () {
-    let $selectPosition = $('#select-position');
-    let departmentId = $('#select-department').val();
-    loadPositionsByDepartment(departmentId, $selectPosition);
+    loadPositionsByDepartment($('#select-department'), $('#select-position'));
 });
 
 $('#button-change-size').click(function () {

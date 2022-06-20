@@ -39,7 +39,7 @@ function writeOrderToRow(order, $row) {
         $select.append(createOption(
             clientArticle.id,
             clientArticle.article.name));
-        appendArticles($select, clientArticle);
+        appendArticlesWithoutActual($select, clientArticle);
     } else {
         $row.find('.cell-desired-article').text(
             toStringArticle(order.desiredClientArticle));

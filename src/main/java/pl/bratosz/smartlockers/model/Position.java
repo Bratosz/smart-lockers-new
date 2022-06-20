@@ -1,12 +1,13 @@
 package pl.bratosz.smartlockers.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import pl.bratosz.smartlockers.utils.SameClient;
 
 import javax.persistence.*;
 import java.util.*;
 
 @Entity
-public class Position {
+public class Position implements SameClient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +24,7 @@ public class Position {
     private Client client;
 
     @ManyToMany(mappedBy = "positions")
-    @JsonView(Views.Public.class)
+    @JsonView(Views.PositionBasicInfo.class)
     private Set<Department> departments;
 
     @OneToMany(mappedBy = "position")

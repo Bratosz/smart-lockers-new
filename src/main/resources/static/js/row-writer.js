@@ -72,6 +72,26 @@ function writePositionToRow(position, $row) {
     return $row;
 }
 
+function writeEmployeeToCreateToRow(employee, $row) {
+    let $selectDepartment = $row.find('.select-department');
+    let $selectPosition = $row.find('.select-position');
+    let $selectLocation = $row.find('.select-location');
+    $row.removeAttr('id');
+    $row.attr('id', employee.id);
+    $row.css('display', 'table-row');
+    $row.find('.cell-last-name').text(employee.lastName);
+    $row.find('.cell-first-name').text(employee.firstName);
+    loadSelectInRowForEmployeeToCreate(
+        $selectDepartment, loadedClient.departments, employee.department, "Wybierz oddział");
+    loadSelectInRowForEmployeeToCreate(
+        $selectPosition, loadedClient.positions, employee.position, "Wybierz stanowisko");
+    console.log(loadedClient.locations);
+    loadSelectInRowForEmployeeToCreate(
+        $selectLocation, loadedClient.locations, employee.location, "Wybierz lokalizację");
+    rowClickedThenSelectCheckBox($row);
+    return $row;
+}
+
 function writeBoxToRow(box, $row) {
     let employee = box.employee;
     $row.removeAttr("id");

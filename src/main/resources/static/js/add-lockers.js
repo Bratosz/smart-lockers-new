@@ -1,5 +1,5 @@
-loadDepartments(userId, $('#select-department'));
-loadLocations(userId, $('#select-location'));
+getAndLoadDepartments(userId, $('#select-department'));
+getAndLoadLocations(userId, $('#select-location'));
 loadPlants(userId, $('#select-plant'));
 
 $("#button-add-lockers").click(function () {

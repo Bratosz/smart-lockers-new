@@ -1,7 +1,7 @@
-loadDepartments(userId, $('#select-department'));
-loadDepartments(userId, $('#select-department-for-change'));
-loadLocations(userId, $('#select-location'));
-loadLocations(userId, $('#select-location-for-change'));
+getAndLoadDepartments(userId, $('#select-department'));
+getAndLoadDepartments(userId, $('#select-department-for-change'));
+getAndLoadLocations(userId, $('#select-location'));
+getAndLoadLocations(userId, $('#select-location-for-change'));
 loadPlants(userId, $('#select-plant'));
 
 loadLockers(userId);

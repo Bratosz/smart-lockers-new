@@ -3,7 +3,7 @@ loadEmployees();
 $('#button-load-employees').click(function () {
     let listType = $('#select-employees-list-type').val();
     if (listType == "TO_RELEASE") {
-        loadEmployeesToAssign();
+        loadEmployeesToCreate();
     } else if (listType == "TO_MEASURE") {
         loadEmployeesToMeasure();
     }
@@ -48,7 +48,7 @@ $('#button-set-measured-employees-as-assigned').click(function () {
             method: 'post',
             success: function(response) {
                 if(response.succeed) {
-                    loadEmployeesToAssign();
+                    loadEmployeesToCreate();
                     loadEmployeesToRelease();
                 }
             }
@@ -59,7 +59,7 @@ $('#button-set-measured-employees-as-assigned').click(function () {
 function loadEmployees() {
     // connectToDB();
     loadEmployeesToMeasure();
-    loadEmployeesToAssign();
+    loadEmployeesToCreate();
     loadEmployeesToRelease();
 
 }
@@ -84,7 +84,7 @@ function connectToDB() {
     }
 }
 
-function loadEmployeesToAssign() {
+function loadEmployeesToCreate() {
     $.ajax({
         url: getEmployeesToAssign(),
         method: 'get',

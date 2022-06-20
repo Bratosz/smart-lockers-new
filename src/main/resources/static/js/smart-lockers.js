@@ -8,12 +8,18 @@ let boxIdForNewEmployee;
 let previousPages = [];
 let actualPage = "empty.html";
 
+
+//to DO - WHEN CHANGE CLIENT THEN RESET VALUES
 //client
 let clientIsLoaded = false;
 let loadedClientId = 0;
 let loadedClient;
 let plantsAreLoaded = false;
 let departmentsAreLoaded = false;
+let loadedDepartments;
+let loadedPlants;
+let loadedLocations;
+let loadedPositions;
 
 //keys
 let ctrlPressed = false;
@@ -47,12 +53,13 @@ $(document).ready(function () {
 
 });
 
-if('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator) {
     navigator.serviceWorker
         .register('/../smart-lockers-service-worker.js')
-        .then(function() {console.log("Service Worker Registered"); });
+        .then(function () {
+            console.log("Service Worker Registered");
+        });
 }
-
 
 
 function loadNav() {
@@ -77,52 +84,52 @@ function loadNav() {
             goBack();
         });
         $('#button-view-lockers').click(function () {
-            loadContent($('#div-content-1'),'view-lockers.html');
+            loadContent($('#div-content-1'), 'view-lockers.html');
         });
         $('#button-view-boxes').click(function () {
-            loadContent($('#div-content-1'),'view-boxes.html');
+            loadContent($('#div-content-1'), 'view-boxes.html');
         });
         $('#button-clothing-acceptance').click(function () {
-            loadContent($('#div-content-1'),'clothing-acceptance.html');
+            loadContent($('#div-content-1'), 'clothing-acceptance.html');
         });
         $('#button-measurement-list').click(function () {
-            loadContent($('#div-content-1'),'measurement-list.html');
+            loadContent($('#div-content-1'), 'measurement-list.html');
         });
         $('#button-add-employee').click(function () {
-            loadContent($('#div-content-1'),'add-employee.html');
+            loadContent($('#div-content-1'), 'add-employee.html');
         });
         $('#button-add-position').click(function () {
-            loadContent($('#div-content-1'),'add-position.html');
+            loadContent($('#div-content-1'), 'add-position.html');
         });
         $('#button-load-client-creation').click(function () {
-            loadContent($('#div-content-1'),'create-client.html');
+            loadContent($('#div-content-1'), 'create-client.html');
         });
         $('#link-to-load-client-from-file').click(function () {
-            loadContent($('#div-content-1'),'create-client-from-file.html');
+            loadContent($('#div-content-1'), 'create-client-from-file.html');
         });
         $('#link-to-add-lockers').click(function () {
-            loadContent($('#div-content-1'),'add-lockers.html');
+            loadContent($('#div-content-1'), 'add-lockers.html');
         });
         $('#button-edit-departments').click(function () {
-            loadContent($('#div-content-1'),'edit-departments.html');
+            loadContent($('#div-content-1'), 'edit-departments.html');
         });
         $('#button-manage-plant').click(function () {
-            loadContent($('#div-content-1'),'manage-plant.html');
+            loadContent($('#div-content-1'), 'manage-plant.html');
         });
         $('#button-manage-lockers').click(function () {
-            loadContent($('#div-content-1'),'manage-lockers.html');
+            loadContent($('#div-content-1'), 'manage-lockers.html');
         });
         $('#button-articles').click(function () {
-            loadContent($('#div-content-1'),'articles.html');
+            loadContent($('#div-content-1'), 'articles.html');
         });
         $('#button-management-list').click(function () {
-            loadContent($('#div-content-1'),'management-list.html');
+            loadContent($('#div-content-1'), 'management-list.html');
         });
         $('#button-reports').click(function () {
-            loadContent($('#div-content-1'),'orders.html');
+            loadContent($('#div-content-1'), 'orders.html');
         });
         $('#button-qr-reader').click(function () {
-            loadContent($('#div-content-1'),'qr-reader.html');
+            loadContent($('#div-content-1'), 'qr-reader.html');
         });
     });
 }
@@ -162,7 +169,7 @@ function loadPlants(actualUserId, $selectPlant) {
 }
 
 function loadClientByPlantNumber(plantNumber) {
-    if(plantNumber === undefined) {
+    if (plantNumber === undefined) {
         plantNumber = $('#input-plant-number').val();
     }
     $.ajax({
@@ -170,7 +177,7 @@ function loadClientByPlantNumber(plantNumber) {
         method: 'put',
         success: function (response) {
             if (response.succeed) {
-                loadContent($('#div-content-1'),'empty.html');
+                loadContent($('#div-content-1'), 'empty.html');
                 previousPages = [];
                 displayClientName(response.entity);
                 loadedClientId = response.entity.id;
@@ -191,6 +198,7 @@ function loadClient() {
         success: function (client) {
             displayClient(client);
             loadedClientId = client.id;
+            loadedClient = client;
         }
     })
 }
@@ -219,7 +227,15 @@ function getClients($selectClient) {
     })
 }
 
-function loadDepartments(userId, $selectDepartment, placeholder, loadPositions) {
+function loadDepartments($selectDepartment, placeholder) {
+    let departments = loadedClient.departments;
+    removeOptionsFromSelect($selectDepartment);
+    console.log(departments);
+    appendOptionsToSelect(
+        sort(departments, "name"), $selectDepartment, placeholder);
+}
+
+function getAndLoadDepartments(userId, $selectDepartment, placeholder, loadPositions) {
     if ($selectDepartment === undefined) {
         $selectDepartment = $('#select-department');
     }
@@ -233,13 +249,22 @@ function loadDepartments(userId, $selectDepartment, placeholder, loadPositions) 
                 sort(departments, "name"), $selectDepartment, placeholder);
         }
     }).done(function () {
-        if(loadPositions != undefined) {
+        if (loadPositions != undefined) {
             loadPositions();
         }
-    })
+    });
 }
 
-function loadPositions(userId, $select) {
+function loadPositions($select, placeholder) {
+    let positions = loadedClient.positions;
+    removeOptionsFromSelect($select);
+    appendOptionsToSelect(
+        sort(positions, "name"),
+        $select,
+        placeholder);
+}
+
+function getAndLoadPositions(userId, $select) {
     $.ajax({
         url: getPositions(userId),
         method: 'get',
@@ -275,7 +300,16 @@ function loadClientArticles(clientId, $selectArticles) {
     })
 }
 
-function loadLocations(userId, $selectLocation) {
+function loadLocations($selectLocation, placeholder) {
+    let locations = loadedClient.locations;
+    removeOptionsFromSelect($selectLocation);
+    appendOptionsToSelect(
+        sort(locations, "name"),
+        $selectLocation,
+        placeholder);
+}
+
+function getAndLoadLocations(userId, $selectLocation, placeholder) {
     if ($selectLocation === undefined) {
         $selectLocation = $('#select-location');
     }
@@ -286,23 +320,28 @@ function loadLocations(userId, $selectLocation) {
             console.log(locations);
             appendOptionsToSelect(
                 sort(locations, "name"),
-                $selectLocation);
+                $selectLocation,
+                placeholder);
         }
     })
 }
 
-function loadPositionsByDepartment(departmentId, $selectPosition) {
+function loadPositionsByDepartment($selectDepartment, $selectPosition) {
+    if ($selectDepartment == undefined || $selectPosition == undefined) {
+        $selectDepartment = $('#select-department');
+        $selectPosition = $('#select-position');
+    }
+    let departmentId = $selectDepartment.val();
     $selectPosition.find('option').each(function () {
         $(this).remove();
     });
-    $.ajax({
-        url: getAllPositions(departmentId),
-        method: 'get',
-        success: function (positions) {
-            console.log(positions);
-            appendOptionsToSelect(positions, $selectPosition);
+    let positionsByDepartment = [];
+    for(let e of loadedClient.departments) {
+        if(e.id == departmentId) {
+            positionsByDepartment = e.positions;
         }
-    })
+    }
+    appendOptionsToSelect(positionsByDepartment, $selectPosition);
 }
 
 function appendCollectionToSelectWithPlaceholder(collection, $select, placeholder) {
@@ -312,7 +351,8 @@ function appendCollectionToSelectWithPlaceholder(collection, $select, placeholde
 }
 
 function appendOptionsToSelect(collection, $select, placeholder) {
-    if(placeholder != undefined && placeholder != "") {
+    removeOptionsFromSelect($select);
+    if (placeholder != undefined && placeholder != "") {
         $select.append(createSelectPlaceholder(placeholder));
     }
     if (collectionIsViable(collection)) {
@@ -320,6 +360,20 @@ function appendOptionsToSelect(collection, $select, placeholder) {
             appendOptionToSelect($select, collection[i]);
         }
     }
+}
+
+function appendOptionsToSelectAndSelectActual(list, $select, selected) {
+    removeOptionsFromSelect($select);
+    appendOptionsToSelect(list, $select);
+    selectActualOptionInSelect($select, selected.id);
+}
+
+function selectActualOptionInSelect($select, actualOptionId) {
+    $select.find('option').each(function () {
+        if ($(this).val() == actualOptionId) {
+            $(this).attr('selected', 'selected');
+        }
+    })
 }
 
 function appendOptionToSelect($select, entity) {
@@ -364,10 +418,5 @@ function displayConfirmWindowForDownloadFile(response) {
     } else {
         window.alert(response.message);
     }
-}
-
-function loadPositionsForSelectedDepartment() {
-    let departmentId = $('#select-department').val();
-    loadPositionsByDepartment(departmentId, $('#select-position'));
 }
 

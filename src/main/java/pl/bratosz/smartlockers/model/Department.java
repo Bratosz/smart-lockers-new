@@ -2,12 +2,13 @@ package pl.bratosz.smartlockers.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import pl.bratosz.smartlockers.model.users.UserClient;
+import pl.bratosz.smartlockers.utils.SameClient;
 
 import javax.persistence.*;
 import java.util.*;
 
 @Entity
-public class Department implements Comparable<Department> {
+public class Department implements Comparable<Department>, SameClient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,9 +52,10 @@ public class Department implements Comparable<Department> {
     @JoinTable(name = "positions",
     joinColumns = @JoinColumn(name = "department_id"),
     inverseJoinColumns = @JoinColumn(name = "position_id"))
-    @JsonView(Views.DepartmentAdvancedInfo.class)
+    @JsonView({Views.DepartmentAdvancedInfo.class, Views.ClientBasicInfo.class})
     private Set<Position> positions;
 
+    @JsonView(Views.Public.class)
     private boolean surrogate;
 
     public Department() {

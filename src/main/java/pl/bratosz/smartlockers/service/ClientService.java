@@ -3,16 +3,14 @@ package pl.bratosz.smartlockers.service;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import pl.bratosz.smartlockers.model.*;
-import pl.bratosz.smartlockers.repository.ClientRepository;
-import pl.bratosz.smartlockers.repository.EmployeesRepository;
-import pl.bratosz.smartlockers.repository.LockersRepository;
-import pl.bratosz.smartlockers.repository.UsersRepository;
+import pl.bratosz.smartlockers.repository.*;
 import pl.bratosz.smartlockers.response.CreateResponse;
 import pl.bratosz.smartlockers.response.DataLoadedResponse;
 import pl.bratosz.smartlockers.response.StandardResponse;
 import pl.bratosz.smartlockers.service.creators.ClientCreator;
 import pl.bratosz.smartlockers.service.exels.DataBaseLoader;
 import pl.bratosz.smartlockers.service.exels.LoadType;
+import pl.bratosz.smartlockers.service.pasting.employee.EmployeeToCreate;
 import pl.bratosz.smartlockers.utils.string.MyString;
 import pl.bratosz.smartlockers.service.exels.plant.template.data.PlantDataContainer;
 
@@ -34,6 +32,7 @@ public class ClientService {
     private DepartmentService departmentService;
     private LocationService locationService;
     private UserService userService;
+    private EmployeesToCreateRepository employeesToCreateRepository;
 
     public ClientService(ClientRepository clientRepository,
                          EmployeesRepository employeesRepository,
@@ -42,7 +41,7 @@ public class ClientService {
                          UsersRepository usersRepository,
                          PlantService plantService,
                          EmployeeService employeeService,
-                         LockerService lockerService, ClientArticleService clientArticleService, PositionService positionService, DepartmentService departmentService, LocationService locationService, UserService userService) {
+                         LockerService lockerService, ClientArticleService clientArticleService, PositionService positionService, DepartmentService departmentService, LocationService locationService, UserService userService, EmployeesToCreateRepository employeesToCreateRepository) {
         this.clientRepository = clientRepository;
         this.employeesRepository = employeesRepository;
         this.measurementListService = measurementListService;
@@ -56,6 +55,7 @@ public class ClientService {
         this.departmentService = departmentService;
         this.locationService = locationService;
         this.userService = userService;
+        this.employeesToCreateRepository = employeesToCreateRepository;
     }
 
     public CreateResponse create(String name) {
@@ -79,8 +79,8 @@ public class ClientService {
                 .filter(p -> p.getPlantNumber() == plantNumber).findFirst().get();
         Department mainDepartment = departmentService
                 .createDefaultDepartmentsAndReturnMain(client, plantNumber);
-//        List<Department> departments = departmentService.create(dataContainer.getDepartments(), client, plantNumber);
-//        List<Location> locations = locationService.create(
+//        List<Department> departments = departmentService.createWithDepartmentPositionAndLocation(dataContainer.getDepartments(), client, plantNumber);
+//        List<Location> locations = locationService.createWithDepartmentPositionAndLocation(
 //                dataContainer.getLocations(), client, plant);
 //        lockerService.createFromZUSO(
 //                dataContainer, plant, mainDepartment, locations);
@@ -88,7 +88,7 @@ public class ClientService {
 //                .addNewArticles(dataContainer.getArticles(), client);
 //        List<Position> positions = positionService.createPositions(
 //                dataContainer.getPositions(), client);
-//        employeeService.create(
+//        employeeService.createWithDepartmentPositionAndLocation(
 //                dataContainer.getEmployees(), positions, locations, departments, mainDepartment);
         return plant;
     }
@@ -115,6 +115,11 @@ public class ClientService {
         return measurementListService.getEmployeesToAssign(clientId);
     }
 
+    public StandardResponse getEmployeesToCreate(long userId) {
+        long clientId = usersRepository.getActualClientId(userId);
+        List<EmployeeToCreate> employees = employeesToCreateRepository.getAllByClient(clientId);
+        return StandardResponse.createForSucceed(employees);
+    }
 
 
     public Set<Employee> updateEmployeesToRelease(long userId) {
@@ -169,4 +174,6 @@ public class ClientService {
     public DepartmentService getDepartmentService() {
         return departmentService;
     }
+
+
 }

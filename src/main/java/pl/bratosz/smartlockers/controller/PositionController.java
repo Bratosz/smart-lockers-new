@@ -62,7 +62,7 @@ public class PositionController {
     @JsonView(Views.Public.class)
     public Position getOne(
             @PathVariable long positionId) {
-        return positionService.getOne(positionId);
+        return positionService.getById(positionId);
     }
 
 

@@ -1,12 +1,13 @@
 package pl.bratosz.smartlockers.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import pl.bratosz.smartlockers.utils.SameClient;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-public class Location {
+public class Location implements SameClient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

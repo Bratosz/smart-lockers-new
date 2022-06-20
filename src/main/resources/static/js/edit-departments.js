@@ -1,4 +1,4 @@
-loadDepartments(userId);
+getAndLoadDepartments(userId);
 loadDepartmentsWithAliases(userId);
 
 $("#button-add-alias").click(function () {

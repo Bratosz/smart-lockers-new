@@ -17,8 +17,15 @@ $('#button-add-employees-edpl').click(function () {
        method: 'post',
        contentType: 'application/json',
        data: JSON.stringify(employees),
-       success: function () {
+       success: function (response) {
            alert("Dodano pracowników");
+           if(response.succeed) {
+               if(confirm("Czy chcesz ich przypisać?")) {
+                   loadContent($('#div-content-1'),'employees-creating.html');
+               }
+           }
+
+
        }
    })
 });

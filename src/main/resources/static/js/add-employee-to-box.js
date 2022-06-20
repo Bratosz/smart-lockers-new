@@ -1,4 +1,4 @@
-loadDepartments(userId, $('#select-department'), "", loadPositionsForSelectedDepartment);
+getAndLoadDepartments(userId, $('#select-department'), "", loadPositionsByDepartment);
 loadBoxInfo(boxIdForNewEmployee);
 
 $('#input-last-name').focus(function() {
@@ -12,8 +12,7 @@ $('#input-first-name').focus(function() {
 );
 
 $('#select-department').change(function () {
-    let departmentId = $('#select-department').val();
-    loadPositionsByDepartment(departmentId, $('#select-position'));
+    loadPositionsByDepartment($('#select-department'), $('#select-position'));
 });
 
 

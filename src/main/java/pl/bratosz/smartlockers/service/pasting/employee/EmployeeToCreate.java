@@ -3,17 +3,21 @@ package pl.bratosz.smartlockers.service.pasting.employee;
 import com.fasterxml.jackson.annotation.JsonView;
 import pl.bratosz.smartlockers.model.*;
 import pl.bratosz.smartlockers.service.jgenderize.model.Gender;
+import pl.bratosz.smartlockers.utils.SameClient;
 
 import javax.persistence.*;
 
 
 @Entity
-public class EmployeeToAssign {
+public class EmployeeToCreate implements SameClient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonView(Views.Public.class)
     private long id;
+
+    @JsonView(Views.Public.class)
+    private String personalNumber;
 
     @JsonView(Views.Public.class)
     private String lastName;
@@ -25,21 +29,38 @@ public class EmployeeToAssign {
     private Gender gender;
 
     @JsonView(Views.Public.class)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Department department;
 
     @JsonView(Views.Public.class)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Position position;
 
     @JsonView(Views.Public.class)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Location location;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Client client;
 
-    public EmployeeToAssign() {
+    public EmployeeToCreate() {
+    }
+
+    public static EmployeeToCreate createWithDepartmentPositionAndLocation(PastedEmployeeEDPL e, Department d, Location l, Position p, Client c) {
+        EmployeeToCreate newEmployee = new EmployeeToCreate();
+        newEmployee.setPersonalNumber(e.getPersonalNumber());
+        newEmployee.setFirstName(e.getFirstName());
+        newEmployee.setLastName(e.getLastName());
+        newEmployee.setGender(e.getGender());
+        newEmployee.setDepartment(d);
+        newEmployee.setLocation(l);
+        newEmployee.setPosition(p);
+        newEmployee.setClient(c);
+        return newEmployee;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public long getId() {
@@ -100,5 +121,13 @@ public class EmployeeToAssign {
 
     public Client getClient() {
         return client;
+    }
+
+    public String getPersonalNumber() {
+        return personalNumber;
+    }
+
+    public void setPersonalNumber(String personalNumber) {
+        this.personalNumber = personalNumber;
     }
 }

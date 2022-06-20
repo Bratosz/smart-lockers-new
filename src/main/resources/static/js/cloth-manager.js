@@ -70,15 +70,7 @@ function writeClothToRow(cloth, $row) {
     $row.find(".cell-released-to-employee-date").text(formatDateDMY(
         cloth.releasedToEmployeeAsRotation));
     $row.find(".cell-washing-date").text(formatDateDMY(cloth.lastWashing));
-    $row.click(function () {
-        let $checkBox = $row.find('.cloth-check-box');
-        let checked = $checkBox.prop('checked');
-        if(checked) {
-            $checkBox.prop('checked', false);
-        } else {
-            $checkBox.prop('checked', true);
-        }
-    });
+    rowClickedThenSelectCheckBox($row);
     return $row;
 }
 

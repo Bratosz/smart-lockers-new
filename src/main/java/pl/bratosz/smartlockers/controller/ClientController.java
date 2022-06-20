@@ -37,7 +37,7 @@ public class ClientController {
         this.userService = userService;
     }
 
-    @JsonView(Views.Public.class)
+    @JsonView(Views.ClientBasicInfo.class)
     @GetMapping("/get-by-user/{userId}")
     public Client getByUser(@PathVariable long userId) {
         return clientService.getByUser(userId);
@@ -69,6 +69,12 @@ public class ClientController {
     @GetMapping("/get-by-id/{clientId}")
     public Client getById(@PathVariable long clientId) {
         return clientService.getById(clientId);
+    }
+
+    @JsonView(Views.Public.class)
+    @GetMapping("/get-employees-to-create/{userId}")
+    public StandardResponse getEmployeesToCreate(@PathVariable long userId) {
+        return clientService.getEmployeesToCreate(userId);
     }
 
     @GetMapping("/get-employees-to-assign/{userId}")

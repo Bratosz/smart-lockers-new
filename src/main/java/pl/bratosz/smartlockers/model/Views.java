@@ -65,4 +65,7 @@ public class Views {
     public static class OrderBasicInfo extends Public{
 
     }
+
+    public class PositionBasicInfo  extends Public{
+    }
 }

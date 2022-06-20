@@ -31,9 +31,9 @@ function displayAvailableArticlesByPosition($select) {
     }
 }
 
-function appendArticles($select, clientArticle) {
+function appendArticlesWithoutActual($select, actualClientArticle) {
     let clientArticles = getClientArticlesFromEmployeePosition(),
-        actualArticle = clientArticle.article,
+        actualArticle = actualClientArticle.article,
         clothType = actualArticle.clothType;
     for(let a of clientArticles) {
         if(a.article.number != actualArticle.number

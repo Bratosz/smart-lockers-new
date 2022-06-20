@@ -9,8 +9,7 @@ $('#button-view-employee').click(function () {
 });
 
 $('#select-department').change(function () {
-    let departmentId = $('#select-department').val();
-    loadPositionsByDepartment(departmentId, $('#select-position'));
+    loadPositionsByDepartment($('#select-department'), $('#select-position'));
 });
 
 $('#button-edit-department-and-position').click(function () {

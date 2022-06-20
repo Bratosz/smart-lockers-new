@@ -49,7 +49,7 @@ public class PositionService {
     }
 
     private Position createSurrogate(Client c) {
-        String n = MyString.create("ZASTĘPCZA").get();
+        String n = MyString.create("ZASTĘPCZE").get();
         Position p = new Position(n, c, true);
         return positionsRepository.save(p);
     }
@@ -194,7 +194,7 @@ public class PositionService {
         }
     }
 
-    public Position getOne(long positionId) {
+    public Position getById(long positionId) {
         return positionsRepository.getById(positionId);
     }
 }

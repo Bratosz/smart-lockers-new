@@ -1,6 +1,6 @@
 
-loadDepartments(userId, $('#select-department'), "", loadPositionsForSelectedDepartment);
-loadLocations(userId, $('#select-location'));
+getAndLoadDepartments(userId, $('#select-department'), "", loadPositionsByDepartment);
+getAndLoadLocations(userId, $('#select-location'));
 
 
 $('#input-last-name').focus(function() {
@@ -14,8 +14,7 @@ $('#input-first-name').focus(function() {
 );
 
 $('#select-department').change(function () {
-    let departmentId = $('#select-department').val();
-    loadPositionsByDepartment(departmentId, $('#select-position'));
+    loadPositionsByDepartment($('#select-department'), $('#select-position'));
 });
 
 $('#button-assign-clothes').click(function () {

@@ -8,11 +8,23 @@ function getEmployee(employeeId) {
 
 function postAddPastedEmployeesEDPL() {
     return getActualLocation() +
-        `/paste/add-employees-edpl` +
+        `/create-employees/add-employees-edpl` +
         `/${userId}`;
 }
 
+function postSetDepartmentPositionLocationForEmployeesToCreate(
+    departmentId, positionId, locationId) {
+    return getActualLocation() +
+        `/create-employees/set-department-position-location` +
+        `/${departmentId}` +
+        `/${positionId}` +
+        `/${locationId}`;
+}
 
+function postCreateEmployees() {
+    return getActualLocation() +
+        `/create-employees`;
+}
 
 function postOrdersForNewClothes(employeeId) {
     return getActualLocation() +
@@ -353,7 +365,13 @@ function getEmployeesByFirstName(firstName, userId) {
     return getActualLocation() +
         `/employee/find-by-first-name` +
         `/${firstName}` +
-        `${userId}`;
+        `/${userId}`;
+}
+
+function getEmployeesToCreate() {
+    return getActualLocation() +
+        `/client/get-employees-to-create` +
+        `/${userId}`;
 }
 
 function getEmployeesToAssign() {

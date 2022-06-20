@@ -3,7 +3,7 @@ package pl.bratosz.smartlockers.model;
 import com.fasterxml.jackson.annotation.JsonView;
 import pl.bratosz.smartlockers.model.orders.ExchangeStrategy;
 import pl.bratosz.smartlockers.model.orders.OrderType;
-import pl.bratosz.smartlockers.service.pasting.employee.EmployeeToAssign;
+import pl.bratosz.smartlockers.service.pasting.employee.EmployeeToCreate;
 
 import javax.persistence.*;
 import java.util.*;
@@ -23,10 +23,11 @@ public class Client {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private Set<Plant> plants;
 
-    @JsonView(Views.PlantBasicInfo.class)
+    @JsonView(Views.ClientBasicInfo.class)
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private Set<Department> departments;
 
+    @JsonView(Views.ClientBasicInfo.class)
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private Set<Location> locations;
 
@@ -36,7 +37,7 @@ public class Client {
 
     @JsonView(Views.Public.class)
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
-    private List<EmployeeToAssign> employeesToAssign;
+    private List<EmployeeToCreate> employeesToCreate;
 
     @ElementCollection
     @CollectionTable(name = "exchange_strategies",
@@ -44,6 +45,7 @@ public class Client {
     @MapKeyEnumerated(EnumType.ORDINAL)
     private Map<OrderType, ExchangeStrategy> exchangeStrategies;
 
+    @JsonView(Views.ClientBasicInfo.class)
     @OneToMany(mappedBy = "client")
     private Set<Position> positions;
 
@@ -167,14 +169,14 @@ public class Client {
         this.setMeasurementList(measurementList);
     }
 
-    public List<EmployeeToAssign> getEmployeesToAssign() {
-        if(employeesToAssign == null) {
-            employeesToAssign = new LinkedList<>();
+    public List<EmployeeToCreate> getEmployeesToCreate() {
+        if(employeesToCreate == null) {
+            employeesToCreate = new LinkedList<>();
         }
-        return employeesToAssign;
+        return employeesToCreate;
     }
 
-    public void setEmployeesToAssign(List<EmployeeToAssign> employeesToAssign) {
-        this.employeesToAssign = employeesToAssign;
+    public void setEmployeesToCreate(List<EmployeeToCreate> employeesToCreate) {
+        this.employeesToCreate = employeesToCreate;
     }
 }

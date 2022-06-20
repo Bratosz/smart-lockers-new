@@ -1,7 +1,9 @@
 package pl.bratosz.smartlockers.utils;
 
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import pl.bratosz.smartlockers.model.Client;
 import pl.bratosz.smartlockers.model.MyEntity;
 
 import java.io.FileNotFoundException;
@@ -112,6 +114,36 @@ public class Utils {
             double d = Double.parseDouble(strNum);
         } catch (NumberFormatException nfe) {
             return false;
+        }
+        return true;
+    }
+
+//    public static <T extends SameClient> boolean haveSameClient(
+//            Collection<? extends T> col, T... args) {
+//        List<T> a1 = new LinkedList<>(col);
+//        List<T> a2 = Arrays.asList(args);
+//        a1.addAll(a2);
+//        long clientId = 0;
+//        for(T e : a1) {
+//            if(clientId == 0) clientId = e.getClient().getId();
+//            else {
+//                if(clientId != e.getClient().getId()) return false;
+//            }
+//        }
+//        return true;
+//    }
+
+    public static boolean haveSameClient(
+            Collection<? extends SameClient> col, SameClient... args) {
+        List<SameClient> a1 = new LinkedList<>(col);
+        List<SameClient> a2 = Arrays.asList(args);
+        a1.addAll(a2);
+        long clientId = 0;
+        for(SameClient e : a1) {
+            if(clientId == 0) clientId = e.getClient().getId();
+            else {
+                if(clientId != e.getClient().getId()) return false;
+            }
         }
         return true;
     }

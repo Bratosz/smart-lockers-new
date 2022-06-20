@@ -1,6 +1,6 @@
 loadPlants(userId, $('#select-plant'));
-loadDepartments(userId, $('#select-department'));
-loadLocations(userId, $('#select-location'));
+getAndLoadDepartments(userId, $('#select-department'));
+getAndLoadLocations(userId, $('#select-location'));
 
 loadPlants(userId, $('#select-plant-for-assign-by-numbers'));
 

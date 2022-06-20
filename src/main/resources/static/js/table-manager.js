@@ -2,6 +2,24 @@ function getRowTemplate($table) {
     return $table.find("tr:nth-child(1)");
 }
 
+function rowClickedThenSelectCheckBox($row) {
+    let $checkBox = $row.find('.my-check-box');
+    $row.click(function () {
+        checkAndUncheck($checkBox);
+    });
+    $row.find('.my-check-box').click(function () {
+        checkAndUncheck($checkBox);
+    });
+}
+
+function checkAndUncheck($checkBox) {
+    if($checkBox.prop('checked')) {
+        $checkBox.prop('checked', false);
+    } else {
+        $checkBox.prop('checked', true);
+    }
+}
+
 function removeTableRows($table) {
     $table.find("tr:not(tr:nth-child(1))").remove();
     return $table;
@@ -14,6 +32,15 @@ function writeDataToTable(elements, $table, writingMethod) {
         addStdRowToTable(e, $table, writingMethod);
     }
     return $table;
+}
+
+function getCheckedRows($table) {
+    let $rows = [];
+     $table.find('tbody').find('input[type="checkbox"]:checked')
+         .each(function () {
+             $rows.push($(this).closest('tr'));
+         });
+    return $rows;
 }
 
 function getCheckedBarcodes($tableBody) {

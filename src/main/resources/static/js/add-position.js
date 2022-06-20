@@ -48,8 +48,8 @@ $('#button-add-other-article-with-quantity').click(function () {
 });
 
 function reloadAddingPosition() {
-    loadDepartments(userId, $('#select-department'), "Oddział");
-    loadPositions(userId, $('#select-position'));
+    getAndLoadDepartments(userId, $('#select-department'), "Oddział");
+    getAndLoadPositions(userId, $('#select-position'));
     loadArticlesToSelect(userId, $('#select-trousers'), "Spodnie");
     loadArticlesToSelect(userId, $('#select-shirt'), "Koszulka");
     loadArticlesToSelect(userId, $('#select-sweatshirt'), "Bluza");
@@ -92,7 +92,7 @@ function createPosition(positionName) {
             console.log(response);
             window.alert(response.message);
             displayPosition(response.entity);
-            loadPositions(userId, $('#select-position'));
+            getAndLoadPositions(userId, $('#select-position'));
         }
     })
 }
@@ -161,7 +161,7 @@ function deletePositionById(positionId) {
             }
         },
         complete: function () {
-          loadPositions(userId, $('#select-position'));
+          getAndLoadPositions(userId, $('#select-position'));
         }
     })
 }
