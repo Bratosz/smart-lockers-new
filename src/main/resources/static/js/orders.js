@@ -121,6 +121,7 @@ function displayOrdersForOrdersList(orders, $table){
         writeOrdersWithEmployeesToTable);
 }
 
+
 function getOrdinalNumbers(order) {
     let ordinalNumbers = [];
     for(let o of order.clothOrders) {

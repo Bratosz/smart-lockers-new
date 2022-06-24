@@ -1,3 +1,4 @@
+
 function dismissEmployee(employeeId) {
     let clothesReturned = false;
     if(confirm("Czy ubrania zostały wycofane?")) {

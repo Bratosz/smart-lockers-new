@@ -128,6 +128,9 @@ function loadNav() {
         $('#button-reports').click(function () {
             loadContent($('#div-content-1'), 'orders.html');
         });
+        $('#button-orders').click(function () {
+            loadContent($('#div-content-1'), 'orders-view.html');
+        })
         $('#button-qr-reader').click(function () {
             loadContent($('#div-content-1'), 'qr-reader.html');
         });

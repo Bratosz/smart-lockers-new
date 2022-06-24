@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.web.bind.annotation.*;
 import pl.bratosz.smartlockers.exception.WrongIdException;
 import pl.bratosz.smartlockers.model.*;
+import pl.bratosz.smartlockers.model.orders.OrderType;
 import pl.bratosz.smartlockers.response.StandardResponse;
 import pl.bratosz.smartlockers.service.EmployeeService;
+import pl.bratosz.smartlockers.service.employees.EmployeeWithActiveOrders;
 import pl.bratosz.smartlockers.utils.string.MyString;
 
 import java.util.List;
@@ -39,6 +41,18 @@ public class EmployeeController {
     public Employee getWithCompleteInfo(
             @PathVariable long id) {
         return employeeService.getById(id);
+    }
+
+    @JsonView(Views.Public.class)
+    @GetMapping("/with-active-orders/{userId}")
+    public StandardResponse getWithActiveOrders(@PathVariable long userId) {
+         return StandardResponse.createForSucceed(employeeService.getWithActiveOrders(userId));
+    }
+
+    @JsonView(Views.Public.class)
+    @GetMapping("/with-active-orders-by-order-type/{orderType}/{userId}")
+    public List<EmployeeWithActiveOrders> getWithActiveOrders(@PathVariable long userId, @PathVariable OrderType orderType) {
+        return employeeService.getWithActiveOrdersByOrderType(userId, orderType);
     }
 
     @JsonView(Views.EmployeeCompleteInfo.class)

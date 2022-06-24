@@ -5,7 +5,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.bratosz.smartlockers.model.*;
-
+import pl.bratosz.smartlockers.model.orders.OrderType;
+import pl.bratosz.smartlockers.service.employees.EmployeeWithActiveOrders;
 
 import java.util.List;
 import java.util.Set;
@@ -66,4 +67,17 @@ public interface EmployeesRepository extends JpaRepository<Employee, Long> {
 
     @Query("select e from Employee e where e.box.locker.plant = :plant and e.position = :position")
     Set<Employee> getByPlantAndPosition(Plant plant, Position position);
+
+    @Query("select new pl.bratosz.smartlockers.service.employees.EmployeeWithActiveOrders(" +
+            "e.id, e.department.name, e.box.locker.plant.plantNumber, e.box.locker.lockerNumber, e.box.boxNumber," +
+            "e.lastName, e.firstName, count(o))  from Employee e join e.mainOrders o on e.id = o.employee.id where e.department.client.id = :clientId and o.active = true group by e order by e.box.locker.plant.plantNumber, e.box.locker.lockerNumber")
+    List<EmployeeWithActiveOrders> getWithActiveOrders(long clientId);
+
+    @Query("select new pl.bratosz.smartlockers.service.employees.EmployeeWithActiveOrders(" +
+            "e.id, e.department.name, e.box.locker.plant.plantNumber, e.box.locker.lockerNumber, e.box.boxNumber," +
+            "e.lastName, e.firstName, count(o))  " +
+            "from Employee e join e.mainOrders o on e.id = o.employee.id " +
+            "where e.department.client.id = :clientId and o.active = true and o.orderType = :orderType " +
+            "group by e order by e.box.locker.plant.plantNumber, e.box.locker.lockerNumber")
+    List<EmployeeWithActiveOrders> getWithActiveOrdersByOrderType(long clientId, OrderType orderType);
 }

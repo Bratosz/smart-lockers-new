@@ -2,9 +2,6 @@ package pl.bratosz.smartlockers.model.orders;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import pl.bratosz.smartlockers.converters.ConvertableEnum;
-import pl.bratosz.smartlockers.model.Employee;
-
-import java.util.Comparator;
 
 public enum OrderType implements ConvertableEnum {
     AUTO_EXCHANGE("Wymiana automatyczna"),
@@ -13,7 +10,8 @@ public enum OrderType implements ConvertableEnum {
     CHANGE_ARTICLE("Zmiana artykułu"),
     NEW_ARTICLE("Nowy artykuł"),
     RELEASE("Do wydania"),
-    EMPTY("Brak aktywnego zamówienia");
+    EMPTY("Brak aktywnego zamówienia"),
+    ALL("Wszystkie");
 
     private final String name;
 

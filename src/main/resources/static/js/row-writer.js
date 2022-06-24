@@ -59,6 +59,25 @@ function writeEmployeeToRowWithViewAndAddClothesButton(employee, $row) {
     return $row;
 }
 
+function writeEmployeeWithActiveOrders(employee, $row) {
+    $row.removeAttr('id');
+    $row.css('display', 'table-row');
+    $row.attr('id', employee.id);
+    $row.find('.cell-department').text(employee.departmentName);
+    $row.find('.cell-plant-number').text(employee.plantNumber);
+    $row.find('.cell-locker-number').text(employee.lockerNumber);
+    $row.find('.cell-box-number').text(employee.boxNumber);
+    $row.find('.cell-last-name').text(employee.lastName);
+    $row.find('.cell-first-name').text(employee.firstName);
+    $row.find('.cell-active-orders').text(employee.activeOrders);
+    $row.find('.button-view-employee').click(function () {
+        employeeId = employee.id;
+        loadContent($('#div-content-1'),'view-employee.html', false);
+    });
+    return $row;
+}
+
+
 function writePositionToRow(position, $row) {
     $row.removeAttr('id');
     $row.css('display', 'table-row');

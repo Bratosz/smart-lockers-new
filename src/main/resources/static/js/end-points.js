@@ -223,6 +223,19 @@ function getOrdersToReport() {
         `/${userId}`;
 }
 
+function getEmployeesWithActiveOrders() {
+    return getActualLocation() +
+        `/employee/with-active-orders` +
+        `/${userId}`;
+}
+
+function getEmployeesWithActiveOrdersByOrderType(orderType) {
+    return getActualLocation() +
+        `/employee/with-active-orders-by-order-type` +
+        `/${orderType}/${userId}`;
+}
+
+
 function getReportForNewEmployees() {
     return getActualLocation() +
         `/report/generate-for-new-employees` +

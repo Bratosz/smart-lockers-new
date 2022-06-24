@@ -3,25 +3,25 @@ package pl.bratosz.smartlockers.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.bratosz.smartlockers.comparators.employee.BoxNumberSorter;
-import pl.bratosz.smartlockers.comparators.employee.PlantNumberSorter;
 import pl.bratosz.smartlockers.comparators.employee.LockerNumberSorter;
+import pl.bratosz.smartlockers.comparators.employee.PlantNumberSorter;
 import pl.bratosz.smartlockers.exception.*;
 import pl.bratosz.smartlockers.model.*;
 import pl.bratosz.smartlockers.model.clothes.Cloth;
+import pl.bratosz.smartlockers.model.orders.OrderType;
 import pl.bratosz.smartlockers.model.users.User;
 import pl.bratosz.smartlockers.repository.EmployeeGeneralRepository;
 import pl.bratosz.smartlockers.repository.EmployeesRepository;
 import pl.bratosz.smartlockers.repository.PositionsRepository;
 import pl.bratosz.smartlockers.repository.UsersRepository;
 import pl.bratosz.smartlockers.response.StandardResponse;
-import pl.bratosz.smartlockers.service.managers.EmployeeManager;
+import pl.bratosz.smartlockers.service.employees.EmployeeWithActiveOrders;
 import pl.bratosz.smartlockers.service.exels.plant.template.data.TemplateEmployee;
+import pl.bratosz.smartlockers.service.managers.EmployeeManager;
 import pl.bratosz.smartlockers.service.pasting.employee.EmployeeToCreate;
 import pl.bratosz.smartlockers.service.update.ScrapingService;
 import pl.bratosz.smartlockers.utils.Utils;
-import sun.awt.image.ImageWatched;
 
-import java.time.LocalDate;
 import java.util.*;
 
 import static pl.bratosz.smartlockers.model.Box.BoxStatus.OCCUPY;
@@ -172,7 +172,6 @@ public class EmployeeService {
         measurementListService.add(employee, department.getClient());
         return employee;
     }
-
 
 
     public StandardResponse createEmployee(
@@ -633,6 +632,20 @@ public class EmployeeService {
             } catch (SkippedEmployeeException e1) {
                 e1.printStackTrace();
             }
+        }
+    }
+
+    public List<EmployeeWithActiveOrders> getWithActiveOrders(long userId) {
+        long clientId = usersRepository.getActualClientId(userId);
+        return  employeesRepository.getWithActiveOrders(clientId);
+    }
+
+    public List<EmployeeWithActiveOrders> getWithActiveOrdersByOrderType(long userId, OrderType orderType) {
+        long clientId = usersRepository.getActualClientId(userId);
+        if(orderType.equals(OrderType.ALL)) {
+            return employeesRepository.getWithActiveOrders(clientId);
+        } else {
+            return employeesRepository.getWithActiveOrdersByOrderType(clientId, orderType);
         }
     }
 }

@@ -1,3 +1,13 @@
+function getAndLoad(request, display) {
+    $.ajax({
+        url: request(),
+        method: 'get',
+        success: function (response) {
+            display(response);
+        }
+    });
+}
+
 function formatDateDMY(date) {
     if(date == null) {
         return "";
