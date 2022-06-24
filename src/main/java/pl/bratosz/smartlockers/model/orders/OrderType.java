@@ -11,7 +11,9 @@ public enum OrderType implements ConvertableEnum {
     NEW_ARTICLE("Nowy artykuł"),
     RELEASE("Do wydania"),
     EMPTY("Brak aktywnego zamówienia"),
-    ALL("Wszystkie");
+    ALL("Wszystkie"),
+    REPAIR("Naprawa"),
+    LENGTH_MODIFICATION("Modyfikacja długości");
 
     private final String name;
 

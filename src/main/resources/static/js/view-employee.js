@@ -14,6 +14,14 @@ $('#button-add-order-for-order-clothes').click(function () {
     }
 });
 
+$('#button-add-length-modification-order').click(function () {
+    alert("Ta funkcja nie jest aktywna");
+});
+
+$('#button-add-repair-order').click(function () {
+    alert("Ta funkcja nie jest aktywna");
+});
+
 $('#select-department').change(function () {
     loadPositionsByDepartment($('#select-department'), $('#select-position'));
 });
@@ -25,6 +33,10 @@ $('#button-change-size').click(function () {
     showFlex($('#div-order-clothes'));
     hide($('#select-desired-article-for-order-clothes'));
     selectClothesByClientArticleId(clientArticleId);
+});
+
+$('#button-length-modification').click(function () {
+    addLengthModificationOrder();
 });
 
 $('#button-exchange-clothes-for-new-ones').click(function () {
@@ -121,6 +133,8 @@ $(document).ready(function () {
                         sendRequestForAssignWithdrawnCloth(withDrawnCloth, article, size)
                     } else if (assignmentType == "RELEASE_ROTATIONAL_CLOTH") {
                         sentRequestForReleaseRotationalCloth(barcode)
+                    } else if (assignmentType == "ACCEPT_CLOTH") {
+                        sendAutoExchange(barcode);
                     }
                     clearInput($(this));
                 } else {
@@ -129,6 +143,16 @@ $(document).ready(function () {
             }
         });
 });
+
+function sendAutoExchange(barcode) {
+    $.ajax({
+        url: postAutoExchange(barcode),
+        method: 'post',
+        success: function (response) {
+            alert(response.message);
+        }
+    })
+}
 
 function updateEmployee() {
         $.ajax({
@@ -180,6 +204,29 @@ function addNewArticle() {
             }
         }).done(function () {
             actualOrderType = "EMPTY";
+        })
+    }
+}
+
+function addLengthModificationOrder() {
+    let parameters = {
+        barcodes: getCheckedBarcodes($('#table-of-clothes-body')),
+        orderType: "LENGTH_MODIFICATION",
+        lengthModification: getLengthModificationFromInput($('#input-length-modification-for-modification-only'))
+    }
+    if(parameters.lengthModification == "NONE") {
+        alert("Podano niewłaściwą wartość!")
+    } else {
+        console.log(parameters);
+        $.ajax({
+            url: postNewOrdersBy(userId),
+            method: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(parameters),
+            success: function (response) {
+                window.alert(response.message);
+                reloadEmployee();
+            }
         })
     }
 }

@@ -72,6 +72,9 @@ public class MainOrder implements Comparable<MainOrder>, MyEntity {
     @JsonView(Views.Public.class)
     private LengthModification lengthModification;
 
+    @JsonView(Views.Public.class)
+    private String description;
+
     private boolean orderEmpty;
 
     public MainOrder() {
@@ -250,6 +253,14 @@ public class MainOrder implements Comparable<MainOrder>, MyEntity {
 
     public void setOrderEmpty(boolean orderEmpty) {
         this.orderEmpty = orderEmpty;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

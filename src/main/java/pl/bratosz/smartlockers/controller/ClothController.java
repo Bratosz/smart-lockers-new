@@ -47,6 +47,12 @@ public class ClothController {
     }
 
     @JsonView(InternalForClothes.class)
+    @PostMapping("/auto-exchange/{barcode}/{userId}")
+    public ResponseClothAcceptance autoExchange(@PathVariable long barcode, @PathVariable long userId) {
+        return clothesService.autoExchange(barcode, userId);
+    }
+
+    @JsonView(InternalForClothes.class)
     @PostMapping("/exchange/{orderType}/{barcode}/{size}/{articleNumber}/{userId}")
     public ResponseClothAcceptance exchange(
             @PathVariable OrderType orderType,

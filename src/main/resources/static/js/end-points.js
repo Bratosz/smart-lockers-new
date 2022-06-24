@@ -340,6 +340,12 @@ function getBoxesFilteredByPlantDepartmentLocationAndBoxStatus(plantId, departme
         `/${boxStatus}`;
 }
 
+function postAutoExchange(barcode) {
+    return getActualLocation() +
+        `/cloth/auto-exchange` +
+        `/${barcode}/${userId}`;
+}
+
 function postNewOrdersBy(userId) {
     return getActualLocation() +
         `/order/place-many/${userId}`

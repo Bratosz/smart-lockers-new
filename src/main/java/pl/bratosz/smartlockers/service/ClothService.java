@@ -212,6 +212,20 @@ public class ClothService {
         }
     }
 
+    public ResponseClothAcceptance autoExchange(long barcode, long userId) {
+        loadUser(userId);
+        long clientId = user.getActualClientId();
+        Cloth cloth = clothesRepository.getByBarcode(barcode);
+        if(clothIsAbsent(clientId, cloth)) {
+            return createClothNotFoundResponse(cloth, barcode);
+        } else if (clothIsReturned(cloth)) {
+            return ResponseClothAcceptance.createClothAlreadyReturned(cloth);
+        } else {
+            OrderType actualOrderType = getActualOrderType(cloth);
+            return acceptForAutoExchange(cloth, actualOrderType);
+        }
+    }
+
     public ResponseClothAcceptance exchange(
             OrderType orderType,
             long barcode,
@@ -649,6 +663,7 @@ public class ClothService {
                 case PIECE_FOR_PIECE:
                     clothDestination = ClothDestination.FOR_WITHDRAW_AND_EXCHANGE;
                     break;
+                case NONE:
                 case RELEASE_BEFORE_RETURN:
                 default:
                     clothDestination = ClothDestination.FOR_WASH;
@@ -659,6 +674,26 @@ public class ClothService {
         c.setStatus(clothStatus);
         clothesRepository.save(c);
     }
+
+    public void updateStatusWhenOrderIsCreated(Cloth c, OrderType ot, User u) {
+        ClothDestination cd;
+        switch (ot) {
+            case REPAIR:
+                cd = ClothDestination.FOR_REPAIR;
+                break;
+            case LENGTH_MODIFICATION:
+                cd = ClothDestination.FOR_MODIFICATION;
+                break;
+            default:
+                cd = ClothDestination.FOR_WASH;
+                break;
+        }
+        ClothStatus cs = createClothStatus(c, cd, u);
+        c.setStatus(cs);
+        clothesRepository.save(c);
+    }
+
+
 
     private ClothStatus createClothStatus(Cloth c, ClothDestination d, User u) {
         ClothActualStatus status;

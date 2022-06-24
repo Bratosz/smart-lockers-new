@@ -8,7 +8,9 @@ public enum ClothDestination {
     FOR_WASH("Do prania"),
     FOR_WITHDRAW_AND_DELETE("Do wycofania i usunięcia"),
     FOR_WITHDRAW_AND_EXCHANGE("Do wycofania i wymiany"),
-    FOR_DISPOSAL("Do utylizacji");
+    FOR_DISPOSAL("Do utylizacji"),
+    FOR_MODIFICATION("Do modyfikacji"),
+    FOR_REPAIR("Do naprawy");
 
     private final String name;
 
