@@ -351,9 +351,6 @@ public class Cloth implements Comparable<Cloth> {
         this.rotationTemporaryOwner = rotationTemporaryOwner;
     }
 
-
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -384,7 +381,6 @@ public class Cloth implements Comparable<Cloth> {
     public void setLifeCycleStatus(LifeCycleStatus lifeCycleStatus) {
         this.lifeCycleStatus = lifeCycleStatus;
     }
-
 
     @Override
     public int compareTo(Cloth o) {

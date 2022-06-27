@@ -20,7 +20,7 @@ public class ScrappingController {
 //       return scrapingService.loadEmployee(boxId);
 //    }
 
-//    @PostMapping("/update-clothes")
+//    @PostMapping("/updateState-clothes")
 //    public StandardResponse updateClothes(
 //            @RequestBody Plant plant) {
 //        return scrapingService.updateClothes(plant);

@@ -159,11 +159,11 @@ public class PlantLoadingService {
         if(plant.getLastUpdate().isBefore(LocalDate.now())) {
             ClothesAndEmployeesToUpdate clothesAndEmployees =
                     scrapingService.getClothesAndEmployeesToUpdate(plant);
-            System.out.println("clothes to update: " + clothesAndEmployees.getUpdatedClothes().size());
+            System.out.println("clothes to updateState: " + clothesAndEmployees.getUpdatedClothes().size());
             clothService.updateLastWashingDate(clothesAndEmployees.getUpdatedClothes());
             Set<SimpleEmployee> employeesToUpdate =
                     getEmployeesToUpdate(plant, clothesAndEmployees.getEmployeesToUpdate());
-            System.out.println("employees to update: " + clothesAndEmployees.getEmployeesToUpdate().size());
+            System.out.println("employees to updateState: " + clothesAndEmployees.getEmployeesToUpdate().size());
             employeeService.updateEmployees(employeesToUpdate, plant, user);
         } else {
             Set<SimpleEmployee> employeesWithActiveOrders =

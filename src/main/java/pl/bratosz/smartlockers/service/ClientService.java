@@ -134,7 +134,7 @@ public class ClientService {
 
     private Set<Employee> updateEmployeesToRelease(Set<Employee> employeesToRelease) {
 //        for(Employee e : employeesToRelease) {
-//            e = employeeService.update(employee);
+//            e = employeeService.updateState(employee);
 //            if(employeeService.isReleased())
 //        }
         return null;

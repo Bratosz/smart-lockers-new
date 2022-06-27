@@ -507,7 +507,7 @@ public class EmployeeService {
         if (status == 1) {
             try {
 //                SimpleEmployee simpleEmployee = scrapingService.getSimpleEmployee();
-//                update(employee, simpleEmployee);
+//                updateState(employee, simpleEmployee);
                 scrapingService.loadBox();
                 List<Cloth> actualClothes = scrapingService.getClothes(employee);
                 try {

@@ -103,7 +103,7 @@ public class OrderStatus {
     }
 
     public enum OrderStage {
-        REQUESTED_AND_PENDING_FOR_CONFIRMATION_BY_SUPERVISOR("oczekuje na potwierdzenie przez klienta", false, true),
+        REQUESTED("oczekuje na potwierdzenie przez klienta", false, true),
         CONFIRMED_BY_CLIENT_AND_PENDING_FOR_ACCEPTANCE("oczekuje na akceptację", true, true),
         DECLINED_BY_CLIENT("odrzucone przez kilenta",false, false),
 
@@ -121,7 +121,9 @@ public class OrderStatus {
         FINALIZED("sfinalizowane", false, false),
         CANCELLED("usunięte", false, false),
         EMPTY("brak zamówienia", false, false),
-        READY_BUT_PENDING_FOR_ASSIGNMENT("odzież zwrócona, oczekuje na przypisanie", true, true);
+        READY_BUT_PENDING_FOR_ASSIGNMENT("odzież zwrócona, oczekuje na przypisanie", true, true),
+        POSTED("", false, false),
+        ACCEPTED("", false, false);
 
         private final String name;
         private final boolean active;
