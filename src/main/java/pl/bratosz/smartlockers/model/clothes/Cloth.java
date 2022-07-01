@@ -43,7 +43,7 @@ public class Cloth implements Comparable<Cloth> {
 
     @JsonView({Views.InternalForEmployees.class, Views.InternalForBoxes.class})
     @OneToMany(mappedBy = "cloth",fetch = FetchType.LAZY)
-    protected List<ClothStatus> statusHistory;
+    protected List<ClothStatusHistory> statusHistory;
 
     @JsonView(Views.Public.class)
     protected LifeCycleStatus lifeCycleStatus;
@@ -275,7 +275,7 @@ public class Cloth implements Comparable<Cloth> {
         this.employee = employee;
     }
 
-    public List<ClothStatus> getStatusHistory() {
+    public List<ClothStatusHistory> getStatusHistory() {
         if(statusHistory == null) {
             return new LinkedList<>();
         } else {
@@ -283,19 +283,19 @@ public class Cloth implements Comparable<Cloth> {
         }
     }
 
-    public ClothStatus getClothStatus() {
+    public ClothStatusHistory getClothStatus() {
         if(statusHistory == null) {
-            return new ClothStatus();
+            return new ClothStatusHistory();
         } else {
             return statusHistory.get(statusHistory.size() - 1);
         }
     }
 
-    public void setStatusHistory(List<ClothStatus> statusHistory) {
+    public void setStatusHistory(List<ClothStatusHistory> statusHistory) {
         this.statusHistory = statusHistory;
     }
 
-    public void setStatus(ClothStatus status) {
+    public void setStatus(ClothStatusHistory status) {
         status.setCloth(this);
         if (statusHistory == null) statusHistory = new LinkedList<>();
         statusHistory.add(status);

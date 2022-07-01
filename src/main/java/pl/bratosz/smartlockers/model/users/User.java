@@ -2,7 +2,7 @@ package pl.bratosz.smartlockers.model.users;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import pl.bratosz.smartlockers.model.Views;
-import pl.bratosz.smartlockers.model.clothes.ClothStatus;
+import pl.bratosz.smartlockers.model.clothes.ClothStatusHistory;
 import pl.bratosz.smartlockers.model.orders.OrderStatus;
 
 import javax.persistence.*;
@@ -28,7 +28,7 @@ public abstract class User {
     protected String email;
 
     @OneToMany(mappedBy = "user")
-    protected Set<ClothStatus> grantedClothStatuses;
+    protected Set<ClothStatusHistory> grantedClothStatusHistories;
 
     @OneToMany(mappedBy = "user")
     protected Set<OrderStatus> grantedOrderStatuses;
@@ -104,12 +104,12 @@ public abstract class User {
         this.email = email;
     }
 
-    public Set<ClothStatus> getGrantedClothStatuses() {
-        return grantedClothStatuses;
+    public Set<ClothStatusHistory> getGrantedClothStatusHistories() {
+        return grantedClothStatusHistories;
     }
 
-    public void setGrantedClothStatuses(Set<ClothStatus> grantedClothStatuses) {
-        this.grantedClothStatuses = grantedClothStatuses;
+    public void setGrantedClothStatusHistories(Set<ClothStatusHistory> grantedClothStatusHistories) {
+        this.grantedClothStatusHistories = grantedClothStatusHistories;
     }
 
 

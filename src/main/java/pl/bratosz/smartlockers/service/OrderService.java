@@ -797,8 +797,8 @@ public class OrderService {
     }
 
     public void update(Cloth cloth, User user) {
-        ClothStatus clothStatus = cloth.getClothStatus();
-        switch (clothStatus.getStatus()) {
+        ClothStatusHistory clothStatusHistory = cloth.getClothStatus();
+        switch (clothStatusHistory.getStatus()) {
             case ASSIGNED:
                 updateForAssignedCloth(cloth, user);
                 break;

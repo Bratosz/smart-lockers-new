@@ -1,7 +1,7 @@
 //package pl.bratosz.smartlockers.repository;
 //
 //import com.fasterxml.jackson.annotation.JsonView;
-//import com.sun.scenario.effect.impl.state.BoxRenderState;
+//import com.sun.scenario.effect.impl.actualState.BoxRenderState;
 //import org.springframework.stereotype.Component;
 //import pl.bratosz.smartlockers.controller.EmployeeController;
 //import pl.bratosz.smartlockers.controller.LockersController;

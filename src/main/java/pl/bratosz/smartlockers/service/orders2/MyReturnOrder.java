@@ -1,66 +1,54 @@
 package pl.bratosz.smartlockers.service.orders2;
 
 import pl.bratosz.smartlockers.model.orders.ExchangeStrategy;
-import pl.bratosz.smartlockers.service.orders.toreturn.ReturnOrderStatus;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static pl.bratosz.smartlockers.service.orders.toreturn.ReturnOrderStatus.*;
+import static pl.bratosz.smartlockers.model.orders.ExchangeStrategy.PIECE_FOR_PIECE;
+import static pl.bratosz.smartlockers.model.orders.ExchangeStrategy.RELEASE_BEFORE_RETURN;
 
 public class MyReturnOrder {
 
     private long id;
     private MyMainOrder mainOrder;
+    protected MyReturnOrderState actualState;
     private List<MyReturnOrderStatusHistory> statusHistory;
-    protected MyReturnOrderState state;
     private MyCloth cloth;
 
 
     public static MyReturnOrder create(MyCloth cloth, MyMainOrder mainOrder, MyUser user) {
         MyReturnOrder o = new MyReturnOrder();
         o.mainOrder = mainOrder;
-        o.statusHistory = createInitialStatus(mainOrder.getExchangeStrategy(), user);
-        o.createState();
+        o.actualState = createInitialState(mainOrder.getStatus(), mainOrder.getExchangeStrategy());
+        o.updateStatus(user);
         o.setClothToReturn(cloth);
     }
 
-    private void createState() {
-        ReturnOrderStatus status = getStatus();
-        switch (status) {
-            case PENDING_FOR_RETURN:
-            default:
-                this.state = new ReturnOrderPendingForReturnState(this);
-        }
+    private void updateStatus(MyUser user) {
+        if(statusHistory == null) statusHistory = new LinkedList<>();
+        MyReturnOrderStatusHistory actualStatus = new MyReturnOrderStatusHistory(actualState.getStatus(), user);
+        statusHistory.add(actualStatus);
     }
 
-    private ReturnOrderStatus getStatus() {
-        if (statusHistory == null) return UNKNOWN;
-        else return statusHistory.get(statusHistory.size() - 1).getOrderStatus();
-    }
-
-    private static MyReturnOrderState createInitialState(MyMainOrderStatus initialStatus) {
-        switch (initialStatus) {
+    private static MyReturnOrderState createInitialState(MyMainOrderStatus actualStatus, ExchangeStrategy exchangeStrategy) {
+        switch (actualStatus) {
             case ACCEPTED:
-            default:
-                return new AcceptedReturnOrderState(this);
+                if(exchangeStrategy.equals(PIECE_FOR_PIECE)) {
+                    return new PendingForClothReturnReturnOrderState();
+                } else if(exchangeStrategy.equals(RELEASE_BEFORE_RETURN)) {
+                    return new PendingForClothReleaseReturnOrderState();
+                }
         }
+    }
+
+    protected ExchangeStrategy getExchangeStrategy() {
+        return mainOrder.getExchangeStrategy();
     }
 
     private void setClothToReturn(MyCloth cloth) {
         this.cloth = cloth;
-        state.updateCloth(cloth);
+        actualState.updateCloth(cloth);
     }
 
-    private static List<MyReturnOrderStatusHistory> createInitialStatus(ExchangeStrategy exchangeStrategy, MyUser user) {
-        List<MyReturnOrderStatusHistory> statusHistory = new LinkedList<>();
-        MyReturnOrderStatusHistory returnStatus;
-        if (exchangeStrategy.equals(ExchangeStrategy.PIECE_FOR_PIECE)) {
-            returnStatus = new MyReturnOrderStatusHistory(PENDING_FOR_RETURN, user);
-        } else {
-            returnStatus = new MyReturnOrderStatusHistory(PENDING_FOR_CLOTH_RELEASE, user);
-        }
-        statusHistory.add(returnStatus);
-        return statusHistory;
-    }
 }

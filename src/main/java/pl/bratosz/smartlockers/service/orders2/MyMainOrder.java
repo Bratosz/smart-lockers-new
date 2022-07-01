@@ -24,12 +24,18 @@ public class MyMainOrder {
         o.orderType = p.getOrderType();
         o.size = p.getSize();
         o.clientArticle = p.getClientArticle();
-        o.actualState = createInitialState(p);
-        o.statusHistory = createInitialStatus(p);
         o.employee = p.getEmployee();
         o.exchangeStrategy = p.getExchangeStrategy();
+        o.actualState = createInitialState(p);
+        o.updateStatus(p.getUser());
         o.createOrders(p);
         return o;
+    }
+
+    private void updateStatus(MyUser user) {
+        if(statusHistory == null) statusHistory = new LinkedList<>();
+        MyMainOrderStatusHistory actualOrderStatus = new MyMainOrderStatusHistory(actualState.getStatus(), user);
+        statusHistory.add(actualOrderStatus);
     }
 
     private static MyMainOrderState createInitialState(OrderParameters p) {
@@ -64,13 +70,6 @@ public class MyMainOrder {
             clothReturnOrders.add(order);
         }
         this.clothReturnOrders = clothReturnOrders;
-    }
-
-    private static List<MyMainOrderStatusHistory> createInitialStatus(OrderParameters p) {
-        List<MyMainOrderStatusHistory> sh = new LinkedList<>();
-        MyMainOrderStatusHistory s = new MyMainOrderStatusHistory(p.getUser());
-        sh.add(s);
-        return sh;
     }
 
     public OrderType getOrderType() {

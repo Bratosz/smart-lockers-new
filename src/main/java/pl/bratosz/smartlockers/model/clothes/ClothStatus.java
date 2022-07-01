@@ -1,119 +1,35 @@
 package pl.bratosz.smartlockers.model.clothes;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import pl.bratosz.smartlockers.model.Views;
-import pl.bratosz.smartlockers.model.clothes.Cloth;
-import pl.bratosz.smartlockers.model.clothes.ClothActualStatus;
-import pl.bratosz.smartlockers.model.clothes.ClothDestination;
-import pl.bratosz.smartlockers.model.users.User;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import pl.bratosz.smartlockers.serializers.ClothActualStatusSerializer;
 
-import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
+import static pl.bratosz.smartlockers.model.clothes.LifeCycleStatus.*;
 
-@Entity
-public class ClothStatus {
-    //mainorder function is to say, where the cloth is, is it returned/released or whatever
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    @JsonView({Views.InternalForEmployees.class, Views.InternalForBoxes.class})
-    private ClothActualStatus status;
-    @JsonView({Views.InternalForEmployees.class, Views.InternalForBoxes.class})
-    private ClothDestination clothDestination;
-    @ManyToOne
-    private User user;
-    private LocalDateTime dateOfUpdate;
-    @ManyToOne
-    private Cloth cloth;
-    private AdditionalStatusInfo additionalStatusInfo;
+@JsonSerialize(using = ClothActualStatusSerializer.class)
+public enum ClothStatus {
+    ORDERED("Zamówione", BEFORE_RELEASE),
+    ASSIGNED("Przypisane", BEFORE_RELEASE),
+    PENDING_FOR_SUPPLY("Oczekuje na dostawę",BEFORE_RELEASE),
+    IN_PREPARATION("W przygotowaniu", BEFORE_RELEASE),
+    RELEASED("Wydane", IN_ROTATION),
+    ACCEPTED("Przyjęte do wymiany", LifeCycleStatus.ACCEPTED),
+    EXCHANGED("Wymienione", LifeCycleStatus.WITHDRAWN),
+    WITHDRAWN("Wycofane", LifeCycleStatus.WITHDRAWN),
+    UNKNOWN("Nieznany", LifeCycleStatus.UNKNOWN);
 
-    public ClothStatus() {
+    private final String name;
+    private final LifeCycleStatus lifeCycleStatus;
+
+    ClothStatus(String name, LifeCycleStatus lifeCycleStatus) {
+        this.name = name;
+        this.lifeCycleStatus = lifeCycleStatus;
     }
 
-    public ClothStatus(ClothActualStatus status,
-                       ClothDestination clothDestination,
-                       Cloth cloth,
-                       User user,
-                       LocalDateTime dateOfUpdate) {
-        this.status = status;
-        this.clothDestination = clothDestination;
-        this.cloth = cloth;
-        this.user = user;
-        this.dateOfUpdate = dateOfUpdate;
+    public String getName() {
+        return name;
     }
 
-    public ClothStatus(ClothActualStatus status,
-                       ClothDestination clothDestination,
-                       User user,
-                       LocalDateTime dateOfUpdate) {
-        this.status = status;
-        this.clothDestination = clothDestination;
-        this.user = user;
-        this.dateOfUpdate = dateOfUpdate;
+    public LifeCycleStatus getLifeCycleStatus() {
+        return lifeCycleStatus;
     }
-
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public ClothDestination getClothDestination() {
-        return clothDestination;
-    }
-
-    public void setClothDestination(ClothDestination clothDestination) {
-        this.clothDestination = clothDestination;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public LocalDateTime getDateOfUpdate() {
-        return dateOfUpdate;
-    }
-
-    public void setDateOfUpdate(LocalDateTime dateOfUpdate) {
-        this.dateOfUpdate = dateOfUpdate;
-    }
-
-    public AdditionalStatusInfo getAdditionalStatusInfo() {
-        return additionalStatusInfo;
-    }
-
-    public void setAdditionalStatusInfo(AdditionalStatusInfo additionalStatusInfo) {
-        this.additionalStatusInfo = additionalStatusInfo;
-    }
-
-    public Cloth getCloth() {
-        return cloth;
-    }
-
-    public void setCloth(Cloth cloth) {
-        this.cloth = cloth;
-    }
-
-    public void setStatus(ClothActualStatus status) {
-        this.status = status;
-    }
-
-    public ClothActualStatus getStatus() {
-        if(status == null) {
-            return ClothActualStatus.UNKNOWN;
-        } else {
-            return status;
-        }
-    }
-
-
 }

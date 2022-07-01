@@ -1,6 +1,6 @@
 package pl.bratosz.smartlockers.service.orders;
 
-import pl.bratosz.smartlockers.model.clothes.ClothStatus;
+import pl.bratosz.smartlockers.model.clothes.ClothStatusHistory;
 import pl.bratosz.smartlockers.model.clothes.LifeCycleStatus;
 import pl.bratosz.smartlockers.service.orders.torelease.ClothReleaseOrder;
 import pl.bratosz.smartlockers.service.orders.toreturn.state.ClothReturnOrder;
@@ -11,7 +11,7 @@ public class ClothDomain {
 
     private long id;
     private int ordinalNumber;
-    private List<ClothStatus> statusHistory;
+    private List<ClothStatusHistory> statusHistory;
     private ClothReturnOrder returnOrder;
     private ClothReleaseOrder releaseOrder;
 
@@ -23,8 +23,8 @@ public class ClothDomain {
         this.returnOrder = returnOrder;
     }
 
-    public ClothStatus getClothStatus() {
-        if(statusHistory == null) return new ClothStatus();
+    public ClothStatusHistory getClothStatus() {
+        if(statusHistory == null) return new ClothStatusHistory();
         return statusHistory.get(statusHistory.size() - 1);
     }
 

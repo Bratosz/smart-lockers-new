@@ -5,6 +5,7 @@ public enum ReturnOrderStatus {
     PENDING_FOR_CLOTH_RELEASE("Oczekuje na wydanie odzieży"),
     PENDING_FOR_RETURN("Oczekuje na zwrot"),
     RETURNED("Zwrócono"),
+    FINALIZED("Zakończono"),
     UNKNOWN("Nieznany");
 
     private String name;

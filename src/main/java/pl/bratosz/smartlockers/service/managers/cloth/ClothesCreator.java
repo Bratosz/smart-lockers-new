@@ -34,9 +34,9 @@ public class ClothesCreator {
             int ordinalNumber,
             MainOrder o,
             User user) {
-        ClothStatus clothStatus = clothStatusService.create(FOR_ASSIGN, user);
+        ClothStatusHistory clothStatusHistory = clothStatusService.create(FOR_ASSIGN, user);
         this.cloth = new Cloth();
-        cloth.setStatus(clothStatus);
+        cloth.setStatus(clothStatusHistory);
         cloth.setActive(true);
         cloth.setCreated(new Date());
         cloth.setOrdinalNumber(ordinalNumber);
@@ -53,9 +53,9 @@ public class ClothesCreator {
                                   ClothSize size,
                                   LengthModification lengthModification,
                                   Employee employee) {
-        ClothStatus clothStatus = clothStatusService.create(FOR_ASSIGN, user);
+        ClothStatusHistory clothStatusHistory = clothStatusService.create(FOR_ASSIGN, user);
         this.cloth = new Cloth();
-        cloth.setStatus(clothStatus);
+        cloth.setStatus(clothStatusHistory);
         cloth.setActive(true);
         cloth.setCreated(new Date());
         cloth.setOrdinalNumber(ordinalNumber);
@@ -63,13 +63,13 @@ public class ClothesCreator {
         cloth.setSize(size);
         cloth.setLengthModification(lengthModification);
         cloth.setEmployee(employee);
-        cloth.setLifeCycleStatus(clothStatus.getStatus().getLifeCycleStatus());
+        cloth.setLifeCycleStatus(clothStatusHistory.getStatus().getLifeCycleStatus());
         return cloth;
     }
 
     private void setClothStatus (ClothDestination destiny) {
-        ClothStatus clothStatus = clothStatusService.create(destiny, user);
-        cloth.setStatus(clothStatus);
+        ClothStatusHistory clothStatusHistory = clothStatusService.create(destiny, user);
+        cloth.setStatus(clothStatusHistory);
     }
 
     public Cloth createExisting(Cloth existing, User user) {

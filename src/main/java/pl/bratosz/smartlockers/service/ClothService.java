@@ -26,8 +26,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static pl.bratosz.smartlockers.model.clothes.ClothActualStatus.ACCEPTED_FOR_EXCHANGE;
-import static pl.bratosz.smartlockers.model.clothes.ClothActualStatus.RELEASED;
+import static pl.bratosz.smartlockers.model.clothes.ClothStatus.ACCEPTED_FOR_EXCHANGE;
+import static pl.bratosz.smartlockers.model.clothes.ClothStatus.RELEASED;
 import static pl.bratosz.smartlockers.model.clothes.ClothSize.*;
 import static pl.bratosz.smartlockers.model.clothes.LifeCycleStatus.*;
 import static pl.bratosz.smartlockers.model.orders.OrderStatus.OrderStage.*;
@@ -177,8 +177,8 @@ public class ClothService {
 
 
     private ResponseClothAssignment assignAsWithdrawnCloth(Cloth withdrawnCloth, Employee employee) {
-        ClothStatus clothStatus = clothStatusService.create(ClothDestination.FOR_DISPOSAL, user);
-        withdrawnCloth.setStatus(clothStatus);
+        ClothStatusHistory clothStatusHistory = clothStatusService.create(ClothDestination.FOR_DISPOSAL, user);
+        withdrawnCloth.setStatus(clothStatusHistory);
         withdrawnCloth.setLifeCycleStatus(WITHDRAWN);
         withdrawnCloth.setEmployee(employee);
         clothesRepository.save(withdrawnCloth);
@@ -572,7 +572,7 @@ public class ClothService {
     }
 
     private Cloth acceptForExchange(Cloth cloth) {
-        ClothStatus actualStatus = clothStatusService.create(ACCEPTED_FOR_EXCHANGE, cloth, user);
+        ClothStatusHistory actualStatus = clothStatusService.create(ACCEPTED_FOR_EXCHANGE, cloth, user);
         cloth = clothesManager.updateCloth(actualStatus, cloth);
         return clothesRepository.save(cloth);
     }
@@ -616,7 +616,7 @@ public class ClothService {
     }
 
     public void hardDelete(Cloth cloth) {
-        List<ClothStatus> statusHistory = cloth.getStatusHistory();
+        List<ClothStatusHistory> statusHistory = cloth.getStatusHistory();
         clothStatusService.hardDelete(statusHistory);
         cloth.setReleaseOrder(null);
         clothesRepository.deleteById(cloth.getId());
@@ -670,8 +670,8 @@ public class ClothService {
                     break;
             }
         }
-        ClothStatus clothStatus = createClothStatus(c, clothDestination, user);
-        c.setStatus(clothStatus);
+        ClothStatusHistory clothStatusHistory = createClothStatus(c, clothDestination, user);
+        c.setStatus(clothStatusHistory);
         clothesRepository.save(c);
     }
 
@@ -688,27 +688,27 @@ public class ClothService {
                 cd = ClothDestination.FOR_WASH;
                 break;
         }
-        ClothStatus cs = createClothStatus(c, cd, u);
+        ClothStatusHistory cs = createClothStatus(c, cd, u);
         c.setStatus(cs);
         clothesRepository.save(c);
     }
 
 
 
-    private ClothStatus createClothStatus(Cloth c, ClothDestination d, User u) {
-        ClothActualStatus status;
+    private ClothStatusHistory createClothStatus(Cloth c, ClothDestination d, User u) {
+        ClothStatus status;
         if (c.getStatusHistory().isEmpty()) {
             status = RELEASED;
         } else {
             status = c.getClothStatus().getStatus();
         }
-        ClothStatus clothStatus = new ClothStatus();
-        clothStatus.setCloth(c);
-        clothStatus.setClothDestination(d);
-        clothStatus.setDateOfUpdate(LocalDateTime.now());
-        clothStatus.setStatus(status);
-        clothStatus.setUser(u);
-        return clothStatus;
+        ClothStatusHistory clothStatusHistory = new ClothStatusHistory();
+        clothStatusHistory.setCloth(c);
+        clothStatusHistory.setClothDestination(d);
+        clothStatusHistory.setDateOfUpdate(LocalDateTime.now());
+        clothStatusHistory.setStatus(status);
+        clothStatusHistory.setUser(u);
+        return clothStatusHistory;
     }
 
     public ClothesRepository getClothesRepository() {

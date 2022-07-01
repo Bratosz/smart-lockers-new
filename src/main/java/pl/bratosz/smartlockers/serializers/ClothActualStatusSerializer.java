@@ -4,13 +4,13 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import pl.bratosz.smartlockers.model.clothes.ClothActualStatus;
+import pl.bratosz.smartlockers.model.clothes.ClothStatus;
 
 import java.io.IOException;
 
-public class ClothActualStatusSerializer extends StdSerializer<ClothActualStatus> {
+public class ClothActualStatusSerializer extends StdSerializer<ClothStatus> {
     public ClothActualStatusSerializer() {
-        super(ClothActualStatus.class);
+        super(ClothStatus.class);
     }
 
     public ClothActualStatusSerializer(Class t) {
@@ -18,7 +18,7 @@ public class ClothActualStatusSerializer extends StdSerializer<ClothActualStatus
     }
 
     public void serialize(
-            ClothActualStatus status,
+            ClothStatus status,
             JsonGenerator generator,
             SerializerProvider provider)
         throws IOException, JsonProcessingException {

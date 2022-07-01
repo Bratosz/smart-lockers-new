@@ -1,19 +1,15 @@
 package pl.bratosz.smartlockers.service;
 
 import org.springframework.stereotype.Service;
-import pl.bratosz.smartlockers.exception.ClothException;
-import pl.bratosz.smartlockers.exception.ClothOrderException;
 import pl.bratosz.smartlockers.model.clothes.*;
 import pl.bratosz.smartlockers.model.users.User;
 import pl.bratosz.smartlockers.repository.ClothesStatusRepository;
 import pl.bratosz.smartlockers.service.managers.cloth.ClothUpdateReason;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
-import static pl.bratosz.smartlockers.model.clothes.ClothActualStatus.*;
+import static pl.bratosz.smartlockers.model.clothes.ClothStatus.*;
 import static pl.bratosz.smartlockers.model.clothes.ClothDestination.*;
 import static pl.bratosz.smartlockers.model.clothes.LifeCycleStatus.*;
 
@@ -26,45 +22,45 @@ public class ClothStatusService {
         this.clothesStatusRepository = clothesStatusRepository;
     }
 
-    public ClothStatus create(ClothDestination destination,
-                              User user) {
-        ClothActualStatus actualStatus =
+    public ClothStatusHistory create(ClothDestination destination,
+                                     User user) {
+        ClothStatus actualStatus =
                 resolveActualStatus(destination);
-        ClothStatus clothStatus =
-                new ClothStatus(actualStatus, destination, user, LocalDateTime.now());
-        return clothesStatusRepository.save(clothStatus);
+        ClothStatusHistory clothStatusHistory =
+                new ClothStatusHistory(actualStatus, destination, user, LocalDateTime.now());
+        return clothesStatusRepository.save(clothStatusHistory);
     }
 
-    public ClothStatus create(ClothActualStatus actualStatus,
-                              Cloth cloth,
-                              User user) {
+    public ClothStatusHistory create(ClothStatus actualStatus,
+                                     Cloth cloth,
+                                     User user) {
         ClothDestination destination =
                 resolveDestination(actualStatus);
-        ClothStatus clothStatus =
-                new ClothStatus(actualStatus, destination, cloth, user, LocalDateTime.now());
-        return clothesStatusRepository.save(clothStatus);
+        ClothStatusHistory clothStatusHistory =
+                new ClothStatusHistory(actualStatus, destination, cloth, user, LocalDateTime.now());
+        return clothesStatusRepository.save(clothStatusHistory);
     }
 
-    public ClothStatus create(ClothDestination destiny,
-                              Cloth cloth,
-                              User user) {
-        ClothActualStatus status =
+    public ClothStatusHistory create(ClothDestination destiny,
+                                     Cloth cloth,
+                                     User user) {
+        ClothStatus status =
                 resolveActualStatus(destiny);
-        ClothStatus clothStatus =
-                new ClothStatus(status, destiny, cloth, user, LocalDateTime.now());
-        return clothesStatusRepository.save(clothStatus);
+        ClothStatusHistory clothStatusHistory =
+                new ClothStatusHistory(status, destiny, cloth, user, LocalDateTime.now());
+        return clothesStatusRepository.save(clothStatusHistory);
     }
 
-    public ClothStatus create(Cloth cloth, ClothUpdateReason reason, User user) {
+    public ClothStatusHistory create(Cloth cloth, ClothUpdateReason reason, User user) {
         LifeCycleStatus lifeCycleStatus = cloth.getLifeCycleStatus();
-        ClothActualStatus actualStatus = resolveActualStatus(reason, lifeCycleStatus);
+        ClothStatus actualStatus = resolveActualStatus(reason, lifeCycleStatus);
         ClothDestination destination = resolveDestination(actualStatus);
-        ClothStatus clothStatus = new ClothStatus(
+        ClothStatusHistory clothStatusHistory = new ClothStatusHistory(
                 actualStatus, destination, cloth, user, LocalDateTime.now());
-        return clothesStatusRepository.save(clothStatus);
+        return clothesStatusRepository.save(clothStatusHistory);
     }
 
-    private ClothDestination resolveDestination(ClothActualStatus actualStatus) {
+    private ClothDestination resolveDestination(ClothStatus actualStatus) {
         ClothDestination destination = null;
         switch (actualStatus) {
             case ORDERED:
@@ -88,7 +84,7 @@ public class ClothStatusService {
         return destination;
     }
 
-    private ClothActualStatus resolveActualStatus(
+    private ClothStatus resolveActualStatus(
             ClothUpdateReason reason,
             LifeCycleStatus lifeCycleStatus) {
         switch (reason) {
@@ -102,12 +98,12 @@ public class ClothStatusService {
             case CLOTH_WITHDRAWAL:
                 return ACCEPTED_AND_WITHDRAWN;
             default:
-                return ClothActualStatus.UNKNOWN;
+                return ClothStatus.UNKNOWN;
         }
     }
 
-    private ClothActualStatus resolveActualStatus(ClothDestination destiny) {
-        ClothActualStatus status = null;
+    private ClothStatus resolveActualStatus(ClothDestination destiny) {
+        ClothStatus status = null;
         switch (destiny) {
             case FOR_ASSIGN:
                 status = ORDERED;
@@ -131,8 +127,8 @@ public class ClothStatusService {
         return status;
     }
 
-    public void hardDelete(List<ClothStatus> statusHistory) {
-        for (ClothStatus status : statusHistory) {
+    public void hardDelete(List<ClothStatusHistory> statusHistory) {
+        for (ClothStatusHistory status : statusHistory) {
             clothesStatusRepository.deleteById(status.getId());
         }
     }

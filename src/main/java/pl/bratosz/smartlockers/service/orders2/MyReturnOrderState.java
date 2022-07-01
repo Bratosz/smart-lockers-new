@@ -7,5 +7,5 @@ public interface MyReturnOrderState {
 
     void updateState(MyReturnOrder order);
 
-    void updateCloth(MyCloth cloth);
+    void updateCloth(MyCloth cloth, MyUser user);
 }

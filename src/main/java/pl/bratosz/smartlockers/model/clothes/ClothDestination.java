@@ -11,7 +11,9 @@ public enum ClothDestination {
     FOR_DISPOSAL("Do utylizacji"),
     FOR_MODIFICATION("Do modyfikacji"),
     FOR_REPAIR("Do naprawy"),
+    FOR_EXCHANGE("Do wymiany"),
     FOR_WITHDRAW("Do wycofania"),
+    UNKNOWN("Nieokreślony")
     ;
 
     private final String name;

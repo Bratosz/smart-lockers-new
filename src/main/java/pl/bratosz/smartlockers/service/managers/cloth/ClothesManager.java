@@ -7,7 +7,6 @@ import pl.bratosz.smartlockers.model.clothes.*;
 import pl.bratosz.smartlockers.model.users.User;
 import pl.bratosz.smartlockers.service.ClothStatusService;
 import pl.bratosz.smartlockers.service.managers.OrderManager;
-import pl.bratosz.smartlockers.service.managers.cloth.ClothesCreator;
 import pl.bratosz.smartlockers.utils.Utils;
 
 import java.util.*;
@@ -68,14 +67,14 @@ public class ClothesManager {
                            User user) {
         List<Cloth> updatedClothes = new LinkedList<>();
         for(Cloth cloth : clothes) {
-            ClothStatus clothStatus = clothStatusService.create(destiny, cloth, user);
-            cloth = updateCloth(clothStatus, cloth);
+            ClothStatusHistory clothStatusHistory = clothStatusService.create(destiny, cloth, user);
+            cloth = updateCloth(clothStatusHistory, cloth);
             updatedClothes.add(cloth);
         }
         return updatedClothes;
     }
 
-    public Cloth updateCloth(ClothStatus actualStatus, Cloth clothToUpdate) {
+    public Cloth updateCloth(ClothStatusHistory actualStatus, Cloth clothToUpdate) {
         clothToUpdate.setStatus(actualStatus);
         LifeCycleStatus lifeCycleStatus = actualStatus.getStatus().getLifeCycleStatus();
         clothToUpdate.setLifeCycleStatus(lifeCycleStatus);
