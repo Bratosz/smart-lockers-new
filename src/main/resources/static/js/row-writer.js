@@ -183,7 +183,7 @@ function writeLabeledRow(label, content, $row) {
 
 function writeDepartmentToRow(department, $row) {
     $row.find('.cell-department-name').text(department.name);
-    $row.find('.cell-main-plant-number').text(department.mainPlantNumber);
+    $row.find('.cell-mainorder-plant-number').text(department.mainPlantNumber);
     return $row;
 }
 

@@ -1,4 +1,4 @@
-package pl.bratosz.smartlockers.service.orders;
+package pl.bratosz.smartlockers.service.orders.mainorder;
 
 import pl.bratosz.smartlockers.model.Client;
 import pl.bratosz.smartlockers.model.ClientArticle;
@@ -9,7 +9,9 @@ import pl.bratosz.smartlockers.model.clothes.LengthModification;
 import pl.bratosz.smartlockers.model.orders.ExchangeStrategy;
 import pl.bratosz.smartlockers.model.orders.OrderType;
 import pl.bratosz.smartlockers.model.users.User;
-import pl.bratosz.smartlockers.service.orders.toreturn.ClothReturnOrder;
+import pl.bratosz.smartlockers.service.orders.ChangeSizeOrdersCreator;
+import pl.bratosz.smartlockers.service.orders.torelease.ClothReleaseOrder;
+import pl.bratosz.smartlockers.service.orders.toreturn.state.ClothReturnOrder;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,7 +19,7 @@ import java.util.Set;
 
 public class MainClothesOrder {
 
-    private MainOrderState mainOrderState;
+    private MainOrderState actualState;
     private OrderType orderType;
     private ClothSize desiredSize;
     private ClientArticle desiredArticle;
@@ -41,14 +43,30 @@ public class MainClothesOrder {
         mainOrder.lengthModification = lengthModification;
         mainOrder.setEmployee(clothes);
         mainOrder.exchangeStrategy = client.getExchangeStrategies().get(mainOrder.orderType);
-        mainOrder.updateOrderStatus(user);
+        mainOrder.updateStatus(user);
         mainOrder.setChangeSizeClothOrders(clothes, user);
         return mainOrder;
     }
 
+    public void update(ClothReturnOrder clothReturnOrder, User user) {
+        updateState();
+        updateStatus(user);
+        updateClothReleaseOrders(user);
+    }
+
+    private void updateClothReleaseOrders(User user) {
+        if(exchangeStrategy.equals(ExchangeStrategy.PIECE_FOR_PIECE)) {
+
+        }
+    }
+
+    private void updateState() {
+        actualState.updateState(this);
+    }
+
     public void setAssigned(User u) {
-        this.mainOrderState = new AssignedMainOrderState(this, u);
-        updateOrderStatus(u);
+        this.actualState = new AssignedMainOrderState(this, u);
+        updateStatus(u);
         updateClothOrders(u);
     }
 
@@ -60,8 +78,8 @@ public class MainClothesOrder {
         clothReturnOrders.forEach(o -> o.update(u));
     }
 
-    private void updateOrderStatus(User user) {
-        MainOrderStatus status = mainOrderState.getStatus();
+    private void updateStatus(User user) {
+        MainOrderStatus status = actualState.getStatus();
         if(orderStatusHistory == null) orderStatusHistory = new LinkedList<>();
         orderStatusHistory.add(MainOrderStatusExtended.create(status, user));
     }
@@ -83,7 +101,21 @@ public class MainClothesOrder {
             case POSTED:
             case REQUESTED:
             case ACCEPTED:
-                this.mainOrderState = new AcceptedMainOrderState();
+                this.actualState = new AcceptedMainOrderState();
         }
+    }
+
+    public List<ClothReleaseOrder> getReleaseOrders() {
+        if(clothReleaseOrders == null) return new LinkedList<>();
+        return clothReleaseOrders;
+    }
+
+    public List<ClothReturnOrder> getReturnOrders() {
+        if(clothReleaseOrders == null) return new LinkedList<>();
+        return clothReturnOrders;
+    }
+
+    public void setActualState(MainOrderState s) {
+        actualState = s;
     }
 }

@@ -10,7 +10,9 @@ public enum ClothDestination {
     FOR_WITHDRAW_AND_EXCHANGE("Do wycofania i wymiany"),
     FOR_DISPOSAL("Do utylizacji"),
     FOR_MODIFICATION("Do modyfikacji"),
-    FOR_REPAIR("Do naprawy");
+    FOR_REPAIR("Do naprawy"),
+    FOR_WITHDRAW("Do wycofania"),
+    ;
 
     private final String name;
 

@@ -15,17 +15,17 @@ import static pl.bratosz.smartlockers.service.exels.plant.template.data.SheetTyp
 public enum TemplateTypeForPlantLoad {
     TEMPLATE_WITH_LOCATIONS(
             "Szablon do wczytania klienta - lokalizacje",
-            "src/main/resources/static/xlsx-templates/load-plant/with-employees-locations.xlsx"),
+            "src/mainorder/resources/static/xlsx-templates/load-plant/with-employees-locations.xlsx"),
     TEMPLATE_WITH_LOCATIONS_AND_SIZES(
             "Szablon do wczytania klienta - rozmiary, lokalizacje",
-            "src/main/resources/static/xlsx-templates/load-plant/with-employees-sizes-and-locations.xlsx",
+            "src/mainorder/resources/static/xlsx-templates/load-plant/with-employees-sizes-and-locations.xlsx",
             Arrays.asList(EMPLOYEES_AND_SIZES)),
     TEMPLATE_WITH_BOXES(
             "Szablon do wczytania klienta - boxy",
-            "src/main/resources/static/xlsx-templates/load-plant/with-employees-boxes.xlsx"),
+            "src/mainorder/resources/static/xlsx-templates/load-plant/with-employees-boxes.xlsx"),
     TEMPLATE_WITH_BOXES_AND_SIZES(
             "Szablon do wczytania klienta - rozmiary, boxy",
-            "src/main/resources/static/xlsx-templates/load-plant/with-employees-sizes-and-boxes.xlsx",
+            "src/mainorder/resources/static/xlsx-templates/load-plant/with-employees-sizes-and-boxes.xlsx",
             Arrays.asList(EMPLOYEES_AND_SIZES));
 
     private String name;

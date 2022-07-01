@@ -1,4 +1,4 @@
-package pl.bratosz.smartlockers.service.orders;
+package pl.bratosz.smartlockers.service.orders.mainorder;
 
 import pl.bratosz.smartlockers.model.users.User;
 

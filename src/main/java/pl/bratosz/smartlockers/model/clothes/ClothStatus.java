@@ -14,7 +14,7 @@ import java.util.Date;
 
 @Entity
 public class ClothStatus {
-    //main function is to say, where the cloth is, is it returned/released or whatever
+    //mainorder function is to say, where the cloth is, is it returned/released or whatever
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

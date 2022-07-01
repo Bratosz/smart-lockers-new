@@ -1,19 +1,20 @@
-package pl.bratosz.smartlockers.service.orders.toreturn;
+package pl.bratosz.smartlockers.service.orders.toreturn.state;
 
 import pl.bratosz.smartlockers.exception.MyException;
 import pl.bratosz.smartlockers.model.clothes.LifeCycleStatus;
 import pl.bratosz.smartlockers.service.orders.ClothDomain;
-import pl.bratosz.smartlockers.service.orders.MainClothesOrder;
+import pl.bratosz.smartlockers.service.orders.mainorder.MainClothesOrder;
+import pl.bratosz.smartlockers.service.orders.toreturn.ReturnOrderStatus;
 
-public class ClothToReturnPendingForReturnState implements ClothToReturnState {
+public class PendingForReturnState implements ReturnOrderState {
     @Override
-    public ClothToReturnStatus getStatus() {
-        return ClothToReturnStatus.PENDING_FOR_RETURN;
+    public ReturnOrderStatus getStatus() {
+        return ReturnOrderStatus.PENDING_FOR_RETURN;
     }
 
     @Override
-    public void updateState(MainClothesOrder mainOrder, ClothReturnOrder o) {
-        o.setState(new ReturnedState());
+    public void updateState(MainClothesOrder mainOrder, ClothReturnOrder o) throws MyException {
+        throw new MyException("Cloth cant be set returned from mainorder order");
     }
 
     @Override

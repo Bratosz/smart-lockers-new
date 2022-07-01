@@ -2,7 +2,8 @@ package pl.bratosz.smartlockers.service.orders.toreturn;
 
 import pl.bratosz.smartlockers.model.users.User;
 import pl.bratosz.smartlockers.service.orders.ClothDomain;
-import pl.bratosz.smartlockers.service.orders.MainClothesOrder;
+import pl.bratosz.smartlockers.service.orders.mainorder.MainClothesOrder;
+import pl.bratosz.smartlockers.service.orders.toreturn.state.ClothReturnOrder;
 
 public class ReturnOrderCreator {
     MainClothesOrder mainOrder;

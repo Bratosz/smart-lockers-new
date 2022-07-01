@@ -2,9 +2,9 @@ package pl.bratosz.smartlockers.service.orders;
 
 import pl.bratosz.smartlockers.model.clothes.ClothStatus;
 import pl.bratosz.smartlockers.model.clothes.LifeCycleStatus;
-import pl.bratosz.smartlockers.service.orders.toreturn.ClothReturnOrder;
+import pl.bratosz.smartlockers.service.orders.torelease.ClothReleaseOrder;
+import pl.bratosz.smartlockers.service.orders.toreturn.state.ClothReturnOrder;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class ClothDomain {
@@ -31,5 +31,9 @@ public class ClothDomain {
     public LifeCycleStatus getLifeCycleStatus() {
         if(statusHistory == null || statusHistory.isEmpty()) return LifeCycleStatus.UNKNOWN;
         return statusHistory.get(statusHistory.size() - 1).getStatus().getLifeCycleStatus();
+    }
+
+    public ClothReleaseOrder getReleaseOrder() {
+        return releaseOrder;
     }
 }

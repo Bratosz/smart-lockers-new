@@ -4,7 +4,7 @@ $("#refresh-employee-button").click(function () {
         updateEmployee();
 });
 
-$("#button-perform-action-on-main-orders").click(function () {
+$("#button-perform-action-on-mainorder-orders").click(function () {
     performActionOnOrders();
 });
 
@@ -276,8 +276,8 @@ function selectClothesByArticleNumber(articleNumber, $table) {
 function performActionOnOrders() {
     let actionType = $('input[name="manage-order"]:checked').val();
     let orderEditInfoArray = new Array;
-    $('#table-of-main-orders-body').find('input[type="checkbox"]:checked').each(function () {
-        let orderId = parseInt($(this).closest('tr').find('.cell-main-order-id').text());
+    $('#table-of-mainorder-orders-body').find('input[type="checkbox"]:checked').each(function () {
+        let orderId = parseInt($(this).closest('tr').find('.cell-mainorder-order-id').text());
         let desiredSize = $(this).closest('tr').find('.input-size').val();
         let desiredClientArticleId = $(this).closest('tr').find('.select-article-in-orders-table').val();
         console.log(desiredClientArticleId);
@@ -411,7 +411,7 @@ function displayWithdrawnClothes(clothes) {
 function displayOrders(mainOrders) {
     if (mainOrders.length > 0) {
         $('#div-orders').css('display', 'inline');
-        writeOrdersToTable($("#table-of-main-orders-body"), mainOrders);
+        writeOrdersToTable($("#table-of-mainorder-orders-body"), mainOrders);
     } else {
         $('#div-orders').css('display', 'none');
     }

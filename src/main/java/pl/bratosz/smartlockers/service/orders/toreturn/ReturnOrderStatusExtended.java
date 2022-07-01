@@ -4,20 +4,20 @@ import pl.bratosz.smartlockers.model.users.User;
 
 import java.time.LocalDate;
 
-public class ClothToReturnOrderStatusExtended {
-    private ClothToReturnStatus status;
+public class ReturnOrderStatusExtended {
+    private ReturnOrderStatus status;
     private LocalDate date;
     private User user;
 
-    public static ClothToReturnOrderStatusExtended create(ClothToReturnStatus status, User user) {
-        ClothToReturnOrderStatusExtended clothReturnOrderStatus = new ClothToReturnOrderStatusExtended();
+    public static ReturnOrderStatusExtended create(ReturnOrderStatus status, User user) {
+        ReturnOrderStatusExtended clothReturnOrderStatus = new ReturnOrderStatusExtended();
         clothReturnOrderStatus.status = status;
         clothReturnOrderStatus.date = LocalDate.now();
         clothReturnOrderStatus.user = user;
         return clothReturnOrderStatus;
     }
 
-    public ClothToReturnStatus getStatus() {
+    public ReturnOrderStatus getStatus() {
         return status;
     }
 

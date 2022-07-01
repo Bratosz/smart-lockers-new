@@ -2,7 +2,9 @@ package pl.bratosz.smartlockers.service.orders;
 
 import pl.bratosz.smartlockers.model.clothes.Cloth;
 import pl.bratosz.smartlockers.model.users.User;
-import pl.bratosz.smartlockers.service.orders.toreturn.ClothReturnOrder;
+import pl.bratosz.smartlockers.service.orders.mainorder.MainClothesOrder;
+import pl.bratosz.smartlockers.service.orders.torelease.ClothReleaseOrder;
+import pl.bratosz.smartlockers.service.orders.toreturn.state.ClothReturnOrder;
 import pl.bratosz.smartlockers.service.orders.toreturn.ReturnOrderCreator;
 
 import java.util.LinkedList;

@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ReportService {
-    private final String listTemplatePath = "src/main/resources/static/xlsx-templates/employee-list-template.xlsx";
+    private final String listTemplatePath = "src/mainorder/resources/static/xlsx-templates/employee-list-template.xlsx";
     private EmployeeService employeeService;
     private OrderService orderService;
     private MeasurementListService measurementListService;

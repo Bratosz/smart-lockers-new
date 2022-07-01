@@ -1,19 +1,20 @@
-package pl.bratosz.smartlockers.service.orders.toreturn;
+package pl.bratosz.smartlockers.service.orders.toreturn.state;
 
 import pl.bratosz.smartlockers.exception.MyException;
 import pl.bratosz.smartlockers.model.users.User;
 import pl.bratosz.smartlockers.service.orders.ClothDomain;
-import pl.bratosz.smartlockers.service.orders.MainClothesOrder;
+import pl.bratosz.smartlockers.service.orders.mainorder.MainClothesOrder;
+import pl.bratosz.smartlockers.service.orders.toreturn.ReturnOrderStatusExtended;
+import pl.bratosz.smartlockers.service.orders.toreturn.ReturnOrderStatus;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class ClothReturnOrder {
 
-    private ClothToReturnState actualState;
+    private ReturnOrderState actualState;
     private MainClothesOrder mainOrder;
-    private ClothToReturnStatus status;
-    private List<ClothToReturnOrderStatusExtended> statusHistory;
+    private List<ReturnOrderStatusExtended> statusHistory;
     private ClothDomain clothToReturn;
 
     public static ClothReturnOrder create(ClothDomain c, MainClothesOrder m, User u) {
@@ -28,10 +29,14 @@ public class ClothReturnOrder {
         try {
             updateState(cloth);
             updateStatus(user);
-            updateMainOrder()
+            updateMainOrder(user);
         } catch (MyException e) {
             e.printStackTrace();
         }
+    }
+
+    private void updateMainOrder(User user) {
+        mainOrder.update(this, user);
     }
 
     private void updateState(ClothDomain cloth) throws MyException {
@@ -49,9 +54,9 @@ public class ClothReturnOrder {
     }
 
     private void updateStatus(User u) {
-        ClothToReturnStatus status = actualState.getStatus();
+        ReturnOrderStatus status = actualState.getStatus();
         if(statusHistory == null) statusHistory = new LinkedList<>();
-        statusHistory.add(ClothToReturnOrderStatusExtended.create(status, u));
+        statusHistory.add(ReturnOrderStatusExtended.create(status, u));
 
     }
 
@@ -64,11 +69,21 @@ public class ClothReturnOrder {
 
     }
 
-    private ClothReturnOrder() {
-        this.actualState = new ClothToReturnPendingForAssignmentState();
+    public ReturnOrderStatus getStatus() {
+        if(getStatusHistory().isEmpty()) return ReturnOrderStatus.UNKNOWN;
+        return getStatusHistory().get(getStatusHistory().size() - 1).getStatus();
     }
 
-    void setState(ClothToReturnState s) {
+    public List<ReturnOrderStatusExtended> getStatusHistory() {
+        if(statusHistory == null) return new LinkedList<>();
+        return statusHistory;
+    }
+
+    private ClothReturnOrder() {
+        this.actualState = new PendingForAssignmentOrderState();
+    }
+
+    void setState(ReturnOrderState s) {
         actualState = s;
     }
 }
