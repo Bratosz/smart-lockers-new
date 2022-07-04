@@ -12,7 +12,6 @@ import pl.bratosz.smartlockers.model.users.User;
 import pl.bratosz.smartlockers.service.orders.ChangeSizeOrdersCreator;
 import pl.bratosz.smartlockers.service.orders.torelease.ClothReleaseOrder;
 import pl.bratosz.smartlockers.service.orders.toreturn.state.ClothReturnOrder;
-import pl.bratosz.smartlockers.service.orders2.AssignedMainOrderState;
 
 import java.util.LinkedList;
 import java.util.List;

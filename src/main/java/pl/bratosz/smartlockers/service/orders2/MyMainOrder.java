@@ -1,12 +1,12 @@
 package pl.bratosz.smartlockers.service.orders2;
 
 import pl.bratosz.smartlockers.model.clothes.ClothSize;
-import pl.bratosz.smartlockers.model.clothes.ClothStatus;
 import pl.bratosz.smartlockers.model.orders.ExchangeStrategy;
 import pl.bratosz.smartlockers.model.orders.OrderType;
+import pl.bratosz.smartlockers.service.clothes.OrdinalNumberResolver;
 import pl.bratosz.smartlockers.service.orders2.returnorder.MyReturnOrder;
 
-import javax.print.DocFlavor;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class MyMainOrder {
     private List<MyMainOrderStatusHistory> statusHistory;
     private MyEmployee employee;
     private ExchangeStrategy exchangeStrategy;
-    private List<MyClothReleaseOrder> clothReleaseOrders;
+    private List<MyReleaseOrder> clothReleaseOrders;
     private List<MyReturnOrder> clothReturnOrders;
 
     public static MyMainOrder create(OrderParameters p) {
@@ -73,15 +73,21 @@ public class MyMainOrder {
     }
 
     private void createReleaseOrders(OrderParameters p) {
+        List<MyReleaseOrder> releaseOrders = new ArrayList<>();
+        for(MyCloth cloth : p.getClothesToChange()) {
+            MyReleaseOrder order = MyReleaseOrder.create(cloth, this, p.getUser());
+            releaseOrders.add(order);
+        }
+        this.clothReleaseOrders = releaseOrders;
     }
 
     private void createReturnOrders(OrderParameters p) {
-        List<MyReturnOrder> clothReturnOrders = new LinkedList<>();
+        List<MyReturnOrder> returnOrders = new ArrayList<>();
         for (MyCloth cloth : p.getClothesToChange()) {
             MyReturnOrder order = MyReturnOrder.create(cloth, this, p.getUser());
-            clothReturnOrders.add(order);
+            returnOrders.add(order);
         }
-        this.clothReturnOrders = clothReturnOrders;
+        this.clothReturnOrders = returnOrders;
     }
 
     public OrderType getOrderType() {
