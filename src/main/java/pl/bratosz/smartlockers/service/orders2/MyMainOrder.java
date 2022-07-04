@@ -1,10 +1,12 @@
 package pl.bratosz.smartlockers.service.orders2;
 
 import pl.bratosz.smartlockers.model.clothes.ClothSize;
+import pl.bratosz.smartlockers.model.clothes.ClothStatus;
 import pl.bratosz.smartlockers.model.orders.ExchangeStrategy;
 import pl.bratosz.smartlockers.model.orders.OrderType;
-import sun.awt.image.ImageWatched;
+import pl.bratosz.smartlockers.service.orders2.returnorder.MyReturnOrder;
 
+import javax.print.DocFlavor;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,7 +14,7 @@ public class MyMainOrder {
     private OrderType orderType;
     private ClothSize size;
     private MyClientArticle clientArticle;
-    private MyMainOrderState actualState;
+    protected MyMainOrderState actualState;
     private List<MyMainOrderStatusHistory> statusHistory;
     private MyEmployee employee;
     private ExchangeStrategy exchangeStrategy;
@@ -30,6 +32,16 @@ public class MyMainOrder {
         o.updateStatus(p.getUser());
         o.createOrders(p);
         return o;
+    }
+
+    public void updateForClothReturn(MyReturnOrder returnOrder, MyUser user) {
+        if(exchangeStrategy.equals(ExchangeStrategy.PIECE_FOR_PIECE)) {
+            setOneToRelease(user);
+        }
+    }
+
+    private void setOneToRelease(MyUser user) {
+        clothReleaseOrders.stream().findFirst().get().update();
     }
 
     private void updateStatus(MyUser user) {

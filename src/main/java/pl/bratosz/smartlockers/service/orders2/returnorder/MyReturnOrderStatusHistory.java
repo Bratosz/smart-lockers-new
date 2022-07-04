@@ -1,6 +1,7 @@
-package pl.bratosz.smartlockers.service.orders2;
+package pl.bratosz.smartlockers.service.orders2.returnorder;
 
 import pl.bratosz.smartlockers.service.orders.toreturn.ReturnOrderStatus;
+import pl.bratosz.smartlockers.service.orders2.MyUser;
 
 import java.time.LocalDate;
 

@@ -1,6 +1,8 @@
-package pl.bratosz.smartlockers.service.orders2;
+package pl.bratosz.smartlockers.service.orders2.returnorder;
 
+import pl.bratosz.smartlockers.model.clothes.ClothStatus;
 import pl.bratosz.smartlockers.model.orders.ExchangeStrategy;
+import pl.bratosz.smartlockers.service.orders2.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -22,7 +24,19 @@ public class MyReturnOrder {
         o.mainOrder = mainOrder;
         o.actualState = createInitialState(mainOrder.getStatus(), mainOrder.getExchangeStrategy());
         o.updateStatus(user);
-        o.setClothToReturn(cloth);
+        o.setClothToReturn(cloth, user);
+        return o;
+    }
+
+    public void update(MyUser user) {
+        actualState.updateState();
+        updateStatus(user);
+        actualState.updateCloth(user);
+        mainOrder.update(this, user);
+    }
+
+    public ClothStatus getStatus() {
+        return cloth.getActualStatusHistory()
     }
 
     private void updateStatus(MyUser user) {
@@ -46,9 +60,12 @@ public class MyReturnOrder {
         return mainOrder.getExchangeStrategy();
     }
 
-    private void setClothToReturn(MyCloth cloth) {
+    private void setClothToReturn(MyCloth cloth, MyUser user) {
         this.cloth = cloth;
-        actualState.updateCloth(cloth);
+        actualState.updateCloth(cloth, user);
     }
 
+    public MyCloth getCloth() {
+        return cloth;
+    }
 }

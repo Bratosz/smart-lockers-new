@@ -3,16 +3,18 @@ package pl.bratosz.smartlockers.service.orders2;
 public class NewOrderCreator {
 
     public static MyMainOrder create(OrderParameters params) {
-        MyMainOrder mainOrder;
+        MyMainOrder mainOrder = null;
         if(params.isThereIsOrderToExtend()) {
-            mainOrder = extend(params);
+//            mainOrder = extend(params);
+            return mainOrder;
         } else {
-            mainOrder = createNew(params);
+           return createNew(params);
         }
     }
 
     private static MyMainOrder createNew(OrderParameters params) {
-        MyMainOrder o = MyMainOrder.create(params);
+        MyMainOrder order = MyMainOrder.create(params);
+        return order;
     }
 
 }

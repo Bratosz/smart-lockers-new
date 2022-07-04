@@ -1,9 +1,8 @@
 package pl.bratosz.smartlockers.service.orders2;
 
-import pl.bratosz.smartlockers.model.ClientArticle;
 import pl.bratosz.smartlockers.model.clothes.ClothSize;
 import pl.bratosz.smartlockers.model.clothes.ClothStatus;
-import pl.bratosz.smartlockers.model.orders.ExchangeStrategy;
+import pl.bratosz.smartlockers.service.orders2.returnorder.MyReturnOrder;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
@@ -23,6 +22,7 @@ public class MyCloth {
     private List<MyClothStatusHistory> statusHistory;
     private MyClientArticle clientArticle;
     private MyEmployee employee;
+    private MyReturnOrder returnOrder;
 
     public ClothSize getSize() {
         return size;
@@ -46,5 +46,9 @@ public class MyCloth {
     public void updateStatusHistory(MyClothStatusHistory actualStatus) {
         if(statusHistory == null) statusHistory = new LinkedList<>();
         statusHistory.add(actualStatus);
+    }
+
+    public MyReturnOrder getReturnOrder() {
+        return returnOrder;
     }
 }

@@ -13,7 +13,6 @@ public enum ClothStatus {
     IN_PREPARATION("W przygotowaniu", BEFORE_RELEASE),
     RELEASED("Wydane", IN_ROTATION),
     ACCEPTED("Przyjęte do wymiany", LifeCycleStatus.ACCEPTED),
-    EXCHANGED("Wymienione", LifeCycleStatus.WITHDRAWN),
     WITHDRAWN("Wycofane", LifeCycleStatus.WITHDRAWN),
     UNKNOWN("Nieznany", LifeCycleStatus.UNKNOWN);
 
